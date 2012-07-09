@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.agmip.translators</groupId>
+    <artifactId>translator-apsim</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>translator-apsim</name>
+    <url>http://www.agmip.org/</url>
+
+    <parent>
+        <groupId>org.agmip.translators</groupId>
+        <artifactId>translator-dist</artifactId>
+        <version>0.6</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <organization>
+        <name>AgMIP - Agricultural Model Intercomparison and Improvement Project</name>
+        <url>http://www.agmip.org/</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <url>https://raw.github.com/agmip/translator-apsim/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>AgMIP Contributors</name>
+        </developer>
+        <!-- fill out the following fields: name, email, roles -> role -->
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.agmip</groupId>
+            <artifactId>agmip-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+    <groupId>org.apache.velocity</groupId>
+    <artifactId>velocity</artifactId>
+    <version>1.7</version>
+</dependency>
+    </dependencies>
+
+    <scm>
+        <connection>scm:git:git://github.com/agmip/translator-apsim.git</connection>
+        <developerConnection>scm:git:git@github.com/agmip/translator-apsim.git</developerConnection>
+        <url>https://github.com/agmip/translator-apsim</url>
+    </scm>
+</project>
