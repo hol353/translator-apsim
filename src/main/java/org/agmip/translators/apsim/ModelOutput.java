@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 //import java.io.XML;
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.util.JSONAdapter;
+import org.agmip.util.MapUtil;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.Velocity;
@@ -25,9 +26,10 @@ public class ModelOutput implements TranslatorOutput {
         Velocity.init();
 
         VelocityContext context = new VelocityContext();
-
-        context.put( "WeatherFileName", new String("testlocation") );
-
+        List weather = MapUtil.getValueOr(input, "weather", new ArrayList()).get(0);
+        context.put( "WeatherFileName", MapUtil.getValueOr(weather, "wst_insi", "?"));
+        
+        
         Template template = Velocity.getTemplate("src\\main\\resources\\AgMIPTemplate.apsim");
 
         FileWriter F;
