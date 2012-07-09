@@ -5,7 +5,7 @@
       <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
     </clock>
     <metfile name="met">
-      <filename name="filename" input="yes">$WeatherFileName</filename>
+      <filename name="filename" input="yes">testlocation</filename>
     </metfile>
     <summaryfile />
     <area name="paddock">

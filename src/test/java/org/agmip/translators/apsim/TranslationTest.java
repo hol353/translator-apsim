@@ -1,8 +1,14 @@
 package org.agmip.translators.apsim;
 
+import java.io.*;
+import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.agmip.core.types.AdvancedHashMap;
+import org.agmip.util.JSONAdapter;
 
 /**
  * Unit test for simple App.
@@ -33,6 +39,29 @@ public class TranslationTest
      */
     public void testTranslation()
     {
-        assertTrue( true );
+        try {
+            ModelOutput Translator = new ModelOutput();
+        
+            JSONAdapter j = new JSONAdapter();
+            LinkedHashMap<String, Object> result;
+
+            String filePath = "src\\test\\resources\\UFGA8201_mzx.json";
+            FileInputStream in = new FileInputStream(filePath);
+            InputStreamReader inreader = new InputStreamReader(in);
+            BufferedReader reader = new BufferedReader(inreader);
+            
+            String JSON = reader.readLine();
+            result = (LinkedHashMap<String, Object>) JSONAdapter.fromJSON(JSON);
+
+            Translator.writeFile("", result);
+            //File file = new File("test.apsim");
+            
+            //assertTrue(file.exists());
+            //assertTrue(file.getName().equals("UFGA7801_SBX.SOL"));
+            //assertTrue(file.delete());
+        } catch (IOException ex) {
+            Logger.getLogger(TranslationTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
 }
