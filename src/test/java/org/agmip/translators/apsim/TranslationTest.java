@@ -40,7 +40,7 @@ public class TranslationTest
     public void testTranslation()
     {
         try {
-            ModelOutput Translator = new ModelOutput();
+            ApsimOutput Translator = new ApsimOutput();
         
             JSONAdapter j = new JSONAdapter();
             LinkedHashMap<String, Object> result;
