@@ -1,11 +1,6 @@
 target/*
 *.swp
 /.settings
-
-bin/org/agmip/translators/apsim/ApsimOutput$SoilLayer.class
-
-bin/org/agmip/translators/apsim/ApsimInput.class
-
-bin/org/agmip/translators/apsim/ApsimOutput.class
-
-bin/org/agmip/translators/apsim/TranslationTest.class
+/bin
+/target
+/.classpath
