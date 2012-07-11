@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
 
-public class APSIM {
+public class Converter {
 
 	
 	public static void generateWeatherFiles(File path, Weather s) throws Exception{

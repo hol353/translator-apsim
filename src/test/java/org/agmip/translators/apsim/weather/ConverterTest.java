@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import junit.framework.TestCase;
 
-import org.agmip.translators.apsim.weather.APSIM;
+import org.agmip.translators.apsim.weather.Converter;
 import org.agmip.translators.apsim.weather.Record;
 import org.agmip.translators.apsim.weather.Weather;
 import org.agmip.translators.apsim.weather.Weather;
@@ -23,7 +23,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.junit.Test;
 
-public class APSIMTest extends TestCase {
+public class ConverterTest extends TestCase {
 	Weather w = new Weather();
 
 	public void setUp() throws Exception {
@@ -60,7 +60,7 @@ public class APSIMTest extends TestCase {
 	@Test
 	public void testGenerateWeatherFiles() {
 		try {
-			APSIM.generateWeatherFiles(new File("src/test/resources/"), w);
+			Converter.generateWeatherFiles(new File("src/test/resources/"), w);
 		} catch (Exception e) {
 			assertTrue(false);
 		}
@@ -68,14 +68,14 @@ public class APSIMTest extends TestCase {
 
 	@Test
 	public void testGetYear() {
-		assertEquals("2012", APSIM.GetYear("2012-12-12"));
-		assertEquals("2000", APSIM.GetYear("2000-2-1"));
+		assertEquals("2012", Converter.GetYear("2012-12-12"));
+		assertEquals("2000", Converter.GetYear("2000-2-1"));
 	}
 
 	@Test
 	public void testGetDay() {
-		assertEquals("1", APSIM.GetDay("2012-1-1"));
-		assertEquals("32", APSIM.GetDay("2012-2-1"));
+		assertEquals("1", Converter.GetDay("2012-1-1"));
+		assertEquals("32", Converter.GetDay("2012-2-1"));
 	}
 
 	@Test
