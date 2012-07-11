@@ -14,9 +14,9 @@ public class APSIM {
 	public static void generateWeatherFiles(File path, Weather s) throws Exception{
 			if(s.shortName==null) throw new Exception("Cant create file. Station short name missing");
 			
-	        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path,s.longName+".met"))));
+	        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path,s.shortName+".met"))));
 	        br.write("!title: ");
-	        br.write(s.shortName);
+	        br.write(s.longName);
 	        br.newLine();
 	        br.write("tav = ");
 	        br.write(s.averageTemperature);
