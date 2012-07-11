@@ -1,3 +1,6 @@
 target/*
 *.swp
 /.settings
+/bin
+/target
+/.classpath
