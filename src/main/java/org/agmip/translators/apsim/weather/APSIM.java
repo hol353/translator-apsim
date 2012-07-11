@@ -11,16 +11,15 @@ import java.util.Calendar;
 public class APSIM {
 
 	
-	public static void generateWeatherFiles(File path, Weather w) throws Exception{
-		for(Station s: w.data){
-			if(s.wsta_insi==null) throw new Exception("Cant create file. WSTA_INSI missing");
+	public static void generateWeatherFiles(File path, Weather s) throws Exception{
+			if(s.shortName==null) throw new Exception("Cant create file. Station short name missing");
 			
-	        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path,s.wsta_insi+".met"))));
+	        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path,s.longName+".met"))));
 	        br.write("!title: ");
-	        br.write(s.wsta_site);
+	        br.write(s.shortName);
 	        br.newLine();
 	        br.write("tav = ");
-	        br.write(s.tav);
+	        br.write(s.averageTemperature);
 	        br.newLine();
 	        br.write("amp = ");
 	        br.newLine();
@@ -43,7 +42,7 @@ public class APSIM {
 	        
 	        br.close();
 	    }
-	}
+	
 
    public static String GetYear(String w_date) {
 		String[] part = w_date.split("-");

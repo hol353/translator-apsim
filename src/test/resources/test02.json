@@ -1,7 +1,6 @@
-{
-    "data": [
+
         {
-            "records": [
+            "dailyWeather": [
                 {
                     "dewp": "?", 
                     "rain": "0.2", 
@@ -32,5 +31,4 @@
             "wsta_long": "-11.2345", 
             "wsta_site": "Station Name, Somewhere in the Galaxy"
         }
-    ]
-}
+   

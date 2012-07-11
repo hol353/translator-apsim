@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 import org.agmip.translators.apsim.weather.APSIM;
 import org.agmip.translators.apsim.weather.Record;
-import org.agmip.translators.apsim.weather.Station;
+import org.agmip.translators.apsim.weather.Weather;
 import org.agmip.translators.apsim.weather.Weather;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -27,15 +27,13 @@ public class APSIMTest extends TestCase {
 	Weather w = new Weather();
 
 	public void setUp() throws Exception {
-		Station ws1 = new Station();
-		w.getData().add(ws1);
-		ws1.setTav("11");
-		ws1.setWsta_site("Station Name, Somewhere in the Galaxy");
-		ws1.setWsta_insi("STA0001");
-		ws1.setWsta_lat("-11.2345");
-		ws1.setWsta_long("-11.2345");
+		w.averageTemperature = "11";
+		w.longName = "Station Name, Somewhere in the Galaxy";
+		w.shortName = "STA0001";
+		w.latitude = "-11.2345";
+		w.longitude = "-11.2345";
 
-		Set<Record> recs = ws1.getRecords();
+		Set<Record> recs = w.records;
 
 		{
 			Record r = new Record();
@@ -102,8 +100,8 @@ public class APSIMTest extends TestCase {
 
 		ObjectMapper mapper = new ObjectMapper();
 //		 try {
-			Weather value = mapper.readValue(new File("src/test/resources/test02.json"), Weather.class);
-			assertEquals("-11.2345",value.getData().get(0).wsta_lat);
+		Weather value = mapper.readValue(new File("src/test/resources/test02.json"), Weather.class);
+			assertEquals("-11.2345",value.latitude);
 
 //		} catch (Exception e) {
 //			assertTrue(false);
@@ -111,13 +109,6 @@ public class APSIMTest extends TestCase {
 
 	}
 
-    @Test
-    public void testJSONIn() throws IOException {
-        URL resource = this.getClass().getResource("/example.json");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
-        String content = new Scanner(new File(resource.getPath()), "UTF-8").useDelimiter("\\A").next();
-        Weather w = mapper.readValue(content, Weather.class);
-    }
+
 
 }
