@@ -4,6 +4,7 @@
  */
 package org.agmip.translators.apsim;
 
+import java.text.ParseException;
 import java.util.Map;
 import org.agmip.translators.apsim.weather.Weather;
 
@@ -14,11 +15,12 @@ import org.agmip.translators.apsim.weather.Weather;
 public class Experiment {
     private Weather weather = new Weather();
     private Soil soil = new Soil();
+    private InitialConditions initialConditions = new InitialConditions();
     
     
-    
-    public void readFrom(Map input) {
+    public void readFrom(Map input) throws ParseException {
         soil.readFrom(input);
+        initialConditions.readFrom(input);
     }
 
 
