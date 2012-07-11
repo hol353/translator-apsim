@@ -27,16 +27,16 @@ public class APSIM {
 	        br.write("()    ()   (MJ/m2) (oC)  (oC)  (mm)  (km)  (oC)   ()   (%)\n");
 
 	        for(Record r : s.records){
-        	    br.write(GetYear(r.w_date)+" ");
-        	    br.write(GetDay(r.w_date)+" ");
-        	    br.write(r.srad +" ");
-        	    br.write(r.tmax +" ");
-        	    br.write(r.tmin +" ");
-        	    br.write(r.rain +" ");
-        	    br.write(r.wind +" ");
-        	    br.write(r.dewp +" ");
-        	    br.write(r.vprs +" ");
-        	    br.write(r.rhum +" ");
+        	    br.write(GetYear(r.date)+" ");
+        	    br.write(GetDay(r.date)+" ");
+        	    br.write(r.solarRadiation +" ");
+        	    br.write(r.maxTemperature +" ");
+        	    br.write(r.minTemperature +" ");
+        	    br.write(r.rainfall +" ");
+        	    br.write(r.windSpeed +" ");
+        	    br.write(r.dewPoint +" ");
+        	    br.write(r.vaporPressure +" ");
+        	    br.write(r.relativeHumidity +" ");
     	        br.newLine();
 	        }
 	        

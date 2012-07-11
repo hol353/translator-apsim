@@ -37,21 +37,21 @@ public class APSIMTest extends TestCase {
 
 		{
 			Record r = new Record();
-			r.w_date = "2012-01-02";
-			r.srad = "0"; // radn
-			r.tmax = "13"; // maxt
-			r.tmin = "-12"; // mint
-			r.rain = "0.2";
+			r.date = "2012-01-01";
+			r.solarRadiation = "0"; // radn
+			r.maxTemperature = "13"; // maxt
+			r.minTemperature = "-12"; // mint
+			r.rainfall = "0.2";
 			recs.add(r);
 		}
 
 		{
 			Record r = new Record();
-			r.w_date = "2012-01-01";
-			r.srad = "0.3"; // radn
-			r.tmax = "18"; // maxt
-			r.tmin = "0.2"; // mint
-			r.rain = "0.2";
+			r.date = "2012-01-02";
+			r.solarRadiation = "0.3"; // radn
+			r.maxTemperature = "18"; // maxt
+			r.minTemperature = "0.2"; // mint
+			r.rainfall = "0.2";
 			recs.add(r);
 		}
 
@@ -99,13 +99,9 @@ public class APSIMTest extends TestCase {
 	public void testJSONReader()  throws Exception{
 
 		ObjectMapper mapper = new ObjectMapper();
-//		 try {
 		Weather value = mapper.readValue(new File("src/test/resources/test02.json"), Weather.class);
 			assertEquals("-11.2345",value.latitude);
 
-//		} catch (Exception e) {
-//			assertTrue(false);
-//		}
 
 	}
 
