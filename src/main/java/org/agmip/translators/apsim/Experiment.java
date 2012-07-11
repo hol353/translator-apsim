@@ -5,6 +5,7 @@
 package org.agmip.translators.apsim;
 
 import java.util.Map;
+
 import org.agmip.translators.apsim.weather.Weather;
 
 /**
@@ -12,8 +13,11 @@ import org.agmip.translators.apsim.weather.Weather;
  * @author Dean Holzworth
  */
 public class Experiment {
-    private Weather weather = new Weather();
-    private Soil soil = new Soil();
+
+	
+    Weather weather = new Weather();
+    Soil soil = new Soil();
+    Management treatment = new Management();
     
     
     

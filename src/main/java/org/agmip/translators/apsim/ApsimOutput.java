@@ -44,7 +44,7 @@ public class ApsimOutput implements TranslatorOutput {
         FileWriter F;
         try {
             
-            F = new FileWriter("Test.apsim");
+            F = new FileWriter(new File(filePath,"Test.apsim"));
             template.merge( context, F );
             F.close();
             
