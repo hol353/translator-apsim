@@ -2,11 +2,13 @@ package org.agmip.translators.apsim;
 
 import java.io.*;
 import java.util.LinkedHashMap;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
 import org.agmip.util.JSONAdapter;
 
 /**
@@ -44,13 +46,15 @@ public class TranslationTest
             JSONAdapter j = new JSONAdapter();
             LinkedHashMap<String, Object> result;
 
-            File filePath = new File( "src/test/resources/UFGA8201_mzx.json");
-            FileInputStream in = new FileInputStream(filePath);
-            InputStreamReader inreader = new InputStreamReader(in);
-            BufferedReader reader = new BufferedReader(inreader);
+            File file = new File( "src/test/resources/UFGA8201_mzx.json");
+
+            Scanner scanner = new Scanner(new FileReader(file));
+    		String json ="";
+            while(scanner.hasNext())
+    			json += scanner.nextLine();
             
-            String JSON = reader.readLine();
-            result = (LinkedHashMap<String, Object>) JSONAdapter.fromJSON(JSON);
+            
+            result = (LinkedHashMap<String, Object>) JSONAdapter.fromJSON(json);
 
             Translator.writeFile("src/test/resources/", result);
             //File file = new File("test.apsim");
@@ -60,6 +64,7 @@ public class TranslationTest
             //assertTrue(file.delete());
         } catch (IOException ex) {
             Logger.getLogger(TranslationTest.class.getName()).log(Level.SEVERE, null, ex);
+            assertTrue(false);
         }
     }
     
