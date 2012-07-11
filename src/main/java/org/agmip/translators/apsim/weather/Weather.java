@@ -3,6 +3,8 @@ package org.agmip.translators.apsim.weather;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * An APSIM Weather info compartment consists of several station information.
  * 
@@ -11,6 +13,7 @@ import java.util.List;
  * @since July 10, 2012
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Weather {
 	List<Station> data = new ArrayList<Station>();
 

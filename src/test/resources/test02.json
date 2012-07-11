@@ -1,0 +1,36 @@
+{
+    "data": [
+        {
+            "records": [
+                {
+                    "dewp": "?", 
+                    "rain": "0.2", 
+                    "rhum": "?", 
+                    "srad": "0.3", 
+                    "tmax": "18", 
+                    "tmin": "0.2", 
+                    "vprs": "?", 
+                    "w_date": "2012-01-01", 
+                    "wind": "?",
+					"extra": "12"
+                }, 
+                {
+                    "dewp": "?", 
+                    "rain": "0.2", 
+                    "rhum": "?", 
+                    "srad": "0", 
+                    "tmax": "13", 
+                    "tmin": "-12", 
+                    "vprs": "?", 
+                    "w_date": "2012-01-02", 
+                    "wind": "?"
+                }
+            ], 
+            "tav": "11", 
+            "wsta_insi": "STA0001", 
+            "wsta_lat": "-11.2345", 
+            "wsta_long": "-11.2345", 
+            "wsta_site": "Station Name, Somewhere in the Galaxy"
+        }
+    ]
+}

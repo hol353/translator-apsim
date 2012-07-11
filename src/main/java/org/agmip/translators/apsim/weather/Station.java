@@ -3,7 +3,10 @@ package org.agmip.translators.apsim.weather;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Station {
 	String wsta_site;
 	String wsta_lat;
