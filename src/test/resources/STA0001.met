@@ -3,5 +3,5 @@ tav = 11
 amp = 
 year day radn maxt mint rain wind dewp vers rh 
 ()    ()   (MJ/m2) (oC)  (oC)  (mm)  (km)  (oC)   ()   (%)
-2012 1 0.3 18 0.2 0.2 ? ? ? ? 
-2012 2 0 13 -12 0.2 ? ? ? ? 
+2012 1 0 13 -12 0.2 ? ? ? ? 
+2012 2 0.3 18 0.2 0.2 ? ? ? ? 
