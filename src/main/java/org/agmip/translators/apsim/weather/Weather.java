@@ -12,15 +12,16 @@ import java.util.List;
  *
  */
 public class Weather {
-	List<Station> data = new ArrayList<Station>();
+    
+    private List<Station> data = new ArrayList<Station>();
 
-	public List<Station> getData() {
-		return data;
-	}
+    public List<Station> getData() {
+            return data;
+    }
 
-	public void setData(List<Station> data) {
-		this.data = data;
-	}
+    public void setData(List<Station> data) {
+        this.data = data;
+    }
 	
 
 

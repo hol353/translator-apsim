@@ -1,5 +1,13 @@
 <folder version="32" name="simulations">
   <simulation name="AgMIP">
+    <memo>
+       This .apsim file was created by the APSIM AgMIP translator.
+       Assumptions made by translator:
+          * Soil AirDry values are set to 0.05 of LL15 for all layers
+          * Soil/Crop LL values are set to LL15 for all layers
+          * Soil/Crop KL values are set to 0.1 for all layers
+          * Soil/Crop XF values are set to 1.0 for all layers (i.e. no sub soil contraints)
+    </memo>
     <clock>
       <start_date type="date" description="Enter the start date of the simulation">01/01/1940</start_date>
       <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
@@ -9,11 +17,11 @@
     </metfile>
     <summaryfile />
     <area name="paddock">
-      <soil name="?">
-        <Comment type="multiedit" description="Comments" />
+      <soil name="Soil">
+        <Comment type="multiedit" description="Comments">Millhopper Fine Sand</Comment>
         <ASC_Order description="Australian Soil Classification Order" />
         <ASC_Sub-order description="Australian Soil Classification Sub-Order" />
-        <SoilType description="Soil description">?</SoilType>
+        <SoilType description="Soil description">Loamy,silic,hyperth Gross. Paleudults</SoilType>
         <LocalName></LocalName>
         <Site>?</Site>
         <NearestTown description="Nearest town"></NearestTown>
@@ -22,10 +30,10 @@
         <Country />
         <NaturalVegetation description="Natural vegetation"></NaturalVegetation>
         <ApsoilNumber description="Apsoil number" />
-        <Latitude description="Latitude (WGS84)">?</Latitude>
-        <Longitude>?</Longitude>
+        <Latitude description="Latitude (WGS84)">29.63</Latitude>
+        <Longitude>-82.37</Longitude>
         <LocationAccuracy description="Location accuracy" />
-        <DataSource type="multiedit" description="Data source">?</DataSource>
+        <DataSource type="multiedit" description="Data source">SCS</DataSource>
         <Comments />
         <Water>
           <Layer>
@@ -250,55 +258,55 @@
           <EnrBCoeff>0.2</EnrBCoeff>
           <Layer>
             <Thickness units="mm">50.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.9</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">100.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.69</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">150.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.28</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">150.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.2</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">150.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.2</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">300.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.09</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">300.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.03</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">300.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.03</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
           <Layer>
             <Thickness units="mm">300.0</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">0.03</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
@@ -310,7 +318,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.3</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -331,7 +339,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.4</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -352,7 +360,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.7</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -373,7 +381,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.8</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -394,7 +402,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.8</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -415,7 +423,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.9</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -436,7 +444,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.9</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -457,7 +465,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.9</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />
@@ -478,7 +486,7 @@
             <Texture></Texture>
             <MunsellColour></MunsellColour>
             <EC units="1:5 dS/m"></EC>
-            <PH units="1:5 water">$layer.ph</PH>
+            <PH units="1:5 water">5.9</PH>
             <CL units="mg/kg" />
             <Boron units="Hot water mg/kg" />
             <CEC units="cmol+/kg" />

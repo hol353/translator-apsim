@@ -12,7 +12,7 @@ public class APSIM {
 
 	
 	public static void generateWeatherFiles(File path, Weather w) throws Exception{
-		for(Station s: w.data){
+		for(Station s: w.getData()){
 			if(s.wsta_insi==null) throw new Exception("Cant create file. WSTA_INSI missing");
 			
 	        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path,s.wsta_insi+".met"))));

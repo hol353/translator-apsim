@@ -1,5 +1,13 @@
 <folder version="32" name="simulations">
   <simulation name="AgMIP">
+    <memo>
+       This .apsim file was created by the APSIM AgMIP translator.
+       Assumptions made by translator:
+          * Soil AirDry values are set to 0.05 of LL15 for all layers
+          * Soil/Crop LL values are set to LL15 for all layers
+          * Soil/Crop KL values are set to 0.1 for all layers
+          * Soil/Crop XF values are set to 1.0 for all layers (i.e. no sub soil contraints)
+    </memo>
     <clock>
       <start_date type="date" description="Enter the start date of the simulation">01/01/1940</start_date>
       <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
@@ -9,41 +17,41 @@
     </metfile>
     <summaryfile />
     <area name="paddock">
-      <soil name="$soil_name">
-        <Comment type="multiedit" description="Comments" />
+      <soil name="Soil">
+        <Comment type="multiedit" description="Comments">$experiment.soil.name</Comment>
         <ASC_Order description="Australian Soil Classification Order" />
         <ASC_Sub-order description="Australian Soil Classification Sub-Order" />
-        <SoilType description="Soil description">$classification</SoilType>
+        <SoilType description="Soil description">$experiment.soil.classification</SoilType>
         <LocalName></LocalName>
-        <Site>$soil_site</Site>
+        <Site>$experiment.soil.site</Site>
         <NearestTown description="Nearest town"></NearestTown>
         <Region></Region>
         <State />
         <Country />
         <NaturalVegetation description="Natural vegetation"></NaturalVegetation>
         <ApsoilNumber description="Apsoil number" />
-        <Latitude description="Latitude (WGS84)">$soil_lat</Latitude>
-        <Longitude>$soil_long</Longitude>
+        <Latitude description="Latitude (WGS84)">$experiment.soil.latitude</Latitude>
+        <Longitude>$experiment.soil.longitude</Longitude>
         <LocationAccuracy description="Location accuracy" />
-        <DataSource type="multiedit" description="Data source">$sl_source</DataSource>
+        <DataSource type="multiedit" description="Data source">$experiment.soil.source</DataSource>
         <Comments />
         <Water>
-#foreach ($layer in $layers)
+#foreach ($layer in $experiment.soil.layers)
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <KS units="mm/day" />
-            <BD units="g/cc">$layer.slbdm</BD>
+            <BD units="g/cc">$layer.bulkDensity</BD>
             <AirDry units="mm/mm">$layer.airDry</AirDry>
-            <LL15 units="mm/mm">$layer.slll</LL15>
-            <DUL units="mm/mm">$layer.sldul</DUL>
-            <SAT units="mm/mm">$layer.slsat</SAT>
+            <LL15 units="mm/mm">$layer.lowerLimit</LL15>
+            <DUL units="mm/mm">$layer.drainedUpperLimit</DUL>
+            <SAT units="mm/mm">$layer.saturation</SAT>
           </Layer>
 #end
           <SoilCrop name="Barley">
-#foreach ($layer in $layers)          
+#foreach ($layer in $experiment.soil.layers)          
             <Layer>
               <Thickness units="mm">$layer.thickness</Thickness>
-              <LL units="mm/mm">$layer.slll</LL>
+              <LL units="mm/mm">$layer.lowerLimit</LL>
               <KL units="/day">0.1</KL>
               <XF units="0-1">1</XF>
             </Layer>
@@ -71,7 +79,7 @@
           </CatchmentArea>
           <MaxPond>
           </MaxPond>
-#foreach ($layer in $layers)             
+#foreach ($layer in $experiment.soil.layers)             
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <SWCON units="0-1">0.3</SWCON>
@@ -86,17 +94,17 @@
           <SoilCn>12.5</SoilCn>
           <EnrACoeff>7.4</EnrACoeff>
           <EnrBCoeff>0.2</EnrBCoeff>
-#foreach ($layer in $layers)        
+#foreach ($layer in $experiment.soil.layers)        
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
-            <OC units="Total %">$sloc</OC>
+            <OC units="Total %">$layer.organicCarbon</OC>
             <FBiom units="0-1">0.025</FBiom>
             <FInert units="0-1">0.4</FInert>
           </Layer>
 #end
         </SoilOrganicMatter>
         <Analysis>
-#foreach ($layer in $layers)        
+#foreach ($layer in $experiment.soil.layers)        
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <Rocks units="%" />

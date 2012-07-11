@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.agmip.core.types.AdvancedHashMap;
 import org.agmip.util.JSONAdapter;
 
 /**
