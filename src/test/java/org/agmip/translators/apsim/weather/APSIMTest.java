@@ -4,7 +4,10 @@ package org.agmip.translators.apsim.weather;
 import java.io.File;
 import java.io.IOException;
 
+import java.net.URL;
+
 import java.util.Set;
+import java.util.Scanner;
 
 import junit.framework.TestCase;
 
@@ -81,7 +84,7 @@ public class APSIMTest extends TestCase{
 	
 	
 	@Test
-	public void testJSON(){
+	public void testJSONOut(){
 	 
 	 ObjectMapper mapper = new ObjectMapper();
 	 mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
@@ -92,5 +95,14 @@ public class APSIMTest extends TestCase{
 	}
 		
 	}
+
+    @Test
+    public void testJSONIn() throws IOException {
+        URL resource = this.getClass().getResource("/example.json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+        String content = new Scanner(new File(resource.getPath()), "UTF-8").useDelimiter("\\A").next();
+        Weather w = mapper.readValue(content, Weather.class);
+    }
 
 }
