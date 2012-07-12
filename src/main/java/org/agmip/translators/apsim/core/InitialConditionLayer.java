@@ -25,11 +25,11 @@ class InitialConditionLayer {
     private double nh4;
 
     
-    void readFrom(Map layer) {
-        soilWater = Double.parseDouble(MapUtil.getValueOr(layer, "ich20", "-99"));
-        no3 = Double.parseDouble(MapUtil.getValueOr(layer, "icno3", "-99"));
-        nh4 = Double.parseDouble(MapUtil.getValueOr(layer, "icnh4", "-99"));
-    }
+//    void readFrom(Map layer) {
+//        soilWater = Double.parseDouble(MapUtil.getValueOr(layer, "ich20", "-99"));
+//        no3 = Double.parseDouble(MapUtil.getValueOr(layer, "icno3", "-99"));
+//        nh4 = Double.parseDouble(MapUtil.getValueOr(layer, "icnh4", "-99"));
+//    }
     
     
     

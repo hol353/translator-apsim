@@ -23,5 +23,50 @@ public class SimulationRun {
 	public String longitude;
 	@JsonProperty("fl_lat")
 	public String latitude;
+	public InitialCondition getInitialCondition() {
+		return initialCondition;
+	}
+	public void setInitialCondition(InitialCondition initialCondition) {
+		this.initialCondition = initialCondition;
+	}
+	public Weather getWeather() {
+		return weather;
+	}
+	public void setWeather(Weather weather) {
+		this.weather = weather;
+	}
+	public Management getManagement() {
+		return management;
+	}
+	public void setManagement(Management management) {
+		this.management = management;
+	}
+	public Soil getSoil() {
+		return soil;
+	}
+	public void setSoil(Soil soil) {
+		this.soil = soil;
+	}
+	public String getExperimentName() {
+		return experimentName;
+	}
+	public void setExperimentName(String experimentName) {
+		this.experimentName = experimentName;
+	}
+	public String getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+	public String getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
+	
+	
+	
 }

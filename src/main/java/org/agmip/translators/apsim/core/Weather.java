@@ -14,7 +14,7 @@ public class Weather {
 	public String shortName;
 	
 	@JsonProperty("wsta_insi") 
-	public String longName;
+	public String longName = "?";
 	
 	@JsonProperty("wsta_lat")	
 	public String latitude;

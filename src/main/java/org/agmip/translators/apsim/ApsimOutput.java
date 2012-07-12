@@ -10,11 +10,16 @@ import java.util.logging.Logger;
 
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.SimulationRun;
+import org.agmip.translators.apsim.util.Converter;
 import org.agmip.util.MapUtil;
 import org.agmip.util.MapUtil.BucketEntry;
+import static org.agmip.util.JSONAdapter.toJSON;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 
 
@@ -25,39 +30,21 @@ public class ApsimOutput implements TranslatorOutput {
 
     
     public void writeFile(String filePath, Map input) {
-    
-        // Initialise velocity
-        Velocity.init();
-        VelocityContext context = new VelocityContext();
-        
-        // Weather variable
-        BucketEntry weather = MapUtil.getBucket(input, "weather").get(0);
-        context.put( "wst_insi", MapUtil.getValueOr(weather.getValues(), "wst_insi", "?"));
-                
-        System.out.println(input.toString());
-        
-        SimulationRun experiment = new SimulationRun();
-            
-//        try {
-//			experiment.readFrom(input);
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        context.put( "experiment", experiment);
+    	 
+    		 File path = new File(filePath);
+		 ObjectMapper mapper = new ObjectMapper();  
+	     SimulationRun sim;
+		try {
+			sim = mapper.readValue(toJSON(MapUtil.decompressAll(input)), SimulationRun.class);
+		     Converter.generateWeatherFiles(path, sim.weather);
+		     Converter.generateAPSIMFile(path, sim);
 
-        // Write template.
-        Template template = Velocity.getTemplate("src\\main\\resources\\AgMIPTemplate.apsim");
-        FileWriter F;
-        try {
-            
-            F = new FileWriter(new File(filePath,"Test.apsim"));
-            template.merge( context, F );
-            F.close();
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ApsimOutput.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	     
+    	   
+
           
         
     }
