@@ -20,7 +20,7 @@ public class TestEvent {
 		    
 		    
 		    Converter.generateAPSIMFile(new File("src/test/resources"), sim);
-//		    Converter.generateWeatherFiles(new File("src/test/resources"), sim.weather);
+		    Converter.generateWeatherFiles(new File("src/test/resources"), sim.weather);
 
 		    
 	}

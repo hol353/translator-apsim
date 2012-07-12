@@ -7,7 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,16 +83,20 @@ public class Converter {
 		return part[0];
 	}
 	
-   public static String GetDay(String w_date) {
-		String[] part = w_date.split("-");
-		
-		
+   
+   private static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
+   private static final SimpleDateFormat apsim = new SimpleDateFormat("dd/MM/yyyy");
+   
+   public static String GetDay(String agmipDate) throws ParseException  {
+	   	Date date = agmip.parse(agmipDate);
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(part[2]));
-        c.set(Calendar.MONTH, Integer.parseInt(part[1])-1);
-        c.set(Calendar.YEAR, Integer.parseInt(part[0]));
+        c.setTime(date);
         return c.get(Calendar.DAY_OF_YEAR) +"";
 	}
    
+   public static String convertDate(String agmipDate)  throws ParseException{
+	   	Date date = agmip.parse(agmipDate);
+	   	return apsim.format(date);
+   }
 
 }

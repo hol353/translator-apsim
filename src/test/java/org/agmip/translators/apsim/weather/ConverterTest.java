@@ -37,7 +37,7 @@ public class ConverterTest extends TestCase {
 
 		{
 			DailyWeather r = new DailyWeather();
-			r.date = "2012-01-01";
+			r.date = "20120101";
 			r.solarRadiation = "0"; // radn
 			r.maxTemperature = "13"; // maxt
 			r.minTemperature = "-12"; // mint
@@ -47,7 +47,7 @@ public class ConverterTest extends TestCase {
 
 		{
 			DailyWeather r = new DailyWeather();
-			r.date = "2012-01-02";
+			r.date = "20120102";
 			r.solarRadiation = "0.3"; // radn
 			r.maxTemperature = "18"; // maxt
 			r.minTemperature = "0.2"; // mint
@@ -73,10 +73,19 @@ public class ConverterTest extends TestCase {
 	}
 
 	@Test
-	public void testGetDay() {
-		assertEquals("1", Converter.GetDay("2012-1-1"));
-		assertEquals("32", Converter.GetDay("2012-2-1"));
+	public void testGetDay() throws Exception{
+		assertEquals("1", Converter.GetDay("20120101"));
+		assertEquals("32", Converter.GetDay("20120201"));
 	}
+	
+	
+	@Test
+	public void testConvertDayte() throws Exception{
+		assertEquals("01/01/2012", Converter.convertDate("20120101"));
+		assertEquals("19/05/2011", Converter.convertDate("20110519"));
+	}
+	
+	
 
 	@Test
 	public void testJSON() {

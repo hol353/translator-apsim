@@ -6,6 +6,7 @@ package org.agmip.translators.apsim.core;
 
 import java.util.Map;
 import org.agmip.util.MapUtil;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -18,13 +19,13 @@ public class SoilLayer {
     @JsonProperty("sllb")
     private double bottomDepth;
     
-    @JsonProperty("DELETE-2")
+    @JsonIgnore
     private double thickness;
     
     @JsonProperty("slbdm")
     private double bulkDensity;
     
-    @JsonProperty("DELETE")
+    @JsonIgnore
     private double airDry;
     
     @JsonProperty("slll")
