@@ -44,7 +44,7 @@ public class TranslationTest
             ApsimOutput Translator = new ApsimOutput();
         
             JSONAdapter j = new JSONAdapter();
-            LinkedHashMap<String, Object> result;
+            LinkedHashMap<String, Object> result =null;
 
             File file = new File( "src/test/resources/UFGA8201_mzx.json");
 
@@ -54,7 +54,7 @@ public class TranslationTest
     			json += scanner.nextLine();
             
             
-            result = (LinkedHashMap<String, Object>) JSONAdapter.fromJSON(json);
+//            result = (LinkedHashMap<String, Object>) JSONAdapter.fromJSON(json);
 
             Translator.writeFile("src/test/resources/", result);
             //File file = new File("test.apsim");

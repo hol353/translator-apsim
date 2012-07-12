@@ -1,0 +1,15 @@
+{
+    "events": [
+        {
+            "cul_name": "Rare Weed", 
+            "date": "20120712", 
+            "pldp": "120", 
+            "type": "planting"
+        }, 
+        {
+            "date": "20121212", 
+            "kill": "all", 
+            "type": "harvest"
+        }
+    ]
+}

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.agmip.translators.apsim;
+package org.agmip.translators.apsim.core;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,24 +11,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import org.agmip.util.MapUtil;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
  * @author hol353
  */
-public class InitialConditions {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class InitialCondition {
     
     @JsonProperty("icdat")
-    private Date date;
+    public String date;
     
     @JsonProperty("icrag")
-    private double residueWeight;
+    public double residueWeight;
     
     @JsonProperty("icrn")
-    private double residueNConc;
+    public double residueNConc;
     
-    private InitialConditionLayer[] layers;
+    public InitialConditionLayer[] soilLayer;
     
     public void readFrom(Map input) throws ParseException {
 /*        MapUtil.BucketEntry management = MapUtil.getBucket(input, "treatment").get(0);
@@ -47,59 +49,5 @@ public class InitialConditions {
         } 
 */    }
 
-    /**
-     * @return the date
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    /**
-     * @return the residueWeight
-     */
-    public double getResidueWeight() {
-        return residueWeight;
-    }
-
-    /**
-     * @param residueWeight the residueWeight to set
-     */
-    public void setResidueWeight(double residueWeight) {
-        this.residueWeight = residueWeight;
-    }
-
-    /**
-     * @return the residueNConc
-     */
-    public double getResidueNConc() {
-        return residueNConc;
-    }
-
-    /**
-     * @param residueNConc the residueNConc to set
-     */
-    public void setResidueNConc(double residueNConc) {
-        this.residueNConc = residueNConc;
-    }
-
-    /**
-     * @return the layers
-     */
-    public InitialConditionLayer[] getLayers() {
-        return layers;
-    }
-
-    /**
-     * @param layers the layers to set
-     */
-    public void setLayers(InitialConditionLayer[] layers) {
-        this.layers = layers;
-    }
+ 
 }

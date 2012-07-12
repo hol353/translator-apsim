@@ -1,7 +1,8 @@
-package org.agmip.translators.apsim.weather;
+package org.agmip.translators.apsim.core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -25,7 +26,7 @@ public class Weather {
 	public String averageTemperature;
 
 	@JsonProperty("dailyWeather") 
-	Set<Record> records = new HashSet<Record>();
+	public List<DailyWeather> records = new ArrayList<DailyWeather>();
 
 	public String getShortName() {
 		return shortName;
@@ -67,13 +68,7 @@ public class Weather {
 		this.averageTemperature = averageTemperature;
 	}
 
-	public Set<Record> getRecords() {
-		return records;
-	}
 
-	public void setRecords(Set<Record> records) {
-		this.records = records;
-	}
 	
 	
 	

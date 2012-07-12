@@ -1,4 +1,4 @@
-package org.agmip.translators.apsim.weather;
+package org.agmip.translators.apsim.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 import java.util.Calendar;
+
+import org.agmip.translators.apsim.core.DailyWeather;
+import org.agmip.translators.apsim.core.Weather;
 
 
 public class Converter {
@@ -26,7 +29,7 @@ public class Converter {
 	        br.write("year day radn maxt mint rain wind dewp vers rh \n");
 	        br.write("()    ()   (MJ/m2) (oC)  (oC)  (mm)  (km)  (oC)   ()   (%)\n");
 
-	        for(Record r : s.records){
+	        for(DailyWeather r : s.records){
         	    br.write(GetYear(r.date)+" ");
         	    br.write(GetDay(r.date)+" ");
         	    br.write(r.solarRadiation +" ");

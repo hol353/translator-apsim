@@ -2,17 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.agmip.translators.apsim;
+package org.agmip.translators.apsim.core;
 
 import java.util.ArrayList;
 import java.util.Map;
 import org.agmip.util.MapUtil;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
  * @author Dean Holzworth
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Soil {
     @JsonProperty("classification")
     private String classification;

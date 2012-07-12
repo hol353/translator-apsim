@@ -2,27 +2,29 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.agmip.translators.apsim;
+package org.agmip.translators.apsim.core;
 
 import java.util.Map;
 import org.agmip.util.MapUtil;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
  * @author hol353
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SoilLayer {
     @JsonProperty("sllb")
     private double bottomDepth;
     
-    @JsonProperty("")
+    @JsonProperty("DELETE-2")
     private double thickness;
     
-    @JsonProperty("slll")
+    @JsonProperty("slbdm")
     private double bulkDensity;
     
-    @JsonProperty("")
+    @JsonProperty("DELETE")
     private double airDry;
     
     @JsonProperty("slll")

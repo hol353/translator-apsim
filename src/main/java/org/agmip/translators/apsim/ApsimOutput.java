@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.agmip.core.types.TranslatorOutput;
+import org.agmip.translators.apsim.core.SimulationRun;
 import org.agmip.util.MapUtil;
 import org.agmip.util.MapUtil.BucketEntry;
 import org.apache.velocity.Template;
@@ -36,13 +36,14 @@ public class ApsimOutput implements TranslatorOutput {
                 
         System.out.println(input.toString());
         
-        Experiment experiment = new Experiment();
-        try {
-			experiment.readFrom(input);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        SimulationRun experiment = new SimulationRun();
+            
+//        try {
+//			experiment.readFrom(input);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
         context.put( "experiment", experiment);
 
         // Write template.

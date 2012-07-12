@@ -7,15 +7,15 @@ import java.io.PrintWriter;
 
 import java.net.URL;
 
+import java.util.List;
 import java.util.Set;
 import java.util.Scanner;
 
 import junit.framework.TestCase;
 
-import org.agmip.translators.apsim.weather.Converter;
-import org.agmip.translators.apsim.weather.Record;
-import org.agmip.translators.apsim.weather.Weather;
-import org.agmip.translators.apsim.weather.Weather;
+import org.agmip.translators.apsim.core.DailyWeather;
+import org.agmip.translators.apsim.core.Weather;
+import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -33,10 +33,10 @@ public class ConverterTest extends TestCase {
 		w.latitude = "-11.2345";
 		w.longitude = "-11.2345";
 
-		Set<Record> recs = w.records;
+		List<DailyWeather> recs = w.records;
 
 		{
-			Record r = new Record();
+			DailyWeather r = new DailyWeather();
 			r.date = "2012-01-01";
 			r.solarRadiation = "0"; // radn
 			r.maxTemperature = "13"; // maxt
@@ -46,7 +46,7 @@ public class ConverterTest extends TestCase {
 		}
 
 		{
-			Record r = new Record();
+			DailyWeather r = new DailyWeather();
 			r.date = "2012-01-02";
 			r.solarRadiation = "0.3"; // radn
 			r.maxTemperature = "18"; // maxt
