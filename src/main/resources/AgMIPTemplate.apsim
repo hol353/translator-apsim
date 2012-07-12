@@ -7,6 +7,10 @@
           * Soil/Crop LL values are set to LL15 for all layers
           * Soil/Crop KL values are set to 0.1 for all layers
           * Soil/Crop XF values are set to 1.0 for all layers (i.e. no sub soil contraints)
+          * Surface organic matter C:N ratio is not changed to reflect residue type.
+        Todo:
+          * Surface organic matter previous crop isn't being set - should use crop code in InitialConditions.
+          
     </memo>
     <clock>
       <start_date type="date" description="Enter the start date of the simulation">01/01/1940</start_date>
@@ -18,25 +22,25 @@
     <summaryfile />
     <area name="paddock">
       <soil name="Soil">
-        <Comment type="multiedit" description="Comments">$experiment.soil.name</Comment>
+        <Comment type="multiedit" description="Comments">$simulation.soil.name</Comment>
         <ASC_Order description="Australian Soil Classification Order" />
         <ASC_Sub-order description="Australian Soil Classification Sub-Order" />
-        <SoilType description="Soil description">$experiment.soil.classification</SoilType>
+        <SoilType description="Soil description">$simulation.soil.classification</SoilType>
         <LocalName></LocalName>
-        <Site>$experiment.soil.site</Site>
+        <Site>$simulation.soil.site</Site>
         <NearestTown description="Nearest town"></NearestTown>
         <Region></Region>
         <State />
         <Country />
         <NaturalVegetation description="Natural vegetation"></NaturalVegetation>
         <ApsoilNumber description="Apsoil number" />
-        <Latitude description="Latitude (WGS84)">$experiment.soil.latitude</Latitude>
-        <Longitude>$experiment.soil.longitude</Longitude>
+        <Latitude description="Latitude (WGS84)">$simulation.soil.latitude</Latitude>
+        <Longitude>$simulation.soil.longitude</Longitude>
         <LocationAccuracy description="Location accuracy" />
-        <DataSource type="multiedit" description="Data source">$experiment.soil.source</DataSource>
+        <DataSource type="multiedit" description="Data source">$simulation.soil.source</DataSource>
         <Comments />
         <Water>
-#foreach ($layer in $experiment.soil.layers)
+#foreach ($layer in $simulation.soil.layers)
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <KS units="mm/day" />
@@ -48,7 +52,7 @@
           </Layer>
 #end
           <SoilCrop name="Barley">
-#foreach ($layer in $experiment.soil.layers)          
+#foreach ($layer in $simulation.soil.layers)          
             <Layer>
               <Thickness units="mm">$layer.thickness</Thickness>
               <LL units="mm/mm">$layer.lowerLimit</LL>
@@ -79,7 +83,7 @@
           </CatchmentArea>
           <MaxPond>
           </MaxPond>
-#foreach ($layer in $experiment.soil.layers)             
+#foreach ($layer in $simulation.soil.layers)             
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <SWCON units="0-1">0.3</SWCON>
@@ -94,7 +98,7 @@
           <SoilCn>12.5</SoilCn>
           <EnrACoeff>7.4</EnrACoeff>
           <EnrBCoeff>0.2</EnrBCoeff>
-#foreach ($layer in $experiment.soil.layers)        
+#foreach ($layer in $simulation.soil.layers)        
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <OC units="Total %">$layer.organicCarbon</OC>
@@ -104,7 +108,7 @@
 #end
         </SoilOrganicMatter>
         <Analysis>
-#foreach ($layer in $experiment.soil.layers)        
+#foreach ($layer in $simulation.soil.layers)        
           <Layer>
             <Thickness units="mm">$layer.thickness</Thickness>
             <Rocks units="%" />
@@ -129,79 +133,21 @@
 #end
           </Analysis>
         <Sample name="Initial conditions">
-          <Date type="date" description="Sample date:" />
+          <Date type="date" description="Sample date:">$simulation.initialcondition.date</Date>
+#foreach ($layer in $simulation.initialcondition.soillayers)        
           <Layer>
-            <Thickness units="mm">150</Thickness>
-            <NO3 units="ppm">6.50300344798777</NO3>
-            <NH4 units="ppm">0.599004378686979</NH4>
+            <Thickness units="mm">$soillayers.depth</Thickness>
+            <NO3 units="ppm">$soillayers.no3</NO3>
+            <NH4 units="ppm">$soillayers.nh4</NH4>
             <SW units="mm/mm" />
           </Layer>
-          <Layer>
-            <Thickness>150</Thickness>
-            <NO3>2.10100111398159</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>2.10100111398159</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
-          <Layer>
-            <Thickness>300</Thickness>
-            <NO3>1.70100090189562</NO3>
-            <NH4>0.100000730999496</NH4>
-            <SW units="mm/mm" />
-          </Layer>
+#end          
         </Sample>
       </soil>
       <surfaceom name="SurfaceOrganicMatter">
-        <PoolName type="text" description="Organic Matter pool name">wheat</PoolName>
+        <PoolName type="text" description="Organic Matter pool name">OrganicMatter</PoolName>
         <type type="list" listvalues="bambatsi,barley,base_type,broccoli,camaldulensis,canola,centro,chickpea,chikenmanure_base,cm,cmA,cmB,constants,cotton,cowpea,danthonia,fababean,fieldpea,fym,gbean,globulus,goatmanure,grandis,grass,horsegram,inert,lablab,lentil,lucerne,lupin,maize,manB,manure,medic,millet,mucuna,nativepasture,navybean,oats,orobanche,peanut,pigeonpea,potato,rice,sorghum,soybean,stylo,sugar,sunflower,sweetcorn,sweetsorghum,tillage,tithonia,vetch,weed,wheat" description="Organic Matter type">wheat</type>
-        <mass type="text" description="Initial surface residue (kg/ha)">1000</mass>
+        <mass type="text" description="Initial surface residue (kg/ha)">$simulation.initialCondition.residueWeight</mass>
         <cnr type="text" description="C:N ratio of initial residue">80</cnr>
         <standing_fraction type="text" description="Fraction of residue standing">0</standing_fraction>
       </surfaceom>
@@ -219,7 +165,14 @@
       </irrigation>
       <wheat />
       <folder name="Manager folder">
-        <operations name="Operations" />
+        <operations name="Operations">
+#foreach ($event in $simulation.management.events)        
+          <operation condition="start_of_day">
+            <date>$event.date</date>
+            <action>$event.apsimAction</action>
+          </operation>
+#end        
+        </operations>
         <manager name="Harvesting rule">
           <ui>
             <category type="category" description="Harvesting criteria" />
