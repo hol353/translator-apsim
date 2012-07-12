@@ -63,7 +63,7 @@ public class Converter {
         // Initialise velocity
         Velocity.init();
         VelocityContext context = new VelocityContext();
-        context.put( "experiment", sim);
+        context.put( "simulation", sim);
 
         Template template = Velocity.getTemplate("src\\main\\resources\\AgMIPTemplate.apsim");
         FileWriter F;
@@ -78,9 +78,11 @@ public class Converter {
         }
 	}
 	
-   public static String GetYear(String w_date) {
-		String[] part = w_date.split("-");
-		return part[0];
+   public static String GetYear(String agmipDate) throws ParseException {
+	    Date date = agmip.parse(agmipDate);
+	    Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.YEAR) +"";
 	}
 	
    

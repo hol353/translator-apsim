@@ -16,4 +16,9 @@ public class Irrigation extends Event {
 	@JsonProperty("ireff")
 	String efficiency;
 
+	@Override
+	String getApsimAction() {
+		return "irrigation apply amount = " +amount+ " (mm) " ;
+	}
+
 }

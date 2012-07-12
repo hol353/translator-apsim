@@ -9,5 +9,10 @@ public class Tillage extends Event {
 	String depth;
 	@JsonProperty("ti_name")
 	String implementName;
+	@Override
+	String getApsimAction() {
+		// TODO Auto-generated method stub
+		return "";
+	}
 
 }

@@ -2,6 +2,7 @@ package org.agmip.translators.apsim.events;
 
 import java.util.Date;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
@@ -31,7 +32,21 @@ public abstract class Event {
 	
 //	@JsonProperty("date")
 //	@JsonSerialize(using=DateSerializer.class)
-//	@JsonDeserialize(using=DateDeserializer.class)
+	@JsonDeserialize(using=DateDeserializer.class)
 	String date;
+	
+
+	
+	abstract String getApsimAction();
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
+	
 
 }

@@ -31,6 +31,7 @@ public class Soil {
     @JsonProperty("soil_long")
     private double longitude;
     
+    @JsonProperty("soilLayer")
     private SoilLayer[] layers;
 
 	public String getClassification() {

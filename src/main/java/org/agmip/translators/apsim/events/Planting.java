@@ -11,6 +11,10 @@ public class Planting extends Event{
 	 * Cultivar name
 	 * Unit or Type: text
 	 */
+	
+	@JsonProperty("crid")
+	String cropID;
+	
 	@JsonProperty("cul_name")
 	String cultivar;
 
@@ -32,5 +36,15 @@ public class Planting extends Event{
 	 */
 	@JsonProperty("plpop")
 	Double population;
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.agmip.translators.apsim.events.Event#getApsimAction()
+	 * TODO: Add a translator from code to name.
+	 */
+	@Override
+	String getApsimAction() {
+		return cropID +" ";  
+	}
 
 }

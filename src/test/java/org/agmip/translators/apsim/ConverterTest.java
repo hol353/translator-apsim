@@ -1,4 +1,4 @@
-package org.agmip.translators.apsim.weather;
+package org.agmip.translators.apsim;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -67,9 +67,9 @@ public class ConverterTest extends TestCase {
 	}
 
 	@Test
-	public void testGetYear() {
-		assertEquals("2012", Converter.GetYear("2012-12-12"));
-		assertEquals("2000", Converter.GetYear("2000-2-1"));
+	public void testGetYear() throws Exception {
+		assertEquals("2012", Converter.GetYear("20121212"));
+		assertEquals("2000", Converter.GetYear("20000921"));
 	}
 
 	@Test

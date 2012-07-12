@@ -23,6 +23,12 @@ public class Fertilizer extends Event {
 
 	@JsonProperty("feamn")
 	String nitrogen;
+
+
+	@Override
+	String getApsimAction() {
+		return "fertiliser apply amount = " + nitrogen + "(kg/ha), type = no3_n (), depth = " + depth + " (mm)";
+	}
 	
 	
 	
