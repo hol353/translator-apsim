@@ -90,25 +90,13 @@ public class Soil {
 		this.layers = layers;
 	}
     
-//    public void readFrom(Map input) {
-//        MapUtil.BucketEntry soil = MapUtil.getBucket(input, "soil").get(0);
-//        
-//        setClassification(MapUtil.getValueOr(soil.getValues(), "classification", "?"));
-//        setSite(MapUtil.getValueOr(soil.getValues(), "soil_site", "?"));
-//        setName(MapUtil.getValueOr(soil.getValues(), "soil_name", "?"));
-//        setSource(MapUtil.getValueOr(soil.getValues(), "sl_source", "?"));
-//        setLatitude(Double.parseDouble(MapUtil.getValueOr(soil.getValues(), "soil_lat", "?")));
-//        setLongitude(Double.parseDouble(MapUtil.getValueOr(soil.getValues(), "soil_long", "?")));
-//        
-//        ArrayList data = soil.getDataList();
-//        setLayers(new SoilLayer[data.size()]);
-//        double cumThickness = 0.0;
-//        for (int i = 0; i < data.size(); i++) {
-//            getLayers()[i] = new SoilLayer();
-//            getLayers()[i].readFrom((Map) data.get(i));
-//            cumThickness = getLayers()[i].calcThickness(cumThickness);
-//        } 
-//    }
+        
+    public void calcThickness() {
+        double cumThickness = 0.0;
+        for (int i = 0; i < layers.length; i++) {
+            cumThickness = layers[i].calcThickness(cumThickness);
+        } 
+    }
 
 
       
