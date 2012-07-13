@@ -48,14 +48,7 @@ public class WeatherTest extends TestCase {
 
 	}
 
-	@Test
-	public void testGenerateWeatherFiles() {
-		try {
-			Converter.generateWeatherFiles(new File("src/test/resources/gen"), w);
-		} catch (Exception e) {
-			assertTrue(false);
-		}
-	}
+
 
 	@Test
 	public void testGetYear() throws Exception {
