@@ -6,25 +6,32 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Weather {
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("wsta_site") 	
-	public String shortName;
+	public String shortName="default";
 	
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("wsta_insi") 
 	public String longName = "?";
-	
-	@JsonProperty("wsta_lat")	
-	public String latitude;
-	
-	@JsonProperty("wsta_long") 
-	public String longitude;
-	
-	@JsonProperty("tav") 
-	public String averageTemperature;
 
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+	@JsonProperty("wsta_lat")	
+	public String latitude = "?";
+	
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+	@JsonProperty("wsta_long") 
+	public String longitude = "?";
+	
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+	@JsonProperty("tav") 
+	public String averageTemperature = "?";
+
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
 	@JsonProperty("dailyWeather") 
 	public List<DailyWeather> records = new ArrayList<DailyWeather>();
 

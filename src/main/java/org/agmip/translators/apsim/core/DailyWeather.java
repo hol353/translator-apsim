@@ -14,30 +14,38 @@ public class DailyWeather {
 	
 	@JsonProperty("w_date")
 	@JsonDeserialize(using=DateDeserializer.class)
-	@JsonSerialize(using=DateSerializer.class)
-	public	String date ="?";
+	@JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
+	public	String date ="01/01/1000";
 	
-	@JsonProperty("srad")	
+	@JsonProperty("srad")
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	public String solarRadiation="?"; //radn
 	
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("tmax")
 	public String maxTemperature="?"; //maxt
 
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("tmin")
 	public String minTemperature="?"; //mint
 
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("rain")
 	public String rainfall="?";
 
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("wind")
 	public String windSpeed="?";
 
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("dewp")
 	public	String dewPoint="?";
 	
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("vprs")
 	public	String vaporPressure="?"; //vers
 
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 	@JsonProperty("rhum")
 	public	String relativeHumidity="?"; //rh
 
