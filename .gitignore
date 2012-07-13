@@ -4,3 +4,7 @@ target/*
 /bin
 /target
 /.classpath
+
+src/test/resources/UFGA8201MZ.apsim
+src/test/resources/UFGA8201MZ.met
+src/test/resources/default.met

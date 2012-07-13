@@ -9,7 +9,11 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-
+/**
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @author Dean Holzworth, CSIRO
+ * @since Jul 13, 2012
+ */
 
     @JsonTypeInfo(  
 	    use = JsonTypeInfo.Id.NAME,  

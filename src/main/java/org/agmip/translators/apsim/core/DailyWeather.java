@@ -1,6 +1,5 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.util.Converter;
 import org.agmip.translators.apsim.util.DateDeserializer;
 import org.agmip.translators.apsim.util.DateSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -8,6 +7,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+
+/**
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @author Dean Holzworth, CSIRO
+ * @since Jul 13, 2012
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DailyWeather {
 	
