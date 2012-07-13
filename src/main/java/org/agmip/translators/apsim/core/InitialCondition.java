@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.core;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -22,7 +23,7 @@ public class InitialCondition {
     @JsonProperty("icrn")
     public double residueNConc;
   
-    @JsonProperty("soillayer")
+    @JsonProperty("soilLayer")
     public InitialConditionLayer[] soilLayers;
 
 	public String getDate() {
@@ -33,6 +34,8 @@ public class InitialCondition {
 		this.date = date;
 	}
 
+
+        
 	public double getResidueWeight() {
 		return residueWeight;
 	}
@@ -57,22 +60,12 @@ public class InitialCondition {
 		this.soilLayers = soilLayers;
 	}
     
-//    public void readFrom(Map input) throws ParseException {
-//        MapUtil.BucketEntry management = MapUtil.getBucket(input, "treatment").get(0);
-//        MapUtil.BucketEntry initialConditions = management.getSubBucketEntry("initial_condition");
-//        
-//        DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd");
-//        date = dateFormatter.parse(MapUtil.getValueOr(initialConditions.getValues(), "icdat", "?"));
-//        residueWeight = Double.parseDouble(MapUtil.getValueOr(management.getValues(), "icrag", "?"));
-//        residueNConc = Double.parseDouble(MapUtil.getValueOr(management.getValues(), "icrn", "?"));
-//       
-//        ArrayList data = management.getDataList();
-//        setLayers(new InitialConditionLayer[data.size()]);
-//        for (int i = 0; i < data.size(); i++) {
-//            layers[i] = new InitialConditionLayer();
-//            layers[i].readFrom((Map) data.get(i));
-//        } 
-//    }
+    public void calcThickness() {
+        double cumThickness = 0.0;
+        for (int i = 0; i < soilLayers.length; i++) {
+            cumThickness = soilLayers[i].calcThickness(cumThickness);
+        } 
+    }
 
  
 }

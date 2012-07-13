@@ -13,8 +13,8 @@
           
     </memo>
     <clock>
-      <start_date type="date" description="Enter the start date of the simulation">$simulation.management.plantingDate</start_date>
-      <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
+      <start_date type="date" description="Enter the start date of the simulation">$simulation.startDate</start_date>
+      <end_date type="date" description="Enter the end date of the simulation">$simulation.endDate</end_date>
     </clock>
     <metfile name="met">
       <filename name="filename" input="yes">${simulation.experimentName}.met</filename>
@@ -133,13 +133,13 @@
 #end
           </Analysis>
         <Sample name="Initial conditions">
-          <Date type="date" description="Sample date:">$simulation.initialcondition.date</Date>
-#foreach ($layer in $simulation.initialcondition.soillayers)        
+          <Date type="date" description="Sample date:">$simulation.initialCondition.date</Date>
+#foreach ($initialLayer in $simulation.initialCondition.soilLayers)        
           <Layer>
-            <Thickness units="mm">$soillayers.depth</Thickness>
-            <NO3 units="ppm">$soillayers.no3</NO3>
-            <NH4 units="ppm">$soillayers.nh4</NH4>
-            <SW units="mm/mm" />
+            <Thickness units="mm">$initialLayer.thickness</Thickness>
+            <NO3 units="ppm">$initialLayer.no3</NO3>
+            <NH4 units="ppm">$initialLayer.nh4</NH4>
+            <SW units="mm/mm">$initialLayer.soilWater</SW>
           </Layer>
 #end          
         </Sample>

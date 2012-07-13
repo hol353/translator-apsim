@@ -2,6 +2,7 @@ package org.agmip.translators.apsim.core;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * @author Dean Holzworth, CSIRO
@@ -14,8 +15,9 @@ public class Soil {
     @JsonProperty("classification")
     private String classification;
 
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("soil_site")
-    private String site;
+    private String site = "";
     
     @JsonProperty("soil_name")
     private String name;

@@ -26,13 +26,5 @@ public class Management {
     this.events = events;
   }
 
-  public String plantingDate() {
-      for (Event event : events) {
-          if (event instanceof Planting) {
-            return event.getDate();
-          }
-      }
-      return null;
-  }
   
 }

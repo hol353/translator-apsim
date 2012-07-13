@@ -1,11 +1,15 @@
 package org.agmip.translators.apsim;
 
 import java.io.File;
+import java.net.URL;
+import java.util.Scanner;
 
 import junit.framework.TestCase;
 
 import org.agmip.translators.apsim.core.SimulationRun;
 import org.agmip.translators.apsim.util.Converter;
+import org.agmip.util.JSONAdapter;
+import org.agmip.util.MapUtil;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
@@ -21,8 +25,12 @@ public class ConverterTest extends TestCase{
 //		FileUtils.deleteDirectory(outputPath);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		 sim = mapper.readValue(new File(
-				"src/test/resources/simulation.json"), SimulationRun.class);
+                File F = new File("src/test/resources/simulation.json");
+                
+                URL resource = this.getClass().getResource("/simulation.json");
+                String json = new Scanner(new File(resource.getPath()), "UTF-8").useDelimiter("\\A").next();
+                String newJson = (JSONAdapter.toJSON(MapUtil.decompressAll(JSONAdapter.fromJSON(json))));
+		 sim = mapper.readValue(newJson, SimulationRun.class);
 	}
 	
 	@Test

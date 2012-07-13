@@ -37,7 +37,7 @@ public class SoilLayer {
     private double organicCarbon;
 
     @JsonProperty("slphw")
-    private double ph;
+    private double ph = 7.0;
 
     public double calcThickness(double cumThickness) {
         setThickness(getBottomDepth() * 10 - cumThickness);

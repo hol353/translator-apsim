@@ -1,5 +1,11 @@
 package org.agmip.translators.apsim.core;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import org.agmip.translators.apsim.events.Event;
+import org.agmip.translators.apsim.events.Planting;
+import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -71,7 +77,25 @@ public class SimulationRun {
 		this.latitude = latitude;
 	}
 
-	
+	public String getStartDate() {
+            for (Event event : management.getEvents()) {
+                if (event instanceof Planting) {
+                    return event.getDate();
+                }
+            }
+            return null;
+        }
+        
+	public String getEndDate() throws ParseException {
+                Calendar endDate = Converter.toCalendar(getStartDate());
+                endDate.add(Calendar.YEAR, 1);
+                return Converter.toApsimDateString(endDate);
+        }
+
+    public void initialise() {
+        getSoil().calcThickness();
+        getInitialCondition().calcThickness();
+    }
 	
 	
 }

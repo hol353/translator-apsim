@@ -78,7 +78,7 @@ public class Converter {
 		Velocity.init();
 		VelocityContext context = new VelocityContext();
 		context.put("simulation", sim);
-
+                sim.initialise();
 		Template template = Velocity
 				.getTemplate("src\\main\\resources\\AgMIPTemplate.apsim");
 		FileWriter writer;
@@ -124,6 +124,14 @@ public class Converter {
 		return c.get(Calendar.DAY_OF_YEAR) + "";
 	}
 
-
+	public static Calendar toCalendar(String apsimDate) throws ParseException {
+                Calendar c = Calendar.getInstance();
+		c.setTime(apsim.parse(apsimDate));
+		return c;
+	}
+        
+	public static String toApsimDateString(Calendar date) throws ParseException {
+		return apsim.format(date.getTime());
+	}
 
 }

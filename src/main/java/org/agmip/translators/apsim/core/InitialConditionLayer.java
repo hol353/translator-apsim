@@ -1,6 +1,7 @@
 
 package org.agmip.translators.apsim.core;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -11,6 +12,10 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class InitialConditionLayer {
+    
+    @JsonProperty("icbl")
+    private double bottomDepth;
+    
     @JsonProperty("ich20")
     private double soilWater;
     
@@ -20,16 +25,9 @@ class InitialConditionLayer {
     @JsonProperty("icnh4")
     private double nh4;
 
-    
-//    void readFrom(Map layer) {
-//        soilWater = Double.parseDouble(MapUtil.getValueOr(layer, "ich20", "-99"));
-//        no3 = Double.parseDouble(MapUtil.getValueOr(layer, "icno3", "-99"));
-//        nh4 = Double.parseDouble(MapUtil.getValueOr(layer, "icnh4", "-99"));
-//    }
-    
-    
-    
-
+    @JsonIgnore
+    private double thickness;
+        
     public double getSoilWater() {
         return soilWater;
     }
@@ -53,6 +51,24 @@ class InitialConditionLayer {
     public void setNh4(double nh4) {
         this.nh4 = nh4;
     }
+    
+    public double calcThickness(double cumThickness) {
+        setThickness(bottomDepth * 10 - cumThickness);  // convert from cm to mm
+        return bottomDepth * 10;
+    }
 
+    /**
+     * @return the thickness
+     */
+    public double getThickness() {
+        return thickness;
+    }
+
+    /**
+     * @param thickness the thickness to set
+     */
+    public void setThickness(double thickness) {
+        this.thickness = thickness;
+    }
     
 }
