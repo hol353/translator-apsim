@@ -1,12 +1,8 @@
 package org.agmip.translators.apsim.util;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,9 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.agmip.translators.apsim.ApsimOutput;
-import org.agmip.translators.apsim.core.DailyWeather;
 import org.agmip.translators.apsim.core.SimulationRun;
-import org.agmip.translators.apsim.core.Weather;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;

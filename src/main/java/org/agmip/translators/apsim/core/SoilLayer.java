@@ -22,7 +22,8 @@ public class SoilLayer {
     @JsonProperty("slbdm")
     private double bulkDensity;
     
-    @JsonIgnore
+    @SuppressWarnings("unused")
+	@JsonIgnore
     private double airDry;
     
     @JsonProperty("slll")

@@ -2,9 +2,7 @@ package org.agmip.translators.apsim.core;
 
 import java.util.List;
 
-
 import org.agmip.translators.apsim.events.Event;
-import org.agmip.translators.apsim.events.Planting;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
