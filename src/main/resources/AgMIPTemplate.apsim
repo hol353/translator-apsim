@@ -13,7 +13,7 @@
           
     </memo>
     <clock>
-      <start_date type="date" description="Enter the start date of the simulation">01/01/1940</start_date>
+      <start_date type="date" description="Enter the start date of the simulation">$simulation.management.plantingDate</start_date>
       <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
     </clock>
     <metfile name="met">
