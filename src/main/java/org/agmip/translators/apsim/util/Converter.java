@@ -33,42 +33,7 @@ public class Converter {
 	public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
 	public static final SimpleDateFormat apsim = new SimpleDateFormat("dd/MM/yyyy");
 
-	@Deprecated
-	public static void generateWeatherFiles(File path, Weather s)
-			throws Exception {
-		if (s.shortName == null)
-			s.shortName = "default"; // throw new
-		// Exception("Cant create file. Station short name missing");
-
-		BufferedWriter br = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(new File(path, s.shortName + ".met"))));
-		br.write("!title: ");
-		br.write(s.longName);
-		br.newLine();
-		br.write("tav = ");
-		br.write(s.averageTemperature);
-		br.newLine();
-		br.write("amp = ");
-		br.newLine();
-		br.write("year day radn maxt mint rain wind dewp vers rh \n");
-		br.write("()    ()   (MJ/m2) (oC)  (oC)  (mm)  (km)  (oC)   ()   (%)\n");
-
-		for (DailyWeather r : s.records) {
-			br.write(GetYear(r.date) + " ");
-			br.write(GetDay(r.date) + " ");
-			br.write(r.solarRadiation + " ");
-			br.write(r.maxTemperature + " ");
-			br.write(r.minTemperature + " ");
-			br.write(r.rainfall + " ");
-			br.write(r.windSpeed + " ");
-			br.write(r.dewPoint + " ");
-			br.write(r.vaporPressure + " ");
-			br.write(r.relativeHumidity + " ");
-			br.newLine();
-		}
-
-		br.close();
-	}
+	
 
 	public static void generateAPSIMFile(File path, SimulationRun sim)
 			throws Exception {

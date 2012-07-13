@@ -2,7 +2,6 @@ package org.agmip.translators.apsim.core;
 
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.util.Converter;

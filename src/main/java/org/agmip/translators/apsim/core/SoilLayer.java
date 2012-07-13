@@ -3,6 +3,7 @@ package org.agmip.translators.apsim.core;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * @author Dean Holzworth, CSIRO
@@ -37,6 +38,7 @@ public class SoilLayer {
     private double organicCarbon;
 
     @JsonProperty("slphw")
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     private double ph = 7.0;
 
     public double calcThickness(double cumThickness) {

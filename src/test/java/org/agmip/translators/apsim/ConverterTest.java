@@ -22,11 +22,10 @@ public class ConverterTest extends TestCase{
 	SimulationRun sim = new SimulationRun();
 	File outputPath = new File("src/test/resources/gen");
 	public void setUp() throws Exception{
-//		FileUtils.deleteDirectory(outputPath);
+		FileUtils.deleteDirectory(outputPath);
 		
 		ObjectMapper mapper = new ObjectMapper();
-                File F = new File("src/test/resources/simulation.json");
-                
+                File F = new File("src/test/resources/simulation.json");     
                 URL resource = this.getClass().getResource("/simulation.json");
                 String json = new Scanner(new File(resource.getPath()), "UTF-8").useDelimiter("\\A").next();
                 String newJson = (JSONAdapter.toJSON(MapUtil.decompressAll(JSONAdapter.fromJSON(json))));
@@ -37,7 +36,7 @@ public class ConverterTest extends TestCase{
 	public void testReadJSONFile() {
 		assertEquals("Millhopper Fine Sand", sim.soil.getName());
 		assertEquals("26/02/1982", sim.getManagement().getEvents().get(0).getDate());
-//		assertEquals("0.026", sim.getSoil().getLayers()[0].getLowerLimit());
+		assertEquals(0.026, sim.getSoil().getLayers()[0].getLowerLimit());
 	}
 	
 	@Test
