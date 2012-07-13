@@ -29,7 +29,7 @@ public class TestRun {
 		System.out.println("Apsim    :" +(System.currentTimeMillis()-ping) +" ms");
 
 		ping = System.currentTimeMillis();
-		Converter.generate2(new File("src/test/resources"), sim);
+		Converter.generateMetFile(new File("src/test/resources"), sim);
 		System.out.println("Weather 2: " +(System.currentTimeMillis()-ping) +" ms");
 		
 		long pong = System.currentTimeMillis();

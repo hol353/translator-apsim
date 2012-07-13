@@ -2,23 +2,14 @@ package org.agmip.translators.apsim;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-
-import java.net.URL;
-
 import java.util.List;
-import java.util.Set;
-import java.util.Scanner;
 
 import junit.framework.TestCase;
 
 import org.agmip.translators.apsim.core.DailyWeather;
 import org.agmip.translators.apsim.core.Weather;
 import org.agmip.translators.apsim.util.Converter;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.junit.Test;
@@ -37,7 +28,7 @@ public class ConverterTest extends TestCase {
 
 		{
 			DailyWeather r = new DailyWeather();
-			r.date = "20120101";
+			r.date = "01/01/2012";
 			r.solarRadiation = "0"; // radn
 			r.maxTemperature = "13"; // maxt
 			r.minTemperature = "-12"; // mint
@@ -47,7 +38,7 @@ public class ConverterTest extends TestCase {
 
 		{
 			DailyWeather r = new DailyWeather();
-			r.date = "20120102";
+			r.date = "02/01/2012";
 			r.solarRadiation = "0.3"; // radn
 			r.maxTemperature = "18"; // maxt
 			r.minTemperature = "0.2"; // mint
@@ -68,22 +59,18 @@ public class ConverterTest extends TestCase {
 
 	@Test
 	public void testGetYear() throws Exception {
-		assertEquals("2012", Converter.GetYear("20121212"));
-		assertEquals("2000", Converter.GetYear("20000921"));
+		assertEquals("2012", Converter.GetYear("12/12/2012"));
+		assertEquals("2000", Converter.GetYear("21/09/2000"));
 	}
 
 	@Test
 	public void testGetDay() throws Exception{
-		assertEquals("1", Converter.GetDay("20120101"));
-		assertEquals("32", Converter.GetDay("20120201"));
+		assertEquals("1", Converter.GetDay("01/01/2012"));
+		assertEquals("32", Converter.GetDay("01/02/2012"));
 	}
 	
 	
-	@Test
-	public void testConvertDayte() throws Exception{
-		assertEquals("01/01/2012", Converter.convertDate("20120101"));
-		assertEquals("19/05/2011", Converter.convertDate("20110519"));
-	}
+
 	
 	
 
@@ -93,8 +80,7 @@ public class ConverterTest extends TestCase {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
 		try {
-			PrintWriter out = new PrintWriter(new FileWriter(new File(
-					"src/test/resources/test01.json")));
+			PrintWriter out = new PrintWriter(new FileWriter(new File("src/test/resources/test01.json")));
 			out.print(mapper.writeValueAsString(w));
 			out.close();
 

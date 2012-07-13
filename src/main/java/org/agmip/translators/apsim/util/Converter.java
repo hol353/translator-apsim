@@ -90,14 +90,14 @@ public class Converter {
 		}
 	}
 
-	public static void generate2(File path, SimulationRun sim) throws Exception {
+	public static void generateMetFile(File path, SimulationRun sim) throws Exception {
 		// Initialise velocity
 		Velocity.init();
 		VelocityContext context = new VelocityContext();
 		context.put("weather", sim.weather);
 
 		Template template = Velocity
-				.getTemplate("src\\main\\resources\\template.met");
+				.getTemplate("src/main/resources/template.met");
 		FileWriter writer;
 		writer = new FileWriter(new File(path, sim.experimentName + ".met"));
 		template.merge(context, writer);
@@ -119,9 +119,6 @@ public class Converter {
 		return c.get(Calendar.DAY_OF_YEAR) + "";
 	}
 
-	public static String convertDate(String agmipDate) throws ParseException {
-		Date date = agmip.parse(agmipDate);
-		return apsim.format(date);
-	}
+
 
 }

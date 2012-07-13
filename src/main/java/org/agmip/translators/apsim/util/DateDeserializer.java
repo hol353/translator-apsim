@@ -19,7 +19,8 @@ import org.codehaus.jackson.map.JsonDeserializer;
 		            throws IOException, JsonProcessingException {
 
 						try {
-							return Converter.convertDate(jp.getText());
+							Date date = Converter.agmip.parse(jp.getText());
+							return Converter.apsim.format(date);
 						} catch (ParseException e) {
 							throw new IOException(e);
 						}
