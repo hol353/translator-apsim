@@ -43,18 +43,6 @@ public class SoilLayer {
     @JsonProperty("slphw")
     private double ph;
 
-//    public void readFrom(Map layer) {
-//        setBottomDepth(Double.parseDouble(MapUtil.getValueOr(layer, "sllb", "-99")));
-//        setBulkDensity(Double.parseDouble(MapUtil.getValueOr(layer, "slbdm", "-99")));
-//        setLowerLimit(Double.parseDouble(MapUtil.getValueOr(layer, "slll", "-99")));
-//        setDrainedUpperLimit(Double.parseDouble(MapUtil.getValueOr(layer, "sldul", "-99")));
-//        setSaturation(Double.parseDouble(MapUtil.getValueOr(layer, "slsat", "-99")));
-//        setOrganicCarbon(Double.parseDouble(MapUtil.getValueOr(layer, "sloc", "-99")));
-//        setPh(Double.parseDouble(MapUtil.getValueOr(layer, "slphw", "-99")));
-//
-//        setAirDry(getLowerLimit() - (getLowerLimit() * 0.05));
-//    }
-
     public double calcThickness(double cumThickness) {
         setThickness(getBottomDepth() * 10 - cumThickness);
         return getBottomDepth() * 10;
@@ -106,7 +94,7 @@ public class SoilLayer {
      * @return the airDry
      */
     public double getAirDry() {
-        return airDry;
+        return lowerLimit - (lowerLimit * 0.05);
     }
 
     /**
