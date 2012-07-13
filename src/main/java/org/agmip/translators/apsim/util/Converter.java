@@ -72,19 +72,21 @@ public class Converter {
 
 	public static void generateAPSIMFile(File path, SimulationRun sim)
 			throws Exception {
-		// Initialise velocity
+		path.mkdirs();
+		File file = new File(path, sim.experimentName + ".apsim");
+		file.createNewFile();
 		Velocity.init();
 		VelocityContext context = new VelocityContext();
 		context.put("simulation", sim);
 
 		Template template = Velocity
 				.getTemplate("src\\main\\resources\\AgMIPTemplate.apsim");
-		FileWriter F;
+		FileWriter writer;
 		try {
 
-			F = new FileWriter(new File(path, sim.experimentName + ".apsim"));
-			template.merge(context, F);
-			F.close();
+			writer = new FileWriter(file);
+			template.merge(context, writer);
+			writer.close();
 
 		} catch (IOException ex) {
 			Logger.getLogger(ApsimOutput.class.getName()).log(Level.SEVERE,
@@ -93,17 +95,18 @@ public class Converter {
 	}
 
 	public static void generateMetFile(File path, SimulationRun sim) throws Exception {
-		// Initialise velocity
+		path.mkdirs();
+		File file = new File(path, sim.experimentName + ".met");
+		file.createNewFile();
 		Velocity.init();
 		VelocityContext context = new VelocityContext();
 		context.put("weather", sim.weather);
-
-		Template template = Velocity
-				.getTemplate("src/main/resources/template.met");
-		FileWriter writer;
-		writer = new FileWriter(new File(path, sim.experimentName + ".met"));
-		template.merge(context, writer);
-		writer.close();
+			Template template = Velocity.getTemplate("src/main/resources/template.met");
+			FileWriter writer;
+			writer = new FileWriter(file);
+			template.merge(context, writer);
+			writer.close();
+		
 
 	}
 

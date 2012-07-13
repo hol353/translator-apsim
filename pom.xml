@@ -49,6 +49,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>20030203.000550</version>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.6</version>
