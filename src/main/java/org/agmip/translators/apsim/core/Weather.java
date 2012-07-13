@@ -68,6 +68,14 @@ public class Weather {
 		this.averageTemperature = averageTemperature;
 	}
 
+	public List<DailyWeather> getRecords() {
+		return records;
+	}
+
+	public void setRecords(List<DailyWeather> records) {
+		this.records = records;
+	}
+
 
 	
 	

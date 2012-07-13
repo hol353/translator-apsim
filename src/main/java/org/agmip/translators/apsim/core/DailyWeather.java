@@ -1,13 +1,20 @@
 package org.agmip.translators.apsim.core;
 
+import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.DateDeserializer;
+import org.agmip.translators.apsim.util.DateSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DailyWeather {
 	
 	
 	@JsonProperty("w_date")
+	@JsonDeserialize(using=DateDeserializer.class)
+	@JsonSerialize(using=DateSerializer.class)
 	public	String date ="?";
 	
 	@JsonProperty("srad")	

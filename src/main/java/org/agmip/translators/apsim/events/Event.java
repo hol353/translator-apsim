@@ -1,13 +1,11 @@
 package org.agmip.translators.apsim.events;
 
-import java.util.Date;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.agmip.translators.apsim.util.DateDeserializer;
+import org.agmip.translators.apsim.util.DateSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonSubTypes.Type;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -30,8 +28,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public abstract class Event {
 	
-//	@JsonProperty("date")
-//	@JsonSerialize(using=DateSerializer.class)
+	@JsonSerialize(using=DateSerializer.class)
 	@JsonDeserialize(using=DateDeserializer.class)
 	String date;
 	

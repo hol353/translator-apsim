@@ -26,11 +26,17 @@ public class TestRun {
 
 		long ping = System.currentTimeMillis();
 		Converter.generateAPSIMFile(new File("src/test/resources"), sim);
-		System.out.println("Apsim " +(System.currentTimeMillis()-ping) +" ms");
+		System.out.println("Apsim    :" +(System.currentTimeMillis()-ping) +" ms");
 
+		ping = System.currentTimeMillis();
+		Converter.generate2(new File("src/test/resources"), sim);
+		System.out.println("Weather 2: " +(System.currentTimeMillis()-ping) +" ms");
+		
 		long pong = System.currentTimeMillis();
 		Converter.generateWeatherFiles(new File("src/test/resources"),sim.weather);
-		System.out.println("Weather " + (System.currentTimeMillis()-pong) +" ms");
+		System.out.println("Weather  :" + (System.currentTimeMillis()-pong) +" ms");
+		
+		
 
 	}
 

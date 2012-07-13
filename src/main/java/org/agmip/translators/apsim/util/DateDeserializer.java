@@ -1,11 +1,10 @@
-package org.agmip.translators.apsim.events;
+package org.agmip.translators.apsim.util;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;

@@ -1,9 +1,7 @@
-package org.agmip.translators.apsim.events;
+package org.agmip.translators.apsim.util;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import java.text.ParseException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
@@ -11,16 +9,20 @@ import org.codehaus.jackson.map.SerializerProvider;
 
 // http://loianegroner.com/2010/09/how-to-serialize-java-util-date-with-jackson-json-processor-spring-3-0/
 
-public class DateSerializer extends JsonSerializer<Date>{
+public class DateSerializer extends JsonSerializer<String>{
 		 
-	    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 	 
 	    @Override
-	    public void serialize(Date date, JsonGenerator gen, SerializerProvider provider)
+	    public void serialize(String date, JsonGenerator gen, SerializerProvider provider)
 	            throws IOException, JsonProcessingException {
 	 
-	        String formattedDate = dateFormat.format(date);
-	 
+	        String formattedDate="";
+			try {
+				formattedDate = Converter.agmip.format(Converter.apsim.parse(date));
+			} catch (ParseException e) {
+				throw new IOException(e);
+			}
+	 	        		
 	        gen.writeString(formattedDate);
 	    }
 	       
