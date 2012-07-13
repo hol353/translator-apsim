@@ -32,9 +32,6 @@ public class Converter {
 
 	public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
 	public static final SimpleDateFormat apsim = new SimpleDateFormat("dd/MM/yyyy");
-
-	
-
 	public static void generateAPSIMFile(File path, SimulationRun sim)
 			throws Exception {
 		path.mkdirs();

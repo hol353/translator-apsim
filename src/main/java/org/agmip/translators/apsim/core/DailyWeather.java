@@ -1,9 +1,22 @@
 package org.agmip.translators.apsim.core;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 import org.agmip.translators.apsim.util.DateDeserializer;
 import org.agmip.translators.apsim.util.DateSerializer;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -16,10 +29,15 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DailyWeather {
 	
+	public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
+	public static final SimpleDateFormat apsimWeather = new SimpleDateFormat("yyyy/MM/dd");
+	
+
+	
 	
 	@JsonProperty("w_date")
-	@JsonDeserialize(using=DateDeserializer.class)
-	@JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
+	@JsonDeserialize(using=DailyWeatherDeserializer.class)
+	@JsonSerialize(using=DailyWeatherSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
 	public	String date ="01/01/1000";
 	
 	@JsonProperty("srad")
@@ -127,7 +145,38 @@ public class DailyWeather {
 	}
 
 
-	
+	static class DailyWeatherDeserializer extends JsonDeserializer<String>{			 
+		 
+	    @Override
+	    public String deserialize(JsonParser jp, DeserializationContext ctxt)
+	            throws IOException, JsonProcessingException {
+					try {
+						Date date = agmip.parse(jp.getText());
+						return apsimWeather.format(date);
+					} catch (ParseException e) {
+						throw new IOException(e);
+					}
+			
+	    	     
+	    }
+	       
 
+}
+	class DailyWeatherSerializer extends JsonSerializer<String>{
+		
+	    @Override
+	    public void serialize(String date, JsonGenerator gen, SerializerProvider provider)
+	            throws IOException, JsonProcessingException {
+	 
+	        String formattedDate="";
+			try {
+				formattedDate = agmip.format(apsimWeather.parse(date));
+			} catch (ParseException e) {
+				throw new IOException(e);
+			}
+	 	        		
+	        gen.writeString(formattedDate);
+	    }
 
+	}
 }
