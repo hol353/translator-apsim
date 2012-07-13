@@ -11,7 +11,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @since Jul 13, 2012
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class InitialConditionLayer {
+public class InitialConditionLayer {
     
     @JsonProperty("icbl")
     private double bottomDepth;
