@@ -1,22 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.agmip.translators.apsim.core;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import org.agmip.util.MapUtil;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- *
- * @author hol353
+ * @author Dean Holzworth, CSIRO
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @since Jul 13, 2012
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InitialCondition {
@@ -81,9 +71,6 @@ public class InitialCondition {
 //            layers[i].readFrom((Map) data.get(i));
 //        } 
 //    }
-    
-    
-    
 
  
 }

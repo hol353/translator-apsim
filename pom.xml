@@ -30,17 +30,18 @@
 
 	<developers>
 		<developer>
-			<name>AgMIP Contributors</name>
+			<name>Ioannis N. Athansiadis</name>
 		</developer>
-		<!-- fill out the following fields: name, email, roles -> role -->
+		<developer>
+			<name>Dean Holzworth</name>
+		</developer>
 	</developers>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.agmip</groupId>
 			<artifactId>agmip-core</artifactId>
-						<version>0.13-SNAPSHOT</version>
-			
+			<version>0.13-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

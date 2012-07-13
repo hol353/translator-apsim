@@ -6,8 +6,11 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Created by json2pojo
+ * @author Dean Holzworth, CSIRO
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @since Jul 13, 2012
  */
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimulationRun {
 

@@ -68,11 +68,6 @@ public class ConverterTest extends TestCase {
 		assertEquals("1", Converter.GetDay("01/01/2012"));
 		assertEquals("32", Converter.GetDay("01/02/2012"));
 	}
-	
-	
-
-	
-	
 
 	@Test
 	public void testJSON() {

@@ -1,17 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.agmip.translators.apsim.core;
 
-import java.util.Map;
-import org.agmip.util.MapUtil;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- *
- * @author Dean Holzworth
+ * @author Dean Holzworth, CSIRO
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @since Jul 13, 2012
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class InitialConditionLayer {

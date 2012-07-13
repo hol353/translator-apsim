@@ -23,9 +23,11 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
 /**
- * 
- * @author Ioannis N. Athanasiadis 
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @author Dean Holzworth, CSIRO
+ * @since Jul 13, 2012
  */
+
 public class Converter {
 
 	public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");

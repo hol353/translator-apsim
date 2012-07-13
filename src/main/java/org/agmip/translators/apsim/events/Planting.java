@@ -1,9 +1,12 @@
 package org.agmip.translators.apsim.events;
 
-import java.util.Date;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
+/**
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @author Dean Holzworth, CSIRO
+ * @since Jul 13, 2012
+ */
 
 public class Planting extends Event{
 

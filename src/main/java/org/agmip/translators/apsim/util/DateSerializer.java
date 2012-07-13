@@ -7,7 +7,12 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
-// http://loianegroner.com/2010/09/how-to-serialize-java-util-date-with-jackson-json-processor-spring-3-0/
+/**
+ * @author Ioannis N. Athanasiadis, DUTh
+ * @author Dean Holzworth, CSIRO
+ * @since Jul 13, 2012
+ * @see  http://loianegroner.com/2010/09/how-to-serialize-java-util-date-with-jackson-json-processor-spring-3-0/
+ */
 
 public class DateSerializer extends JsonSerializer<String>{
 		 

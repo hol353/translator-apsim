@@ -2,42 +2,59 @@ package org.agmip.translators.apsim;
 
 import java.io.File;
 
+import junit.framework.TestCase;
+
 import org.agmip.translators.apsim.core.SimulationRun;
 import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.junit.Test;
 
 /**
- * 
- * 
- * @author Ioannis N. Athanasiadis
+ * @author Ioannis N. Athanasiadis, DUTh
  */
-public class TestRun {
-
-	public static void main(String... args) throws Exception {
+public class TestRun extends TestCase{
+	
+	SimulationRun sim = new SimulationRun();
+	public void setUp() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
-		// mapper.setPropertyNamingStrategy(new CamelCaseNamingStrategy());
-		SimulationRun sim = mapper.readValue(new File(
+		 sim = mapper.readValue(new File(
 				"src/test/resources/simulation.json"), SimulationRun.class);
-
-		System.out.println(mapper.writeValueAsString(sim));
-		System.out.println(sim.soil.getName());
-		System.out.println(sim.getManagement().getEvents().get(0).getDate());
-		System.out.println(sim.getSoil().getLayers()[0].getLowerLimit());
-
+	}
+	
+	@Test
+	public void testReadJSONFile() {
+		assertEquals("Millhopper Fine Sand", sim.soil.getName());
+		assertEquals("26/02/1982", sim.getManagement().getEvents().get(0).getDate());
+		assertEquals("0.026", sim.getSoil().getLayers()[0].getLowerLimit());
+	}
+	
+	@Test
+	public void testWriteAPSIMFile() {
 		long ping = System.currentTimeMillis();
-		Converter.generateAPSIMFile(new File("src/test/resources"), sim);
-		System.out.println("Apsim    :" +(System.currentTimeMillis()-ping) +" ms");
-
-		ping = System.currentTimeMillis();
-		Converter.generateMetFile(new File("src/test/resources"), sim);
-		System.out.println("Weather 2: " +(System.currentTimeMillis()-ping) +" ms");
-		
-		long pong = System.currentTimeMillis();
-		Converter.generateWeatherFiles(new File("src/test/resources"),sim.weather);
-		System.out.println("Weather  :" + (System.currentTimeMillis()-pong) +" ms");
-		
-		
+		try {
+			Converter.generateAPSIMFile(new File("src/test/resources"), sim);
+		} catch (Exception e) {
+			assertTrue(e.toString(),false);
+		}
+		assertTrue("APSIM file generated in " +(System.currentTimeMillis()-ping) +" ms", true);
 
 	}
+	
+
+	@Test
+	public void testWriteMETFile() {
+		long ping = System.currentTimeMillis();
+		try {
+			Converter.generateMetFile(new File("src/test/resources"), sim);
+		} catch (Exception e) {
+			assertTrue(e.toString(),false);
+		}
+		assertTrue("MET file generated in " +(System.currentTimeMillis()-ping) +" ms", true);
+
+	}
+
+
+		
+		
 
 }
