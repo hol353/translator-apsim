@@ -1,8 +1,8 @@
 !title: $weather.longName
 latitude = $weather.latitude
 longitude = $weather.longitude
-tav =
-amp = 
+tav = 20.0   ! Default values - need to run Tav_amp
+amp = 15.0   ! Default values - need to run Tav_amp
 date radn maxt mint rain 
 ()  (MJ/m2) (oC)  (oC)  (mm) 
 #foreach($daily in $weather.records)

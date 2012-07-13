@@ -16,7 +16,7 @@ public class InitialConditionLayer {
     @JsonProperty("icbl")
     private double bottomDepth;
     
-    @JsonProperty("ich20")
+    @JsonProperty("ich2o")
     private double soilWater;
     
     @JsonProperty("icno3")
