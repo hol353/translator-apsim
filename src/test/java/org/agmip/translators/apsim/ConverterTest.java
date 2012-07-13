@@ -22,7 +22,7 @@ public class ConverterTest extends TestCase{
 	SimulationRun sim = new SimulationRun();
 	File outputPath = new File("src/test/resources/gen");
 	public void setUp() throws Exception{
-		FileUtils.deleteDirectory(outputPath);
+//		FileUtils.deleteDirectory(outputPath);
 		
 		ObjectMapper mapper = new ObjectMapper();
                 File F = new File("src/test/resources/simulation.json");     

@@ -16,19 +16,19 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Weather {
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wsta_site") 	
+	@JsonProperty("wst_site") 	
 	public String shortName="default";
 	
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wsta_insi") 
+	@JsonProperty("wst_insi") 
 	public String longName = "?";
 
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wsta_lat")	
+	@JsonProperty("wst_lat")	
 	public String latitude = "?";
 	
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wsta_long") 
+	@JsonProperty("wst_long") 
 	public String longitude = "?";
 	
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
