@@ -1,8 +1,8 @@
 !title: $weather.longName
 tav = $weather.averageTemperature
 amp = 
-date radn maxt mint rain wind dewp vers rh 
-()    ()   (MJ/m2) (oC)  (oC)  (mm)  (km)  (oC)   ()   (%)
+date radn maxt mint rain 
+()    ()   (MJ/m2) (oC)  (oC)  (mm) 
 #foreach($daily in $weather.records)
-$daily.date $daily.solarRadiation $daily.maxTemperature $daily.minTemperature
+$daily.date $daily.solarRadiation $daily.maxTemperature $daily.minTemperature $daily.rainfall
 #end

@@ -3,6 +3,7 @@ package org.agmip.translators.apsim.core;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * Created by json2pojo
@@ -17,7 +18,8 @@ public class SimulationRun {
 	public Soil soil;
 
 	@JsonProperty("exname")
-	public String experimentName;
+	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+	public String experimentName = "default";
 
 	@JsonProperty("fl_long")
 	public String longitude;

@@ -17,7 +17,7 @@
       <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
     </clock>
     <metfile name="met">
-      <filename name="filename" input="yes">${wst_insi}.met</filename>
+      <filename name="filename" input="yes">UFGA8201MZ.met</filename>
     </metfile>
     <summaryfile />
     <area name="paddock">
