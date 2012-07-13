@@ -12,7 +12,7 @@ public class OrganicMatter extends Event {
 	@JsonProperty("omn%")
 	String nitrogen;
 	@Override
-	String getApsimAction() {
+	public String getApsimAction() {
 		return "";
 	}
 
