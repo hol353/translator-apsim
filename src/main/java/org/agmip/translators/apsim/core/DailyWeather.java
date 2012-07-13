@@ -35,7 +35,7 @@ public class DailyWeather {
 	@JsonProperty("w_date")
 	@JsonDeserialize(using=DailyWeatherDeserializer.class)
 	@JsonSerialize(using=DailyWeatherSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
-	public	String date ="01/01/1000";
+	public	String date ="1000/01/01";
 	
 	@JsonProperty("srad")
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
@@ -142,7 +142,7 @@ public class DailyWeather {
 	}
 
 
-	static class DailyWeatherDeserializer extends JsonDeserializer<String>{			 
+	public static class DailyWeatherDeserializer extends JsonDeserializer<String>{			 
 		 
 	    @Override
 	    public String deserialize(JsonParser jp, DeserializationContext ctxt)
@@ -159,12 +159,11 @@ public class DailyWeather {
 	       
 
 }
-	class DailyWeatherSerializer extends JsonSerializer<String>{
+	public static class DailyWeatherSerializer extends JsonSerializer<String>{
 		
 	    @Override
 	    public void serialize(String date, JsonGenerator gen, SerializerProvider provider)
 	            throws IOException, JsonProcessingException {
-	 
 	        String formattedDate="";
 			try {
 				formattedDate = agmip.format(apsimWeather.parse(date));

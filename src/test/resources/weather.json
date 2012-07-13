@@ -26,9 +26,9 @@
                 }
             ], 
             "tav": "11", 
-            "wsta_insi": "STA0001", 
-            "wsta_lat": "-11.2345", 
-            "wsta_long": "-11.2345", 
-            "wsta_site": "Station Name, Somewhere in the Galaxy"
+            "wst_insi": "STA0001", 
+            "wst_lat": "-11.2345", 
+            "wst_long": "-11.2345", 
+            "wst_site": "Station Name, Somewhere in the Galaxy"
         }
    

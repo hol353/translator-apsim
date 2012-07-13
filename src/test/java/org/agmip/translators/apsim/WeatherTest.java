@@ -28,7 +28,7 @@ public class WeatherTest extends TestCase {
 
 		{
 			DailyWeather r = new DailyWeather();
-			r.date = "01/01/2012";
+			r.date = "2012/01/01";
 			r.solarRadiation = "0"; // radn
 			r.maxTemperature = "13"; // maxt
 			r.minTemperature = "-12"; // mint
@@ -38,7 +38,7 @@ public class WeatherTest extends TestCase {
 
 		{
 			DailyWeather r = new DailyWeather();
-			r.date = "02/01/2012";
+			r.date = "2012/01/02";
 			r.solarRadiation = "0.3"; // radn
 			r.maxTemperature = "18"; // maxt
 			r.minTemperature = "0.2"; // mint
@@ -48,6 +48,9 @@ public class WeatherTest extends TestCase {
 
 	}
 
+	public void testDate() throws Exception{
+		assertEquals("20120130",DailyWeather.agmip.format(DailyWeather.apsimWeather.parse("2012/01/30")));
+	}
 
 
 	@Test
