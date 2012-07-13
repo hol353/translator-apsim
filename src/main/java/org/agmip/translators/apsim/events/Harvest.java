@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class Harvest extends Event {
 
 	@Override
-	String getApsimAction() {
+	public String getApsimAction() {
 		return "";
 	}
 

@@ -13,7 +13,7 @@
           
     </memo>
     <clock>
-      <start_date type="date" description="Enter the start date of the simulation">01/01/1940</start_date>
+      <start_date type="date" description="Enter the start date of the simulation">$simulation.management.plantingDate</start_date>
       <end_date type="date" description="Enter the end date of the simulation">31/12/1950</end_date>
     </clock>
     <metfile name="met">
@@ -27,7 +27,7 @@
         <ASC_Sub-order description="Australian Soil Classification Sub-Order" />
         <SoilType description="Soil description">Loamy,silic,hyperth Arenic Paleudult</SoilType>
         <LocalName></LocalName>
-        <Site>$simulation.soil.site</Site>
+        <Site></Site>
         <NearestTown description="Nearest town"></NearestTown>
         <Region></Region>
         <State />
@@ -44,7 +44,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.3</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.0247</AirDry>
             <LL15 units="mm/mm">0.026</LL15>
             <DUL units="mm/mm">0.096</DUL>
             <SAT units="mm/mm">0.23</SAT>
@@ -53,7 +53,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">0.0</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.02375</AirDry>
             <LL15 units="mm/mm">0.025</LL15>
             <DUL units="mm/mm">0.086</DUL>
             <SAT units="mm/mm">0.0</SAT>
@@ -62,7 +62,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.4</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.02375</AirDry>
             <LL15 units="mm/mm">0.025</LL15>
             <DUL units="mm/mm">0.086</DUL>
             <SAT units="mm/mm">0.0</SAT>
@@ -71,7 +71,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.4</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.02375</AirDry>
             <LL15 units="mm/mm">0.025</LL15>
             <DUL units="mm/mm">0.086</DUL>
             <SAT units="mm/mm">0.0</SAT>
@@ -80,7 +80,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.45</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.0266</AirDry>
             <LL15 units="mm/mm">0.028</LL15>
             <DUL units="mm/mm">0.09</DUL>
             <SAT units="mm/mm">0.0</SAT>
@@ -89,7 +89,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.45</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.0266</AirDry>
             <LL15 units="mm/mm">0.028</LL15>
             <DUL units="mm/mm">0.09</DUL>
             <SAT units="mm/mm">0.0</SAT>
@@ -98,7 +98,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.45</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.02755</AirDry>
             <LL15 units="mm/mm">0.029</LL15>
             <DUL units="mm/mm">0.13</DUL>
             <SAT units="mm/mm">0.0</SAT>
@@ -107,7 +107,7 @@
             <Thickness units="mm">0.0</Thickness>
             <KS units="mm/day" />
             <BD units="g/cc">1.2</BD>
-            <AirDry units="mm/mm">0.0</AirDry>
+            <AirDry units="mm/mm">0.0665</AirDry>
             <LL15 units="mm/mm">0.07</LL15>
             <DUL units="mm/mm">0.258</DUL>
             <SAT units="mm/mm">0.36</SAT>
@@ -486,39 +486,39 @@
         <operations name="Operations">
           <operation condition="start_of_day">
             <date>26/02/1982</date>
-            <action>$event.apsimAction</action>
+            <action>Maize sow plants = 7.2, sowing_depth = 7.0, cultivar = McCurdy 84aa, row_spacing = 61, crop_class = plantsow </action>
           </operation>
           <operation condition="start_of_day">
             <date>04/03/1982</date>
-            <action>$event.apsimAction</action>
+            <action>irrigation apply amount = 13 (mm) </action>
           </operation>
           <operation condition="start_of_day">
             <date>07/04/1982</date>
-            <action>$event.apsimAction</action>
+            <action>fertiliser apply amount = 27(kg/ha), type = no3_n (), depth = 10 (mm)</action>
           </operation>
           <operation condition="start_of_day">
             <date>12/04/1982</date>
-            <action>$event.apsimAction</action>
+            <action>fertiliser apply amount = 35(kg/ha), type = no3_n (), depth = 10 (mm)</action>
           </operation>
           <operation condition="start_of_day">
             <date>17/05/1982</date>
-            <action>$event.apsimAction</action>
+            <action>fertiliser apply amount = 54(kg/ha), type = no3_n (), depth = 10 (mm)</action>
           </operation>
           <operation condition="start_of_day">
             <date>15/06/1978</date>
-            <action>$event.apsimAction</action>
+            <action></action>
           </operation>
           <operation condition="start_of_day">
             <date>25/04/1979</date>
-            <action>$event.apsimAction</action>
+            <action></action>
           </operation>
           <operation condition="start_of_day">
             <date>14/06/1978</date>
-            <action>$event.apsimAction</action>
+            <action></action>
           </operation>
           <operation condition="start_of_day">
             <date>25/02/1980</date>
-            <action>$event.apsimAction</action>
+            <action></action>
           </operation>
         </operations>
         <manager name="Harvesting rule">

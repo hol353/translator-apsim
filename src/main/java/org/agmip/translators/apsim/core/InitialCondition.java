@@ -13,6 +13,7 @@ import java.util.Map;
 import org.agmip.util.MapUtil;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  *
@@ -21,8 +22,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InitialCondition {
     
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("icdat")
-    public String date;
+    public String date = "?";
     
     @JsonProperty("icrag")
     public double residueWeight;

@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import org.agmip.translators.apsim.events.Event;
+import org.agmip.translators.apsim.events.Planting;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
@@ -23,4 +24,13 @@ public class Management {
     this.events = events;
   }
 
+  public String plantingDate() {
+      for (Event event : events) {
+          if (event instanceof Planting) {
+            return event.getDate();
+          }
+      }
+      return null;
+  }
+  
 }

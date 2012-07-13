@@ -17,7 +17,7 @@ public class Irrigation extends Event {
 	String efficiency;
 
 	@Override
-	String getApsimAction() {
+	public String getApsimAction() {
 		return "irrigation apply amount = " +amount+ " (mm) " ;
 	}
 

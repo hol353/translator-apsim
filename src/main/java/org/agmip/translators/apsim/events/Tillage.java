@@ -10,7 +10,7 @@ public class Tillage extends Event {
 	@JsonProperty("ti_name")
 	String implementName;
 	@Override
-	String getApsimAction() {
+	public String getApsimAction() {
 		// TODO Auto-generated method stub
 		return "";
 	}
