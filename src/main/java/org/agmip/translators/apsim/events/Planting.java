@@ -43,8 +43,10 @@ public class Planting extends Event{
 	 * TODO: Add a translator from code to name.
 	 */
 	@Override
-	String getApsimAction() {
-		return cropID +" ";  
+	public String getApsimAction() {
+            if (cropID.equals("MZ"))
+                cropID = "Maize";
+            return cropID +" sow plants = " + population + ", sowing_depth = " + depth + ", cultivar = " + cultivar + ", row_spacing = " + rowSpacing + ", crop_class = plantsow ";  
 	}
-
+        
 }
