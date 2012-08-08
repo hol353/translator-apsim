@@ -2,6 +2,7 @@ package org.agmip.translators.apsim;
 
 import java.io.File;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import junit.framework.TestCase;
@@ -65,7 +66,22 @@ public class ConverterTest extends TestCase{
 
 	}
 
+	@Test
+	public void testPeanut() {
+		try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    URL resource = this.getClass().getResource("/APAN8601PN_1.json");
+                    String json = new Scanner(new File(resource.getPath()), "UTF-8").useDelimiter("\\A").next();
+                    LinkedHashMap h1 = JSONAdapter.fromJSON(json);
+                    LinkedHashMap h = MapUtil.decompressAll(h1);
+                    String newJson = (JSONAdapter.toJSON(h));
+                    sim = mapper.readValue(newJson, SimulationRun.class);
+                    Converter.generateAPSIMFile(outputPath, sim);
+		} catch (Exception e) {
+			assertTrue(e.toString(),false);
+		}
 
+	}
 
 
 
