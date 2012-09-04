@@ -35,7 +35,10 @@ public class ApsimOutput implements TranslatorOutput {
 		ObjectMapper mapper = new ObjectMapper();
 		SimulationRun sim;
 		try {
-			sim = mapper.readValue(toJSON(MapUtil.decompressAll(input)),SimulationRun.class);
+                    String temp = toJSON(MapUtil.decompressAll(input));
+                    System.out.println(temp);
+                    sim = mapper.readValue(temp, SimulationRun.class);
+                        
 			sim.initialise();
 			Converter.generateMetFile(path, sim);
 			Converter.generateAPSIMFile(path, sim);
