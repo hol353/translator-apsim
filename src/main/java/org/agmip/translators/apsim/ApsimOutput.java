@@ -17,6 +17,9 @@ import org.agmip.translators.apsim.util.Converter;
 import org.agmip.util.MapUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Ioannis N. Athanasiadis, DUTh
  * @author Dean Holzworth, CSIRO
@@ -25,62 +28,70 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 
 public class ApsimOutput implements TranslatorOutput {
-	static final int BUFFER = 2048;
+    static final int BUFFER = 2048;
+    private static final Logger LOG = LoggerFactory.getLogger(ApsimOutput.class);
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void writeFile(String filePath, Map input) {
-		File path = new File(filePath);
-		// if(!path.canWrite()) throw new Exception("Can't write at "
-		// +filePath);
-		ObjectMapper mapper = new ObjectMapper();
-		SimulationRun sim;
-		try {
-                    String temp = toJSON(MapUtil.decompressAll(input));
-                    System.out.println(temp);
-                    sim = mapper.readValue(temp, SimulationRun.class);
-                        
-			sim.initialise();
-			Converter.generateMetFile(path, sim);
-			Converter.generateAPSIMFile(path, sim);
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+        public void writeFile(String filePath, Map input) {
+            File path = new File(filePath);
+            ObjectMapper mapper = new ObjectMapper();
+            SimulationRun sim;
+            try {
+                
+                String temp = toJSON(MapUtil.decompressAll(input));
+                sim = mapper.readValue(temp, SimulationRun.class);
 
-			BufferedInputStream origin = null;
+                sim.initialise();
+                if (sim.getWeather() != null) {
+                    // Support if there is no weather data.
+                    Converter.generateMetFile(path, sim);
+                }
+                if (sim.getStartDate() != null) {
+                    // Support for weather file only.
+                    Converter.generateAPSIMFile(path, sim);
+                }
 
-			File zipfile = new File(path, sim.experimentName + "_apsim.zip");
+                BufferedInputStream origin = null;
 
-			if (zipfile.exists())
-				zipfile.delete();
+                File zipfile = new File(path, sim.experimentName + "_apsim.zip");
 
-			FileOutputStream dest = new FileOutputStream(zipfile);
-			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-					dest));
-			byte data[] = new byte[BUFFER];
-			// get a list of files from current directory
+                if (zipfile.exists())
+                    zipfile.delete();
 
-			String files[] = new String[] { sim.experimentName + ".met",
-					sim.experimentName + ".apsim" };
+                FileOutputStream dest = new FileOutputStream(zipfile);
+                ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+                            dest));
+                byte data[] = new byte[BUFFER];
+                // get a list of files from current directory
 
-			for (int i = 0; i < files.length; i++) {
-				// System.out.println("Adding: " + files[i]);
-				FileInputStream fi = new FileInputStream(new File(path,
-						files[i]));
-				origin = new BufferedInputStream(fi);
-				ZipEntry entry = new ZipEntry(files[i]);
-				out.putNextEntry(entry);
-				int count;
-				while ((count = origin.read(data, 0, BUFFER)) != -1) {
-					out.write(data, 0, count);
-				}
-				origin.close();
-			}
-			out.close();
+                String files[] = new String[] { sim.experimentName + ".met",
+                    sim.experimentName + ".apsim" };
 
-			for (int i = 0; i < files.length; i++) {
-				File f = new File(path, files[i]);
-				f.delete();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+                for (int i = 0; i < files.length; i++) {
+                    // System.out.println("Adding: " + files[i]);
+                    File rawFile = new File(path, files[i]);
+                    if( rawFile.exists()) {
+                        FileInputStream fi = new FileInputStream(new File(path,
+                                    files[i]));
+                        origin = new BufferedInputStream(fi);
+                        ZipEntry entry = new ZipEntry(files[i]);
+                        out.putNextEntry(entry);
+                        int count;
+                        while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                            out.write(data, 0, count);
+                        }
+                        origin.close();
+                    }
+                }
+                out.close();
 
-	}
+                for (int i = 0; i < files.length; i++) {
+                    File f = new File(path, files[i]);
+                    f.delete();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
 }

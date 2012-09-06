@@ -7,8 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.agmip.translators.apsim.ApsimOutput;
 import org.agmip.translators.apsim.core.SimulationRun;
@@ -24,6 +25,7 @@ public class Converter {
 
     public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
     public static final SimpleDateFormat apsim = new SimpleDateFormat("dd/MM/yyyy");
+    private static final Logger LOG = LoggerFactory.getLogger(ApsimOutput.class);
 
     public static void generateAPSIMFile(File path, SimulationRun sim)
             throws Exception {
@@ -32,20 +34,15 @@ public class Converter {
         file.createNewFile();
         Velocity.init();
         VelocityContext context = new VelocityContext();
-        context.put("simulation", sim);
         sim.initialise();
-        
         FileWriter writer;
         try {
-
+            context.put("simulation", sim);
             writer = new FileWriter(file);
             Velocity.evaluate(context, writer, "Generate APSIM", Converter.class.getClassLoader().getResourceAsStream("AgMIPTemplate.apsim"));
-            //template.merge(context, writer);
             writer.close();
-
         } catch (IOException ex) {
-            Logger.getLogger(ApsimOutput.class.getName()).log(Level.SEVERE,
-                    null, ex);
+            LOG.error(ex.getMessage());
         }
     }
 
@@ -56,13 +53,9 @@ public class Converter {
         Velocity.init();
         VelocityContext context = new VelocityContext();
         context.put("weather", sim.weather);
-        //Template template = Velocity.getTemplate("src/main/resources/template.met");
         FileWriter writer = new FileWriter(file);
-        //template.merge(context, writer);
         Velocity.evaluate(context, writer, "Generate Met", Converter.class.getClassLoader().getResourceAsStream("template.met"));
         writer.close();
-
-
     }
 
     public static String GetYear(String agmipDate) throws ParseException {

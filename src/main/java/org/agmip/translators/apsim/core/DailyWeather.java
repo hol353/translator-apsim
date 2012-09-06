@@ -17,6 +17,9 @@ import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import org.agmip.translators.apsim.util.DateDeserializer;
+import org.agmip.translators.apsim.util.DateSerializer;
+
 
 /**
  * @author Ioannis N. Athanasiadis, DUTh
@@ -33,8 +36,8 @@ public class DailyWeather {
 	
 	
 	@JsonProperty("w_date")
-	@JsonDeserialize(using=DailyWeatherDeserializer.class)
-	@JsonSerialize(using=DailyWeatherSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
+	@JsonDeserialize(using=DateDeserializer.class)
+	@JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
 	public	String date ="1000/01/01";
 	
 	@JsonProperty("srad")
