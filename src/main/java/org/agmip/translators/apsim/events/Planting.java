@@ -23,7 +23,8 @@ public class Planting extends Event{
 
 	/**
 	 * Planting depth
-	 * Unit or Type: mm
+	 * Unit or Type: mm (AgMIP unit: cm)
+     * TODO: Implement conversion
 	 */
 	@JsonProperty("pldp")
 	Double depth;
@@ -32,7 +33,7 @@ public class Planting extends Event{
 	 * Unit or Type: cm
 	 */
 	@JsonProperty("plrs")
-	String rowSpacing;
+	Double rowSpacing;
 	/**
 	 * Plant population at planting
 	 * Unit or Type: number/m2
@@ -47,8 +48,10 @@ public class Planting extends Event{
 	 */
 	@Override
 	public String getApsimAction() {
+            depth = depth*10.0;
             if (cropID.equals("MZ"))
                 cropID = "Maize";
+            cultivar = "sc401";
             return cropID +" sow plants = " + population + ", sowing_depth = " + depth + ", cultivar = " + cultivar + ", row_spacing = " + rowSpacing + ", crop_class = plantsow ";  
 	}
         

@@ -48,7 +48,13 @@ public class Converter {
 
     public static void generateMetFile(File path, SimulationRun sim) throws Exception {
         path.mkdirs();
-        File file = new File(path, sim.experimentName + ".met");
+        String baseName;
+        if (sim.getExperimentName().equals("default")) {
+            baseName = sim.getWeather().getShortName();
+        } else {
+            baseName = sim.getExperimentName();
+        }
+        File file = new File(path, baseName+".met");
         file.createNewFile();
         Velocity.init();
         VelocityContext context = new VelocityContext();

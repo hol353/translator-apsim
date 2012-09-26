@@ -7,6 +7,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ioannis N. Athanasiadis, DUTh
  * @author Dean Holzworth, CSIRO
- * @author Chris Villalobos, CSIRO
+ * @author Chris Villalobos, AgMIP IT
  * @since Jul 13, 2012
  */
 
@@ -41,18 +42,30 @@ public class ApsimOutput implements TranslatorOutput {
                 String temp = toJSON(MapUtil.decompressAll(input));
                 sim = mapper.readValue(temp, SimulationRun.class);
 
+                ArrayList<String> files = new ArrayList<String>();
+                
                 sim.initialise();
                 if (sim.getWeather() != null) {
                     // Support if there is no weather data.
                     Converter.generateMetFile(path, sim);
+                     String baseName;
+        if (sim.getExperimentName().equals("default")) {
+            baseName = sim.getWeather().getShortName();
+        } else {
+            baseName = sim.getExperimentName();
+        }
+                    files.add(baseName+".met");
                 }
-                if (sim.getStartDate() != null) {
+                if (sim.getLatitude() != null) {
                     // Support for weather file only.
                     Converter.generateAPSIMFile(path, sim);
+                    files.add(sim.experimentName+".apsim");
                 }
 
                 BufferedInputStream origin = null;
 
+                if (files.size() > 1) {
+                
                 File zipfile = new File(path, sim.experimentName + "_apsim.zip");
 
                 if (zipfile.exists())
@@ -64,17 +77,14 @@ public class ApsimOutput implements TranslatorOutput {
                 byte data[] = new byte[BUFFER];
                 // get a list of files from current directory
 
-                String files[] = new String[] { sim.experimentName + ".met",
-                    sim.experimentName + ".apsim" };
-
-                for (int i = 0; i < files.length; i++) {
+                for (int i = 0; i < files.size(); i++) {
                     // System.out.println("Adding: " + files[i]);
-                    File rawFile = new File(path, files[i]);
+                    File rawFile = new File(path, files.get(i));
                     if( rawFile.exists()) {
                         FileInputStream fi = new FileInputStream(new File(path,
-                                    files[i]));
+                                    files.get(i)));
                         origin = new BufferedInputStream(fi);
-                        ZipEntry entry = new ZipEntry(files[i]);
+                        ZipEntry entry = new ZipEntry(files.get(i));
                         out.putNextEntry(entry);
                         int count;
                         while ((count = origin.read(data, 0, BUFFER)) != -1) {
@@ -85,9 +95,10 @@ public class ApsimOutput implements TranslatorOutput {
                 }
                 out.close();
 
-                for (int i = 0; i < files.length; i++) {
-                    File f = new File(path, files[i]);
+                for (int i = 0; i < files.size(); i++) {
+                    File f = new File(path, files.get(i));
                     f.delete();
+                }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

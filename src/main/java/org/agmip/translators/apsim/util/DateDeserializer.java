@@ -21,13 +21,10 @@ import org.slf4j.LoggerFactory;
 public class DateDeserializer extends JsonDeserializer<String> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DateDeserializer.class);
-    private static int lineNumber = 0;
 
     @Override
     public String deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
-        lineNumber++;
-        LOG.info("Line number: "+lineNumber);
         try {
             String toParse = jp.getText();
             Date date = Converter.agmip.parse(toParse);

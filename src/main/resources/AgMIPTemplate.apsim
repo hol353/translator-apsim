@@ -95,15 +95,15 @@ Todo:
 #end
 				</SoilWat>
 				<SoilOrganicMatter>
-					<RootCn>40</RootCn>
-					<RootWt>200</RootWt>
-					<SoilCn>12.5</SoilCn>
+					<RootCn>45</RootCn>  <!-- was 40 -->
+					<RootWt>500</RootWt>  <!-- was 200 -->
+					<SoilCn>14.5</SoilCn> <!-- was 12.5 -->
 					<EnrACoeff>7.4</EnrACoeff>
 					<EnrBCoeff>0.2</EnrBCoeff>
 #foreach ($layer in $simulation.soil.layers)        
-					<Layer>
-						<Thickness units="mm">$layer.thickness</Thickness>
-						<OC units="Total %">$layer.organicCarbon</OC>
+					<Layer>                                            
+						<Thickness units="mm">$layer.thickness</Thickness>                                                
+						<OC units="Total %">#if( $layer.organicCarbon == 0 ) 0.1 #else $layer.organicCarbon #end</OC>
 						<FBiom units="0-1">0.025</FBiom>
 						<FInert units="0-1">0.4</FInert>
 					</Layer>
@@ -117,7 +117,7 @@ Todo:
 						<Texture/>
 						<MunsellColour/>
 						<EC units="1:5 dS/m"/>
-						<PH units="1:5 water">$layer.ph</PH>
+						<PH units="1:5 water"/>
 						<CL units="mg/kg" />
 						<Boron units="Hot water mg/kg" />
 						<CEC units="cmol+/kg" />
@@ -139,8 +139,8 @@ Todo:
 #foreach ($initialLayer in $simulation.initialCondition.soilLayers)        
 					<Layer>
 						<Thickness units="mm">$initialLayer.thickness</Thickness>
-						<NO3 units="kg/ha">$initialLayer.no3</NO3>
-						<NH4 units="kg/ha">$initialLayer.nh4</NH4>
+						<NO3 units="ppm">$initialLayer.no3</NO3>
+						<NH4 units="ppm">$initialLayer.nh4</NH4>
 						<SW units="mm/mm">$initialLayer.soilWater</SW>
 					</Layer>
 #end          

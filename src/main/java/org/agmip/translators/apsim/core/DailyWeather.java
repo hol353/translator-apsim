@@ -30,13 +30,13 @@ import org.agmip.translators.apsim.util.DateSerializer;
 public class DailyWeather {
 	
 	public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
-	public static final SimpleDateFormat apsimWeather = new SimpleDateFormat("yyyy/MM/dd");
+	public static final SimpleDateFormat apsimWeather = new SimpleDateFormat("yyyy D");
 	
 
 	
 	
 	@JsonProperty("w_date")
-	@JsonDeserialize(using=DateDeserializer.class)
+	@JsonDeserialize(using=DailyWeatherDeserializer.class)
 	@JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
 	public	String date ="1000/01/01";
 	
@@ -152,7 +152,17 @@ public class DailyWeather {
 	            throws IOException, JsonProcessingException {
 					try {
 						Date date = agmip.parse(jp.getText());
-						return apsimWeather.format(date);
+                        String outputDate = apsimWeather.format(date);
+                        if(outputDate.length() == 8) {
+                            return outputDate;
+                        } else {
+                            StringBuffer buf = new StringBuffer(outputDate);
+                            buf.insert(5, " ");
+                            if (buf.length() == 7) {
+                                buf.insert(5, " ");
+                            }
+                            return buf.toString();
+                        }
 					} catch (ParseException e) {
 						throw new IOException(e);
 					}

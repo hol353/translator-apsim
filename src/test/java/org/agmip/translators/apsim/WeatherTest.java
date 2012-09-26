@@ -49,7 +49,7 @@ public class WeatherTest extends TestCase {
 	}
 
 	public void testDate() throws Exception{
-		assertEquals("20120130",DailyWeather.agmip.format(DailyWeather.apsimWeather.parse("2012/01/30")));
+		assertEquals("20120130",DailyWeather.agmip.format(DailyWeather.apsimWeather.parse("2012  30")));
 	}
 
 

@@ -16,11 +16,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Weather {
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wst_site") 	
+	@JsonProperty("wst_name")
 	public String shortName="default";
 	
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wst_insi") 
+	@JsonProperty("wst_source") 
 	public String longName = "?";
 
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
