@@ -59,14 +59,14 @@ public class ApsimOutput implements TranslatorOutput {
                 if (sim.getLatitude() != null) {
                     // Support for weather file only.
                     Converter.generateAPSIMFile(path, sim);
-                    files.add(sim.experimentName+".apsim");
+                    files.add(sim.getExperimentName()+".apsim");
                 }
 
                 BufferedInputStream origin = null;
 
                 if (files.size() > 1) {
                 
-                File zipfile = new File(path, sim.experimentName + "_apsim.zip");
+                File zipfile = new File(path, sim.getExperimentName() + "_apsim.zip");
 
                 if (zipfile.exists())
                     zipfile.delete();
@@ -105,4 +105,10 @@ public class ApsimOutput implements TranslatorOutput {
             }
 
         }
+    
+
+        
+        
+        
+    
 }

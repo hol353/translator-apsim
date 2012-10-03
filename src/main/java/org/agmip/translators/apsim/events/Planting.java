@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.events;
 
+import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -10,49 +11,71 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Planting extends Event{
 
-	/**
-	 * Cultivar name
-	 * Unit or Type: text
-	 */
-	
-	@JsonProperty("crid")
-	String cropID;
-	
-	@JsonProperty("cul_name")
-	String cultivar;
+    // cropID
+    @JsonProperty("crid")
+    private String cropID = "?";
 
-	/**
-	 * Planting depth
-	 * Unit or Type: mm (AgMIP unit: cm)
-     * TODO: Implement conversion
-	 */
-	@JsonProperty("pldp")
-	Double depth;
-	/**
-	 * Row spacing
-	 * Unit or Type: cm
-	 */
-	@JsonProperty("plrs")
-	Double rowSpacing;
-	/**
-	 * Plant population at planting
-	 * Unit or Type: number/m2
-	 */
-	@JsonProperty("plpop")
-	Double population;
+    // cultivar
+    @JsonProperty("cul_name")
+    private String cultivar = "?";
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.agmip.translators.apsim.events.Event#getApsimAction()
-	 * TODO: Add a translator from code to name.
-	 */
-	@Override
-	public String getApsimAction() {
-            depth = depth*10.0;
-            if (cropID.equals("MZ"))
-                cropID = "Maize";
-            cultivar = "sc401";
-            return cropID +" sow plants = " + population + ", sowing_depth = " + depth + ", cultivar = " + cultivar + ", row_spacing = " + rowSpacing + ", crop_class = plantsow ";  
-	}
+    // planting depth. units=cm.
+    @JsonProperty("pldp")
+    private String depth = "?";
+    public String depthAsMM() {
+        if ("?".equals(depth))
+            return "?";
+        else
+            return String.valueOf(Double.valueOf(depth) * 10.0);
+    }
+
+    // row spacing. units=cm
+    @JsonProperty("plrs")
+    String rowSpacing;
+    public String rowSpacingAsMM() {
+        if ("?".equals(rowSpacing))
+            return "?";
+        else
+            return String.valueOf(Double.valueOf(rowSpacing) * 10.0);
+    }
+    
+    // Plant population at planting. units=number/m2
+    @JsonProperty("plpop")
+    private String population = "?";
+
+    // Crop Name
+    public String getCropName() {return Converter.cropCodeToName(cropID);}
+    
+    @Override
+    public String getApsimAction() {
+        return getCropName()+" sow plants = " + population + ", sowing_depth = " + depthAsMM() + ", cultivar = " + cultivar + ", row_spacing = " + rowSpacingAsMM() + ", crop_class = plant";
+    }
+
+    @Override
+    public void initialise() {
+        if ("?".equals(getDate()))
+            log += "  * Operation planting ERROR: Date missing. '?' has been inserted\r\n";
+        
+        if ("?".equals(cropID))
+            log += "  * Operation " + getDate() + " ERROR: Planting crop missing. A '?' has been inserted\r\n";
+        else
+            log += "  * Operation " + getDate() + " ASSUMPTION: Planting crop name: " + getCropName() + " may not match APSIM crop names. Please check.\r\n";
+        
+        if ("?".equals(depth)) {
+            depth = "50";
+            log += "  * Operation " + getDate() + " ASSUMPTION: Planting depth missing. A depth of 50mm has been assumed.\r\n";
+        }
+      
+        if ("?".equals(cultivar))
+            log += "  * Operation " + getDate() + " ERROR: Missing planting cultivar.\r\n";
+        else
+            log += "  * Operation " + getDate() + " ERROR: AgMIP planting cultivars don't match the APSIM cultivars. Please check the sowing operation. AgMIP cultivar is: " + cultivar + "\r\n";
+
+        if ("?".equals(rowSpacing)) {
+            rowSpacing = "500";
+            log += "  * Operation " + getDate() + " ASSUMPTION: Planting row spacing missing. A row spacing of 500 has been assumed\r\n";
+        }
+
+    }
         
 }

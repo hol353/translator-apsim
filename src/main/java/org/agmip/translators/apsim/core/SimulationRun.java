@@ -5,13 +5,9 @@ import java.util.Calendar;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.util.Converter;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Dean Holzworth, CSIRO
@@ -20,77 +16,45 @@ import org.slf4j.LoggerFactory;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimulationRun {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SimulationRun.class);
+    
+    // Initial condition
     @JsonProperty("initial_conditions")
-    public InitialCondition initialCondition;
-    public Weather weather;
-    public Management management;
-    public Soil soil;
+    private InitialCondition initialCondition;
+    public InitialCondition getInitialCondition() { return initialCondition; }
+    
+    // weather
+    private Weather weather;
+    public Weather getWeather() { return weather; }
+    
+    // management.
+    private Management management;
+    public Management getManagement() { return management; }
+    
+    // soil
+    private Soil soil;
+    public Soil getSoil() { return soil; }
+
+    // experimentName
     @JsonProperty("exname")
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
-    public String experimentName = "default";
-    @JsonProperty("fl_long")
-    public String longitude;
+    private String experimentName = "default";
+    public String getExperimentName() { return experimentName; }
+    
+    // latitude
     @JsonProperty("fl_lat")
-    public String latitude;
+    private String latitude = "?";
+    public String getLatitude() { return latitude; }
+    
+    // longitude
+    @JsonProperty("fl_long")
+    private String longitude = "?";
+    public String getLongitude() { return longitude; }
 
-    public InitialCondition getInitialCondition() {
-        return initialCondition;
-    }
-
-    public void setInitialCondition(InitialCondition initialCondition) {
-        this.initialCondition = initialCondition;
-    }
-
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
-
-    public Management getManagement() {
-        return management;
-    }
-
-    public void setManagement(Management management) {
-        this.management = management;
-    }
-
-    public Soil getSoil() {
-        return soil;
-    }
-
-    public void setSoil(Soil soil) {
-        this.soil = soil;
-    }
-
-    public String getExperimentName() {
-        return experimentName;
-    }
-
-    public void setExperimentName(String experimentName) {
-        this.experimentName = experimentName;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
+    // log
+    private String log;
+    public String getLog() { return log; }
+    
+    // startDate
     public String getStartDate() {
         if (management != null) {
             for (Event event : management.getEvents()) {
@@ -98,26 +62,73 @@ public class SimulationRun {
                     return event.getDate();
                 }
             }
-            return null;
+            return "?";
         } else {
-            return null;
+            return "?";
         }
     }
 
+    // endDate
     public String getEndDate() throws ParseException {
+        if ("?".equals(getStartDate())) 
+            return "?";
         Calendar endDate = Converter.toCalendar(getStartDate());
         endDate.add(Calendar.YEAR, 1);
         return Converter.toApsimDateString(endDate);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // initialise the SimulationRun instance.
     public void initialise() {
-        LOG.debug("Starting initialization of soil and ic");
+        log = "";
+        
+        // Check the start and end date.
+        if ("?".equals(getStartDate()))
+           log += "  * Clock ERROR: Missing a simulation start date.\r\n";
+        else
+           log += "  * Clock ASSUMPTION: end date assumed to be one year after start date.\r\n";
 
-        if (getSoil() != null) {
-            getSoil().calcThickness();
+        // Check the weather latitude.
+        if (weather == null)
+            log += "  * Met ERROR: Missing weather data.\r\n";
+        else if ("?".equals(weather.getLatitude())) {
+            if ("?".equals(latitude))
+                log += "  * Met ERROR: No latitude found in weather data or experiment.\r\n";
+            else {
+                log += "  * Met ASSUMPTION: No latitude found in weather data. Using experiment latitude instead.\r\n";
+                weather.setLatitude(latitude);
+            }
         }
-        if (getInitialCondition() != null) {
-            getInitialCondition().calcThickness();
+        
+        // Check the soil
+        if (soil == null)
+            log += "  * Soil: No soil found in AgMIP dataset.\r\n";
+        else {
+            soil.initialise();
+            log += soil.getLog();
+        }        
+        
+        if (initialCondition == null)
+            log += "  * Initial conditions ERROR: Missing initial conditions (NO3, NH4, SW, SurfaceOM.residueWeight)\r\n";
+        else if (soil != null) {
+            initialCondition.initialise(soil.getLayers());
+            log += initialCondition.getLog();
+        }
+        
+        if (management == null)
+            log += "  * Operations ERROR: Missing all management events.\r\n";
+        else {
+            management.initialise();
+            log += management.getLog();
         }
     }
 }

@@ -1,5 +1,8 @@
 package org.agmip.translators.apsim.events;
 
+import java.text.ParseException;
+import java.util.Date;
+import org.agmip.translators.apsim.util.Converter;
 import org.agmip.translators.apsim.util.DateDeserializer;
 import org.agmip.translators.apsim.util.DateSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -15,39 +18,50 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * @since Jul 13, 2012
  */
 
-    @JsonTypeInfo(  
-	    use = JsonTypeInfo.Id.NAME,  
-	    include = JsonTypeInfo.As.PROPERTY,  
-	    property = "event")  
-	@JsonSubTypes({  
-	    @Type(value = Irrigation.class, name = "irrigation"),
-	    @Type(value = Planting.class, name = "planting"), 
-	    @Type(value = Fertilizer.class, name = "fertilizer") ,
-	    @Type(value = OrganicMatter.class, name = "organic_matter"), 
-	    @Type(value = Tillage.class, name = "tillage"), 
-	    @Type(value = Chemical.class, name = "chemical"), 
-	    @Type(value = Harvest.class, name = "harvest"),  
-	    })  
-    @JsonIgnoreProperties(ignoreUnknown = true)
-
+@JsonTypeInfo(  
+    use = JsonTypeInfo.Id.NAME,  
+    include = JsonTypeInfo.As.PROPERTY,  
+    property = "event")  
+@JsonSubTypes({  
+    @Type(value = Irrigation.class, name = "irrigation"),
+    @Type(value = Planting.class, name = "planting"), 
+    @Type(value = Fertilizer.class, name = "fertilizer") ,
+    @Type(value = OrganicMatter.class, name = "organic_matter"), 
+    @Type(value = Tillage.class, name = "tillage"), 
+    @Type(value = Chemical.class, name = "chemical"), 
+    @Type(value = Harvest.class, name = "harvest"),  
+    })  
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Event {
 	
-	@JsonSerialize(using=DateSerializer.class)
-	@JsonDeserialize(using=DateDeserializer.class)
-	String date;
-	
+    // date
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
+    private String date = "?";
+    public String getDate() { return date; }
+    public Date getEventDate() {
+        try {
+            if (date == null)
+                return null;
+            else
+                return Converter.apsim.parse(date);
+        } catch (ParseException ex) {
+            return null;
+        }
+     }
 
-	
-	abstract String getApsimAction();
+    // log
+    protected String log = "";
+    public String getLog() { return log; }
+    
+    
+    // action
+    abstract String getApsimAction();
 
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-	
-	
-
+    // initialise this instance.
+    public abstract void initialise();
 }
+
+
+
+

@@ -12,18 +12,27 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Irrigation extends Event {
 	
-	@JsonProperty("irop")
-	String method;
-	
-	@JsonProperty("irval")
-	String amount;
-	
-	@JsonProperty("ireff")
-	String efficiency;
+    //@JsonProperty("irop")
+    //private String method = "?";
 
-	@Override
-	public String getApsimAction() {
-		return "irrigation apply amount = " +amount+ " (mm) " ;
-	}
+    @JsonProperty("irval")
+    private String amount = "?";
+
+    //@JsonProperty("ireff")
+    //private String efficiency = "?";
+
+    @Override
+    public String getApsimAction() {
+        return "irrigation apply amount = " +amount+ " (mm) " ;
+    }
+
+    @Override
+    public void initialise() {
+        if ("?".equals(getDate()))
+            log += "  * Operation irrigation ERROR: Date missing. '?' has been inserted\r\n";
+        
+        if ("?".equals(amount))
+            log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing. A '?' has been inserted.\r\n";
+    }
 
 }

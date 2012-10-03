@@ -3,6 +3,9 @@ latitude = $weather.latitude
 longitude = $weather.longitude
 tav = 20.0   ! Default values - need to run Tav_amp
 amp = 15.0   ! Default values - need to run Tav_amp
+#if($weather.co2)
+co2 = $weather.co2
+#end
 year  day radn maxt mint rain 
 ()    ()  (MJ/m2) (oC)  (oC)  (mm) 
 #foreach($daily in $weather.records)

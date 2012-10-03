@@ -10,15 +10,23 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class OrganicMatter extends Event {
 
-	@JsonProperty("omamt")
-	String amount;
-	@JsonProperty("omdep")
-	String depth;
-	@JsonProperty("omn%")
-	String nitrogen;
-	@Override
-	public String getApsimAction() {
-		return "";
-	}
+    @JsonProperty("omamt")
+    private String amount;
+    
+    @JsonProperty("omdep")
+    private String depth;
+    
+    @JsonProperty("omn%")
+    private String nitrogen;
+    
+    @Override
+    public String getApsimAction() {
+        return null;
+    }
+
+    @Override
+    public void initialise() {
+        
+    }
 
 }

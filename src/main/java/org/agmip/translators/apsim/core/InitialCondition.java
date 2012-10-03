@@ -1,5 +1,7 @@
 package org.agmip.translators.apsim.core;
 
+import org.agmip.translators.apsim.ApsimOutput;
+import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -12,58 +14,77 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InitialCondition {
     
+    // date
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("icdat")
-    public String date = "?";
+    private String date = "?";
+    public String getDate() { return date; }
     
+    // residueWeight
     @JsonProperty("icrag")
-    public double residueWeight;
+    private String residueWeight = "?";
+    public String getResidueWeight() { return residueWeight; }
     
+    // residueNConc
     @JsonProperty("icrn")
-    public double residueNConc;
-  
-    @JsonProperty("soilLayer")
-    public InitialConditionLayer[] soilLayers;
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-
-        
-	public double getResidueWeight() {
-		return residueWeight;
-	}
-
-	public void setResidueWeight(double residueWeight) {
-		this.residueWeight = residueWeight;
-	}
-
-	public double getResidueNConc() {
-		return residueNConc;
-	}
-
-	public void setResidueNConc(double residueNConc) {
-		this.residueNConc = residueNConc;
-	}
-
-	public InitialConditionLayer[] getSoilLayers() {
-		return soilLayers;
-	}
-
-	public void setSoilLayers(InitialConditionLayer[] soilLayers) {
-		this.soilLayers = soilLayers;
-	}
+    private String residueNConc = "?";
+    public String getResidueNConc() { return residueNConc; }
     
-    public void calcThickness() {
+    // cropCode
+    @JsonProperty("icpcr")
+    private String cropCode = "?";
+
+    // residueType
+    public String getResidueType() { return Converter.cropCodeToName(cropCode); }
+    
+    // soilLayers
+    @JsonProperty("soilLayer")
+    private InitialConditionLayer[] soilLayers;
+    public InitialConditionLayer[] getSoilLayers() { return soilLayers; }
+
+    // log
+    private String log = "";
+    public String getLog() { return log; }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // Initialise this instance.
+    public void initialise(SoilLayer[] layersFromSoil) {
         double cumThickness = 0.0;
-        for (int i = 0; i < soilLayers.length; i++) {
-            cumThickness = soilLayers[i].calcThickness(cumThickness);
-        } 
+        if (soilLayers.length == 0) {
+            log = "  * Initial conditions ERROR: Missing NO3, NH4 and SW. An empty table has been set up under soil with '-99' entries \r\n";
+            soilLayers = new InitialConditionLayer[layersFromSoil.length];
+            for (int i = 0; i < soilLayers.length; i++) {
+                soilLayers[i] = new InitialConditionLayer(layersFromSoil[i].getThickness());
+            }
+        }
+        else {
+            boolean missingFound = false;
+            for (int i = 0; i < soilLayers.length; i++) {
+                cumThickness = soilLayers[i].initialise(cumThickness);
+                if ("-99".equals(soilLayers[i].getNo3()) ||
+                    "-99".equals(soilLayers[i].getNh4()) ||
+                    "-99".equals(soilLayers[i].getSoilWater()))
+                    missingFound = true;
+            } 
+            if (missingFound)
+                log = "  * Initial conditions ERROR: Some missing values were found. Please check the table initial conditions table under the soil\r\n";
+        }
+        
+        if ("?".equals(getResidueType()))
+            log += "  * SurfaceOrganicMatter ERROR: Missing residue type.\r\n";
+        
+        if ("?".equals(residueWeight))
+            log += "  * SurfaceOrganicMatter ERROR: Missing residue weight.\r\n";
+        
+        log += "  * SurfaceOrganicMatter ERROR: Missing residue CNR.\r\n";
+        
     }
 
  

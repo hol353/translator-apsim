@@ -13,62 +13,45 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InitialConditionLayer {
     
+    // bottomDepth;
     @JsonProperty("icbl")
     private double bottomDepth;
     
+    // soilWater
     @JsonProperty("ich2o")
-    private double soilWater;
+    private String soilWater = "-99";
+    public String getSoilWater() { return soilWater; }
     
+    // no3
     @JsonProperty("icno3")
-    private double no3;
+    private String no3 = "-99";
+    public String getNo3() { return no3; }
     
+    // nh4
     @JsonProperty("icnh4")
-    private double nh4;
-
-    @JsonIgnore
-    private double thickness;
-        
-    public double getSoilWater() {
-        return soilWater;
-    }
-
-    public void setSoilWater(double soilWater) {
-        this.soilWater = soilWater;
-    }
-
-    public double getNo3() {
-        return no3;
-    }
-
-    public void setNo3(double no3) {
-        this.no3 = no3;
-    }
-
-    public double getNh4() {
-        return nh4;
-    }
-
-    public void setNh4(double nh4) {
-        this.nh4 = nh4;
-    }
+    private String nh4 = "-99";
+    public String getNh4() { return nh4; }
     
-    public double calcThickness(double cumThickness) {
-        setThickness(bottomDepth * 10 - cumThickness);  // convert from cm to mm
-        return bottomDepth * 10;
-    }
+    // thickness
+    @JsonIgnore
+    private String thickness = "?";
+    public String getThickness() { return thickness; }    
 
-    /**
-     * @return the thickness
-     */
-    public double getThickness() {
-        return thickness;
-    }
-
-    /**
-     * @param thickness the thickness to set
-     */
-    public void setThickness(double thickness) {
+    
+    
+    
+    
+    
+    
+    
+    // constructor
+    InitialConditionLayer(String thickness) {
         this.thickness = thickness;
     }
     
+    // Initialise this instance.
+    public double initialise(double cumThickness) {
+        thickness = String.valueOf(bottomDepth * 10 - cumThickness);  // convert from cm to mm
+        return bottomDepth * 10;
+    }
 }

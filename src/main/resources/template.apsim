@@ -1,18 +1,9 @@
 <folder version="32" name="simulations">
 	<simulation name="AgMIP">
-		<memo>
+		<memo name="LOG">
 This .apsim file was created by the APSIM AgMIP translator.
-Assumptions made by translator:
-  * Soil AirDry values are set to 0.05 of LL15 for all layers
-  * Soil/Crop LL values are set to LL15 for all layers
-  * Soil/Crop KL values are set to 0.1 for all layers
-  * Soil/Crop XF values are set to 1.0 for all layers (i.e. no sub soil contraints)
-  * Surface organic matter C:N ratio is not changed to reflect residue type.
-Todo:
-  * Surface organic matter previous crop isn't being set - should use crop code in InitialConditions.
-  * Currently there is no mapping of cultivars from ICASA name to APSIM name. The ICASA
-    name is currently written to the sow operation. You may need to change this.
-
+Log messages:
+$simulation.log   
 		</memo>
 		<clock>
 			<start_date type="date" description="Enter the start date of the simulation">$simulation.startDate</start_date>
@@ -53,7 +44,7 @@ Todo:
 						<SAT units="mm/mm">$layer.saturation</SAT>
 					</Layer>
 #end
-					<SoilCrop name="Maize">
+					<SoilCrop name="$simulation.management.plantingCropName()">
 #foreach ($layer in $simulation.soil.layers)          
 						<Layer>
 							<Thickness units="mm">$layer.thickness</Thickness>
@@ -65,16 +56,12 @@ Todo:
 					</SoilCrop>
 				</Water>
 				<SoilWat>
-					<SummerCona>3.5</SummerCona>
-					<SummerU>6</SummerU>
-					<SummerDate>1-Nov</SummerDate>
-					<WinterCona>3.5</WinterCona>
-					<WinterU>6</WinterU>
-					<WinterDate>1-Apr</WinterDate>
+					<Cona>3.5</Cona>
+					<U>$simulation.soil.u</U>
 					<DiffusConst>40</DiffusConst>
 					<DiffusSlope>16</DiffusSlope>
-					<Salb>0.13</Salb>
-					<Cn2Bare>73</Cn2Bare>
+					<Salb>$simulation.soil.salb</Salb>
+					<Cn2Bare>$simulation.soil.cn2bare</Cn2Bare>
 					<CnRed>20</CnRed>
 					<CnCov>0.8</CnCov>
 					<Slope>
@@ -104,8 +91,8 @@ Todo:
 					<Layer>                                            
 						<Thickness units="mm">$layer.thickness</Thickness>                                                
 						<OC units="Total %">#if( $layer.organicCarbon == 0 ) 0.1 #else $layer.organicCarbon #end</OC>
-						<FBiom units="0-1">0.025</FBiom>
-						<FInert units="0-1">0.4</FInert>
+						<FBiom units="0-1">$layer.fbiom</FBiom>
+						<FInert units="0-1">$layer.finert</FInert>
 					</Layer>
 #end
 				</SoilOrganicMatter>
@@ -117,7 +104,7 @@ Todo:
 						<Texture/>
 						<MunsellColour/>
 						<EC units="1:5 dS/m"/>
-						<PH units="1:5 water"/>
+						<PH units="1:5 water">$layer.ph</PH>
 						<CL units="mg/kg" />
 						<Boron units="Hot water mg/kg" />
 						<CEC units="cmol+/kg" />
@@ -148,9 +135,9 @@ Todo:
 			</soil>
 			<surfaceom name="SurfaceOrganicMatter">
 				<PoolName type="text" description="Organic Matter pool name">OrganicMatter</PoolName>
-				<type type="list" listvalues="bambatsi,barley,base_type,broccoli,camaldulensis,canola,centro,chickpea,chikenmanure_base,cm,cmA,cmB,constants,cotton,cowpea,danthonia,fababean,fieldpea,fym,gbean,globulus,goatmanure,grandis,grass,horsegram,inert,lablab,lentil,lucerne,lupin,maize,manB,manure,medic,millet,mucuna,nativepasture,navybean,oats,orobanche,peanut,pigeonpea,potato,rice,sorghum,soybean,stylo,sugar,sunflower,sweetcorn,sweetsorghum,tillage,tithonia,vetch,weed,wheat" description="Organic Matter type">wheat</type>
+				<type type="list" listvalues="bambatsi,barley,base_type,broccoli,camaldulensis,canola,centro,chickpea,chikenmanure_base,cm,cmA,cmB,constants,cotton,cowpea,danthonia,fababean,fieldpea,fym,gbean,globulus,goatmanure,grandis,grass,horsegram,inert,lablab,lentil,lucerne,lupin,maize,manB,manure,medic,millet,mucuna,nativepasture,navybean,oats,orobanche,peanut,pigeonpea,potato,rice,sorghum,soybean,stylo,sugar,sunflower,sweetcorn,sweetsorghum,tillage,tithonia,vetch,weed,wheat" description="Organic Matter type">$simulation.initialCondition.getResidueType()</type>
 				<mass type="text" description="Initial surface residue (kg/ha)">$simulation.initialCondition.residueWeight</mass>
-				<cnr type="text" description="C:N ratio of initial residue">80</cnr>
+				<cnr type="text" description="C:N ratio of initial residue">?</cnr>
 				<standing_fraction type="text" description="Fraction of residue standing">0</standing_fraction>
 			</surfaceom>
 			<fertiliser />
@@ -165,17 +152,20 @@ Todo:
 				<default_nh4_conc type="text" description="Ammonium concentration (ppm N)">0.0</default_nh4_conc>
 				<default_cl_conc type="text" description="Chloride concentration (ppm Cl)">0.0</default_cl_conc>
 			</irrigation>
-			<maize />
+			<$simulation.management.plantingCropName() />
 			<folder name="Manager folder">
 				<operations name="Operations">
 #foreach ($event in $simulation.management.events)        
+#if( $event.apsimAction )
 					<operation condition="start_of_day">
 						<date>$event.date</date>
 						<action>$event.apsimAction</action>
 					</operation>
+#end               
 #end        
 				</operations>
-<manager name="Harvesting rule"><ui><category type="category" description="Harvesting criteria" /><crop type="crop" description="Enter name of crop to harvest when ripe : ">maize</crop></ui><script><text>if [crop].StageName = 'harvest_ripe'  or [crop].plant_status = 'dead' then
+<manager name="Harvesting rule"><ui><category type="category" description="Harvesting criteria" />
+                                    <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop></ui><script><text>if [crop].StageName = 'harvest_ripe'  or [crop].plant_status = 'dead' then
    [crop] harvest
    [crop] end_crop
 endif
@@ -185,16 +175,16 @@ endif
 				<filename output="yes">AgMIP.out</filename>
 				<title>AgMIP</title>
 				<variables name="Variables">
-					<variable>dd/mm/yyyy as Date</variable>
-					<variable>biomass</variable>
-					<variable>yield</variable>
-					<variable>grain_protein</variable>
-					<variable>grain_size</variable>
-					<variable>esw</variable>
-					<variable>lai</variable>		  
+					<variable name="dd/mm/yyyy as Date"></variable>
+					<variable name="biomass"></variable>
+					<variable name="yield"></variable>
+					<variable name="grain_protein"></variable>
+					<variable name="grain_size"></variable>
+					<variable name="esw"></variable>
+					<variable name="lai"></variable>		  
 				</variables>
 				<events name="Reporting Frequency">
-					<event description="">daily</event>
+					<event name="daily"></event>
 				</events>
 				<Graph name="Yield and Biomass">
 					<Legend>

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import org.agmip.translators.apsim.util.DateSerializer;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
@@ -17,9 +17,6 @@ import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import org.agmip.translators.apsim.util.DateDeserializer;
-import org.agmip.translators.apsim.util.DateSerializer;
-
 
 /**
  * @author Ioannis N. Athanasiadis, DUTh
@@ -29,163 +26,115 @@ import org.agmip.translators.apsim.util.DateSerializer;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DailyWeather {
 	
-	public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
-	public static final SimpleDateFormat apsimWeather = new SimpleDateFormat("yyyy D");
-	
+    public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
+    public static final SimpleDateFormat apsimWeather = new SimpleDateFormat("yyyy D");
 
-	
-	
-	@JsonProperty("w_date")
-	@JsonDeserialize(using=DailyWeatherDeserializer.class)
-	@JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
-	public	String date ="1000/01/01";
-	
-	@JsonProperty("srad")
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	public String solarRadiation="?"; //radn
-	
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("tmax")
-	public String maxTemperature="?"; //maxt
+    // date
+    @JsonProperty("w_date")
+    @JsonDeserialize(using=DailyWeatherDeserializer.class)
+    @JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
+    private String date ="1000/01/01";
+    public String getDate() { return date; }
 
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("tmin")
-	public String minTemperature="?"; //mint
+    // solarRadiation
+    @JsonProperty("srad")
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    private String solarRadiation="?";
+    public String getSolarRadiation() { return solarRadiation; }
 
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("rain")
-	public String rainfall="?";
+    // maxTemperature
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("tmax")
+    private String maxTemperature="?";
+    public String getMaxTemperature() { return maxTemperature; }
+    
+    // minTemperature
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("tmin")
+    private String minTemperature="?";
+    public String getMinTemperature() { return minTemperature; }
+    
+    // rainfall
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("rain")
+    private String rainfall="?";
+    public String getRainfall() { return rainfall; }
 
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("wind")
-	public String windSpeed="?";
+    // windSpeed
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("wind")
+    private String windSpeed="?";
+    public String getWindSpeed() { return windSpeed; }
+    
+    // dewPoint
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("dewp")
+    private String dewPoint="?";
+    public String getDewPoint() { return dewPoint; }
+    
+    // vaporPressure
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("vprs")
+    private String vaporPressure="?";
+    public String getVaporPressure() { return vaporPressure; }
 
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("dewp")
-	public	String dewPoint="?";
-	
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("vprs")
-	public	String vaporPressure="?"; //vers
-
-	@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-	@JsonProperty("rhum")
-	public	String relativeHumidity="?"; //rh
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public String getSolarRadiation() {
-		return solarRadiation;
-	}
-
-	public void setSolarRadiation(String solarRadiation) {
-		this.solarRadiation = solarRadiation;
-	}
-
-	public String getMaxTemperature() {
-		return maxTemperature;
-	}
-
-	public void setMaxTemperature(String maxTemperature) {
-		this.maxTemperature = maxTemperature;
-	}
-
-	public String getMinTemperature() {
-		return minTemperature;
-	}
-
-	public void setMinTemperature(String minTemperature) {
-		this.minTemperature = minTemperature;
-	}
-
-	public String getRainfall() {
-		return rainfall;
-	}
-
-	public void setRainfall(String rainfall) {
-		this.rainfall = rainfall;
-	}
-
-	public String getWindSpeed() {
-		return windSpeed;
-	}
-
-	public void setWindSpeed(String windSpeed) {
-		this.windSpeed = windSpeed;
-	}
-
-	public String getDewPoint() {
-		return dewPoint;
-	}
-
-	public void setDewPoint(String dewPoint) {
-		this.dewPoint = dewPoint;
-	}
-
-	public String getVaporPressure() {
-		return vaporPressure;
-	}
-
-	public void setVaporPressure(String vaporPressure) {
-		this.vaporPressure = vaporPressure;
-	}
-
-	public String getRelativeHumidity() {
-		return relativeHumidity;
-	}
-
-	public void setRelativeHumidity(String relativeHumidity) {
-		this.relativeHumidity = relativeHumidity;
-	}
+    // relativeHumidity
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("rhum")
+    private String relativeHumidity="?";
+    public String getRelativeHumidity() { return relativeHumidity; }
 
 
-	public static class DailyWeatherDeserializer extends JsonDeserializer<String>{			 
-		 
-	    @Override
-	    public String deserialize(JsonParser jp, DeserializationContext ctxt)
-	            throws IOException, JsonProcessingException {
-					try {
-						Date date = agmip.parse(jp.getText());
-                        String outputDate = apsimWeather.format(date);
-                        if(outputDate.length() == 8) {
-                            return outputDate;
-                        } else {
-                            StringBuffer buf = new StringBuffer(outputDate);
-                            buf.insert(5, " ");
-                            if (buf.length() == 7) {
-                                buf.insert(5, " ");
-                            }
-                            return buf.toString();
-                        }
-					} catch (ParseException e) {
-						throw new IOException(e);
-					}
-			
-	    	     
-	    }
-	       
+    
+    
+    
+    
+    
 
-}
-	public static class DailyWeatherSerializer extends JsonSerializer<String>{
-		
-	    @Override
-	    public void serialize(String date, JsonGenerator gen, SerializerProvider provider)
-	            throws IOException, JsonProcessingException {
-	        String formattedDate="";
-			try {
-				formattedDate = agmip.format(apsimWeather.parse(date));
-			} catch (ParseException e) {
-				throw new IOException(e);
-			}
-	 	        		
-	        gen.writeString(formattedDate);
-	    }
+    public static class DailyWeatherDeserializer extends JsonDeserializer<String> {			 
 
-	}
+        @Override
+        public String deserialize(JsonParser jp, DeserializationContext ctxt)
+            throws IOException, JsonProcessingException {
+            
+            try {
+                Date date = agmip.parse(jp.getText());
+                String outputDate = apsimWeather.format(date);
+                if(outputDate.length() == 8) {
+                    return outputDate;
+                } else {
+                    StringBuffer buf = new StringBuffer(outputDate);
+                    buf.insert(5, " ");
+                    if (buf.length() == 7) {
+                        buf.insert(5, " ");
+                    }
+                    return buf.toString();
+                }
+            } catch (ParseException e) {
+                throw new IOException(e);
+            }
+        }
+    }
+    
+    
+    
+    public static class DailyWeatherSerializer extends JsonSerializer<String> {
+
+        @Override
+        public void serialize(String date, JsonGenerator gen, SerializerProvider provider)
+            throws IOException, JsonProcessingException {
+            
+            String formattedDate="";
+            try {
+                formattedDate = agmip.format(apsimWeather.parse(date));
+            } catch (ParseException e) {
+                throw new IOException(e);
+            }
+
+            gen.writeString(formattedDate);
+        }
+    }
+    
+    
+    
 }

@@ -11,10 +11,16 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Harvest extends Event {
 
-	@Override
-	public String getApsimAction() {
-		return "";
-	}
+    // APSIM currently does auto harvesting - this is not used.
+    @Override
+    public String getApsimAction() {
+            return null;
+    }
+
+    // initialise this instance.
+    @Override
+    public void initialise() {
+    }
 
 
 }
