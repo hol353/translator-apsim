@@ -1,5 +1,5 @@
 target/*
-*.swp
+*.sw?
 /.settings
 /bin
 /target

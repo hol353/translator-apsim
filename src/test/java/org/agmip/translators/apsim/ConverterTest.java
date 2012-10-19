@@ -58,7 +58,7 @@ public class ConverterTest extends TestCase{
 
     @Test
     public void testWriteAPSIMFile2() throws Exception {
-        loadJSONFromFile("C:\\Users\\hol353\\Work\\AgMIP\\json-translation-samples\\ufga8201_multi.json");
+        loadJSONFromResource("/ufga8201_multi.json");
         long ping = System.currentTimeMillis();
         try {
                 Converter.generateAPSIMFile(outputPath, sim);
