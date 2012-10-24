@@ -117,8 +117,10 @@ public class SimulationRun {
             log += soil.getLog();
         }        
         
-        if (initialCondition == null)
+        if (initialCondition == null) {
+            initialCondition = new InitialCondition();
             log += "  * Initial conditions ERROR: Missing initial conditions (NO3, NH4, SW, SurfaceOM.residueWeight)\r\n";
+        }
         else if (soil != null) {
             initialCondition.initialise(soil.getLayers());
             log += initialCondition.getLog();

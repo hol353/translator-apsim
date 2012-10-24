@@ -39,7 +39,7 @@ public class InitialCondition {
     
     // soilLayers
     @JsonProperty("soilLayer")
-    private InitialConditionLayer[] soilLayers;
+    private InitialConditionLayer[] soilLayers = new InitialConditionLayer[0];
     public InitialConditionLayer[] getSoilLayers() { return soilLayers; }
 
     // log
