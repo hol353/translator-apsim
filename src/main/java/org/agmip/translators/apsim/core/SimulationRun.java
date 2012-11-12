@@ -18,7 +18,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class SimulationRun {
     
     // Initial condition
-    @JsonProperty("initial_conditions")
+    @JsonProperty("initial_condition")
     private InitialCondition initialCondition;
     public InitialCondition getInitialCondition() { return initialCondition; }
     
@@ -88,7 +88,7 @@ public class SimulationRun {
     
     
     // initialise the SimulationRun instance.
-    public void initialise() {
+    public void initialise() throws Exception {
         log = "";
         
         // Check the start and end date.
@@ -108,6 +108,7 @@ public class SimulationRun {
                 weather.setLatitude(latitude);
             }
         }
+        log += "  * Met ERROR: No TAV and AMP have been specified in met file.\r\n";
         
         // Check the soil
         if (soil == null)
@@ -121,7 +122,7 @@ public class SimulationRun {
             initialCondition = new InitialCondition();
             log += "  * Initial conditions ERROR: Missing initial conditions (NO3, NH4, SW, SurfaceOM.residueWeight)\r\n";
         }
-        else if (soil != null) {
+        if (soil != null) {
             initialCondition.initialise(soil.getLayers());
             log += initialCondition.getLog();
         }

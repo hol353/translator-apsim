@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.core;
 
+import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -32,7 +33,7 @@ public class SoilLayer {
     private String airDry = "?";
     public String getAirDry() {
         double ll = Double.valueOf(lowerLimit);
-        return String.valueOf(ll - (ll * 0.05));
+        return String.valueOf(ll * 0.5);
     }
     
     // lowerLimit
@@ -87,7 +88,7 @@ public class SoilLayer {
 
     
     // These assumptions are written to the top of the .apsim file in a <Memo>
-    public double initialise(double cumThickness, int layerNumber, int numLayers) {
+    public double initialise(double cumThickness, int layerNumber, int numLayers) throws Exception {
         log = "";
         
         if ("?".equals(bottomDepth))
@@ -107,25 +108,49 @@ public class SoilLayer {
 
         if ("?".equals(organicCarbon))
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing organ carbon.\r\n";
-
+        
         if ("?".equals(ph))
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ASSUMPTION: Missing PH. Assuming a value of 7.0\r\n";
 
         if ("?".equals(swcon))
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ASSUMPTION: Missing SWCON. Assuming a value of 0.3\r\n";
+
+        double bottom = Double.valueOf(bottomDepth);
+        thickness = String.valueOf(bottom * 10 - cumThickness);
         
-        double klPerLayer = (0.08 - 0.02) / (numLayers-1);
-        kl = 0.08 - ( (layerNumber-1) * klPerLayer);
+        double[] klX = {  15,   30,   60,   90,  120,  150,  180};
+        double[] klY = {0.08, 0.08, 0.08, 0.06, 0.06, 0.04, 0.02};
+        kl = Converter.linearInterpReal(bottom, klX, klY);
         
         double fbiomPerLayer = (0.04 - 0.01) / (numLayers-1);
         fbiom = 0.04 - ( (layerNumber-1) * fbiomPerLayer);
 
-        double finertPerLayer = (0.4 - 0.9) / (numLayers-1);
-        finert = 0.4 - ( (layerNumber-1) * finertPerLayer);
+        double[] finertX = {  15,   30,   60,   90};
+        double[] finertY = { 0.4,  0.5,  0.7, 0.95};
+        finert = Converter.linearInterpReal(bottom, finertX, finertY);
         
-        double bottom = Double.valueOf(bottomDepth);
-        thickness = String.valueOf(bottom * 10 - cumThickness);
         return bottom * 10;
-    }     
+    }
+    
+    // Where only soil surface data has been collected use the following method 
+                // for estimating values in the deeper layers:
+                // 0-15 cm measured data, 
+                // 15-30 cm, 80% of 0-15 layer; 
+                // 30-60 cm, 50% of 0-15 layer; 
+                // 60-90 cm, 25% of 0-15 layer; 
+                // 90-120 cm, 15% of 0-15 layer; 
+                // 120-150 cm, 10% of 0-15 layer; 
+                // 150-180 cm 10% of 0-15 layer.
+    public void calculateOrganicCarbon(double TopLayerOC) throws Exception {
+        double[] bottomX = {  30,   60,   90,  120,  150,  180};
+        double[] percentY = {  80,   50,   25,   15,   10,   10};
+        
+        if (organicCarbon.equals("?")) {
+            double Percent = Converter.linearInterpReal(Double.valueOf(bottomDepth), 
+                                                        bottomX, percentY);
+            organicCarbon = String.valueOf(TopLayerOC * Percent / 100.0);
+        }
+        
+    }
     
 }

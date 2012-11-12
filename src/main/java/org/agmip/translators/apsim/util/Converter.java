@@ -48,7 +48,7 @@ public class Converter {
         path.mkdirs();
         String baseName;
         if (sim.getExperimentName().equals("default")) {
-            baseName = sim.getWeather().getShortName();
+            baseName = sim.getWeather().getName();
         } else {
             baseName = sim.getExperimentName();
         }
@@ -326,5 +326,45 @@ public class Converter {
         return "?";
     }
     
+    
+    //-------------------------------------------------------------------------
+    //Linearly interpolates a value y for a given value x and a given
+    //set of xy co-ordinates.
+    //When x lies outside the x range_of, y is set to the boundary condition.
+    //Returns true for Did_interpolate if interpolation was necessary.
+    //-------------------------------------------------------------------------
+    public static double linearInterpReal(double dX, double[] dXCoordinate, double[] dYCoordinate) throws Exception
+    {
+        if (dXCoordinate == null || dYCoordinate == null)
+            return 0;
+        //find where x lies in the x coordinate
+        if (dXCoordinate.length == 0 || dYCoordinate.length == 0 || dXCoordinate.length != dYCoordinate.length)
+            throw new Exception("linearInterpReal: Lengths of passed in arrays are incorrect");
+
+        for (int iIndex = 0; iIndex < dXCoordinate.length; iIndex++)
+        {
+            if (dX <= dXCoordinate[iIndex])
+            {
+                //Chcek to see if dX is exactly equal to dXCoordinate[iIndex]
+                //If so then don't calcuate dY.  This was added to remove roundoff error.
+                if (dX == dXCoordinate[iIndex])
+                    return dYCoordinate[iIndex];
+                //Found position
+                else if (iIndex == 0)
+                    return dYCoordinate[iIndex];
+                else
+                {
+                    //interpolate - y = mx+c
+                    if ((dXCoordinate[iIndex] - dXCoordinate[iIndex - 1]) == 0)
+                        return dYCoordinate[iIndex - 1];
+                    else
+                        return ((dYCoordinate[iIndex] - dYCoordinate[iIndex - 1]) / (dXCoordinate[iIndex] - dXCoordinate[iIndex - 1]) * (dX - dXCoordinate[iIndex - 1]) + dYCoordinate[iIndex - 1]);
+                }
+            }
+            else if (iIndex == (dXCoordinate.length - 1))
+                return dYCoordinate[iIndex];
+        }// END OF FOR LOOP
+        return 0.0;
+    }
     
 }

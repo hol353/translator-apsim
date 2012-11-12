@@ -49,17 +49,21 @@ $simulation.log
 						<Layer>
 							<Thickness units="mm">$layer.thickness</Thickness>
 							<LL units="mm/mm">$layer.lowerLimit</LL>
-							<KL units="/day">0.1</KL>
+							<KL units="/day">$layer.kl</KL>
 							<XF units="0-1">1</XF>
 						</Layer>
 #end
 					</SoilCrop>
 				</Water>
 				<SoilWat>
-					<Cona>3.5</Cona>
-					<U>$simulation.soil.u</U>
-					<DiffusConst>40</DiffusConst>
-					<DiffusSlope>16</DiffusSlope>
+					<SummerCona>3.5</SummerCona>
+					<SummerU>$simulation.soil.u</SummerU>
+               <SummerDate>1-Nov</SummerDate>
+					<WinterCona>3.5</WinterCona>
+					<WinterU>$simulation.soil.u</WinterU>
+               <WinterDate>1-Apr</WinterDate>
+					<DiffusConst>$simulation.soil.getDiffusConst()</DiffusConst>
+					<DiffusSlope>$simulation.soil.getDiffusSlope()</DiffusSlope>
 					<Salb>$simulation.soil.salb</Salb>
 					<Cn2Bare>$simulation.soil.cn2bare</Cn2Bare>
 					<CnRed>20</CnRed>
@@ -82,9 +86,9 @@ $simulation.log
 #end
 				</SoilWat>
 				<SoilOrganicMatter>
-					<RootCn>45</RootCn>  <!-- was 40 -->
-					<RootWt>500</RootWt>  <!-- was 200 -->
-					<SoilCn>14.5</SoilCn> <!-- was 12.5 -->
+					<RootCn>45</RootCn>  
+					<RootWt>500</RootWt>  
+					<SoilCn>14.5</SoilCn> 
 					<EnrACoeff>7.4</EnrACoeff>
 					<EnrBCoeff>0.2</EnrBCoeff>
 #foreach ($layer in $simulation.soil.layers)        

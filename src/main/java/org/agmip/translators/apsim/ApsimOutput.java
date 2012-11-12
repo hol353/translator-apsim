@@ -50,7 +50,7 @@ public class ApsimOutput implements TranslatorOutput {
                     Converter.generateMetFile(path, sim);
                      String baseName;
         if (sim.getExperimentName().equals("default")) {
-            baseName = sim.getWeather().getShortName();
+            baseName = sim.getWeather().getName();
         } else {
             baseName = sim.getExperimentName();
         }

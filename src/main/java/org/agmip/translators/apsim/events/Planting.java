@@ -58,8 +58,6 @@ public class Planting extends Event{
         
         if ("?".equals(cropID))
             log += "  * Operation " + getDate() + " ERROR: Planting crop missing. A '?' has been inserted\r\n";
-        else
-            log += "  * Operation " + getDate() + " ASSUMPTION: Planting crop name: " + getCropName() + " may not match APSIM crop names. Please check.\r\n";
         
         if ("?".equals(depth)) {
             depth = "50";

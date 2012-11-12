@@ -1,5 +1,7 @@
 package org.agmip.translators.apsim.core;
 
+import org.agmip.translators.apsim.util.Converter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -67,6 +69,16 @@ public class Soil {
     private String cn2bare = "?";
     public String getCn2bare() { return cn2bare; }
     
+    // diffusConst
+    @JsonIgnore
+    public String diffusConst;
+    public String getDiffusConst() { return diffusConst; }
+
+    // diffusSlope
+    @JsonIgnore
+    public String diffusSlope;
+    public String getDiffusSlope() { return diffusSlope; }
+    
     // layers
     @JsonProperty("soilLayer")
     private SoilLayer[] layers;
@@ -84,7 +96,7 @@ public class Soil {
     
     
     // Initialise the instance.
-    public void initialise() {
+    public void initialise() throws Exception {
         log = "";
         
         if (layers.length == 0)
@@ -96,7 +108,23 @@ public class Soil {
                 cumThickness = layers[i].initialise(cumThickness, i+1, layers.length);
             } 
             
-            log += "  * Soil ASSUMPTION: AirDry values are set to 0.05 of LL15 for all layers\r\n";
+            // Look for an organic carbon in the top layer but missing values in subsequent
+            // deeper layers.
+            if (!layers[0].getOrganicCarbon().equals("?")) {
+                double TopOC = Double.valueOf(layers[0].getOrganicCarbon());
+                boolean missingValuesFound = false;
+                for (int i = 1; i < layers.length; i++) {
+                    if (layers[i].getOrganicCarbon().equals("?"))
+                        missingValuesFound = true;
+                    layers[i].calculateOrganicCarbon(TopOC);
+                }
+                
+                if (missingValuesFound)
+                    log += "  * Soil ASSUMPTION: Missing organic carbon values have been estimated from the measured value in the top layer.";
+            }
+                
+            
+            log += "  * Soil ASSUMPTION: AirDry values are set to 0.5 of LL15 for all layers\r\n";
             
             for (int i = 0; i < layers.length; i++) {
                 log += layers[i].getLog();
@@ -110,7 +138,6 @@ public class Soil {
             u = "6.0";
             log += "  * Soil ASSUMPTION: Missing U. Assuming a value of 6.0\r\n";
         }
-        log += "  * Soil ASSUMPTION: DiffusConst set to a value of 40.0\r\n";
 
         if ("?".equals(salb)) {
             salb = "0.13";
@@ -122,7 +149,30 @@ public class Soil {
             log += "  * Soil ASSUMPTION: Missing CN2Bare. Assuming a value of 73.0\r\n";
         }
         
-        
+        if (getClassification().toLowerCase().contains("sand") ||
+            getName().toLowerCase().contains("sand")) {
+            log += "  * Soil ASSUMPTION: Sand soil type found. Assuming DiffusConst of 250 and DiffusSlope of 22\r\n";
+            diffusConst = "250";
+            diffusSlope = "22";
+        }
+        else if (getClassification().toLowerCase().contains("loam") ||
+                 getName().toLowerCase().contains("loam")) {
+            log += "  * Soil ASSUMPTION: Loam soil type found. Assuming DiffusConst of 88 and DiffusSlope of 35\r\n";
+            diffusConst = "88";
+            diffusSlope = "35";
+        }
+        else if (getClassification().toLowerCase().contains("clay") ||
+                 getName().toLowerCase().contains("clay")) {
+            log += "  * Soil ASSUMPTION: Clay soil type found. Assuming DiffusConst of 40 and DiffusSlope of 16\r\n";
+            diffusConst = "40";
+            diffusSlope = "16";
+        }
+        else {
+            log += "  * Soil ASSUMPTION: No soil type info found. Assuming DiffusConst of 40 and DiffusSlope of 16\r\n";
+            diffusConst = "40";
+            diffusSlope = "16";
+        }
+
         
         log += "  * Soil ASSUMPTION: RootCN set to a value of 45.0\r\n";
         log += "  * Soil ASSUMPTION: RootWt set to a value of 500.0\r\n";
