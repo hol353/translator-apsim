@@ -89,6 +89,9 @@ public class Weather {
     private List<DailyWeather> records = new ArrayList<DailyWeather>();
     public List<DailyWeather> getRecords() { return records; }
 
+    // Needed for Jackson
+    public Weather() {}
+
 	
     
 

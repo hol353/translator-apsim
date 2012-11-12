@@ -36,7 +36,8 @@ public class Management {
     }
     
     
-    
+    // Needed for Jackson
+    public Management() {}
     
     // initialise this instance
     public void initialise() {

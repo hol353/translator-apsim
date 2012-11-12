@@ -83,7 +83,8 @@ public class SoilLayer {
     
     
 
-    
+    // Needed for Jackson
+    public SoilLayer() {}
     
 
     

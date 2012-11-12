@@ -48,6 +48,9 @@ public class InitialConditionLayer {
     InitialConditionLayer(String thickness) {
         this.thickness = thickness;
     }
+
+    // Needed for Jackson
+    public InitialConditionLayer() {}
     
     // Initialise this instance.
     public double initialise(double cumThickness) {

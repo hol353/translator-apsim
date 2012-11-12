@@ -46,11 +46,8 @@ public class InitialCondition {
     private String log = "";
     public String getLog() { return log; }
     
-    
-    
-    
-    
-    
+    // Needed for Jackson
+    public InitialCondition() {}
     
     
     

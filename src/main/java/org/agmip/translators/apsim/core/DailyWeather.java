@@ -84,7 +84,8 @@ public class DailyWeather {
     private String relativeHumidity="?";
     public String getRelativeHumidity() { return relativeHumidity; }
 
-
+    // Needed for Jackson
+    public DailyWeather() {}
     
     
     

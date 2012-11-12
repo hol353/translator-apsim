@@ -90,8 +90,8 @@ public class Soil {
     
     
     
-    
-    
+    // Needed for Jackson
+    public Soil() {}
     
     
     

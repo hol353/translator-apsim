@@ -18,7 +18,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class SimulationRun {
     
     // Initial condition
-    @JsonProperty("initial_condition")
+    @JsonProperty("initial_conditions")
     private InitialCondition initialCondition;
     public InitialCondition getInitialCondition() { return initialCondition; }
     
@@ -77,15 +77,8 @@ public class SimulationRun {
         return Converter.toApsimDateString(endDate);
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    // Needed for Jackson
+    public SimulationRun() {}
     
     // initialise the SimulationRun instance.
     public void initialise() throws Exception {

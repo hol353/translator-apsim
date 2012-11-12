@@ -6,7 +6,7 @@
 	"fl_long": "77.12",
 	"wst_id": "INDE",
 	"soil_id": "WP_IND",
-	"initial_condition": {
+	"initial_conditions": {
 		"icdat": "19841122",
 		"icpcr": "MAZ",
 		"icrag": "1500",

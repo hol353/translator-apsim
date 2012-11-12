@@ -33,39 +33,39 @@ public class ApsimOutput implements TranslatorOutput {
     private static final Logger LOG = LoggerFactory.getLogger(ApsimOutput.class);
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-        public void writeFile(String filePath, Map input) {
-            File path = new File(filePath);
-            ObjectMapper mapper = new ObjectMapper();
-            SimulationRun sim;
-            try {
-                
-                String temp = toJSON(MapUtil.decompressAll(input));
-                sim = mapper.readValue(temp, SimulationRun.class);
+    public void writeFile(String filePath, Map input) {
+        File path = new File(filePath);
+        ObjectMapper mapper = new ObjectMapper();
+        SimulationRun sim;
+        try {
 
-                ArrayList<String> files = new ArrayList<String>();
-                
-                sim.initialise();
-                if (sim.getWeather() != null) {
+            String temp = toJSON(MapUtil.decompressAll(input));
+            sim = mapper.readValue(temp, SimulationRun.class);
+
+            ArrayList<String> files = new ArrayList<String>();
+
+            sim.initialise();
+            if (sim.getWeather() != null) {
                     // Support if there is no weather data.
-                    Converter.generateMetFile(path, sim);
-                     String baseName;
-        if (sim.getExperimentName().equals("default")) {
-            baseName = sim.getWeather().getName();
-        } else {
-            baseName = sim.getExperimentName();
-        }
-                    files.add(baseName+".met");
+                Converter.generateMetFile(path, sim);
+                String baseName;
+                if (sim.getExperimentName().equals("default")) {
+                    baseName = sim.getWeather().getName();
+                } else {
+                    baseName = sim.getExperimentName();
                 }
-                if (sim.getLatitude() != null) {
+                files.add(baseName+".met");
+            }
+            if (sim.getLatitude() != null) {
                     // Support for weather file only.
-                    Converter.generateAPSIMFile(path, sim);
-                    files.add(sim.getExperimentName()+".apsim");
-                }
+                Converter.generateAPSIMFile(path, sim);
+                files.add(sim.getExperimentName()+".apsim");
+            }
 
-                BufferedInputStream origin = null;
+            BufferedInputStream origin = null;
 
-                if (files.size() > 1) {
-                
+            if (files.size() > 1) {
+
                 File zipfile = new File(path, sim.getExperimentName() + "_apsim.zip");
 
                 if (zipfile.exists())
@@ -73,7 +73,7 @@ public class ApsimOutput implements TranslatorOutput {
 
                 FileOutputStream dest = new FileOutputStream(zipfile);
                 ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-                            dest));
+                    dest));
                 byte data[] = new byte[BUFFER];
                 // get a list of files from current directory
 
@@ -82,7 +82,7 @@ public class ApsimOutput implements TranslatorOutput {
                     File rawFile = new File(path, files.get(i));
                     if( rawFile.exists()) {
                         FileInputStream fi = new FileInputStream(new File(path,
-                                    files.get(i)));
+                            files.get(i)));
                         origin = new BufferedInputStream(fi);
                         ZipEntry entry = new ZipEntry(files.get(i));
                         out.putNextEntry(entry);
@@ -94,21 +94,16 @@ public class ApsimOutput implements TranslatorOutput {
                     }
                 }
                 out.close();
+                dest.close();
 
                 for (int i = 0; i < files.size(); i++) {
                     File f = new File(path, files.get(i));
                     f.delete();
                 }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    
 
-        
-        
-        
-    
+    }    
 }
