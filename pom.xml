@@ -2,9 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.agmip.translators</groupId>
 	<artifactId>translator-apsim</artifactId>
 	<version>1.2-SNAPSHOT</version>
-	<name>translator-apsim</name>
+	<name>AgMIP APSIM ACE Translator</name>
 	<url>http://www.agmip.org/</url>
 
 	<parent>
@@ -15,6 +16,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.6</jdk.version>
 	</properties>
 
 	<organization>
@@ -41,7 +43,6 @@
 		<dependency>
 			<groupId>org.agmip</groupId>
 			<artifactId>agmip-core</artifactId>
-            <version>0.15-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -56,12 +57,10 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.0.7</version>
         </dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
-			<version>1.7</version>
 		</dependency>
 	</dependencies>
 
@@ -70,4 +69,113 @@
 		<developerConnection>scm:git:git@github.com/agmip/translator-apsim.git</developerConnection>
 		<url>https://github.com/agmip/translator-apsim</url>
 	</scm>
+
+	<build>
+    <plugins>
+        <plugin>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <version>0.5</version>
+            <configuration>
+                <message>Building site for ${project.version}</message>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>site</goal>
+                    </goals>
+                    <phase>site</phase>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.0</version>
+            <configuration>
+                <reportPlugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+                            <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.8.1</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <version>2.12</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>2.9</version>
+                    </plugin>
+                </reportPlugins>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>${jdk.version}</source>
+                <target>${jdk.version}</target>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.8.1</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.1.2</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <pushChanges>false</pushChanges>
+                <localCheckout>true</localCheckout>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 </project>
