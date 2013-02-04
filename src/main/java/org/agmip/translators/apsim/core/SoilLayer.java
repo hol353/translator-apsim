@@ -28,7 +28,6 @@ public class SoilLayer {
     public String getBulkDensity() { return bulkDensity; }
     
     // airDry
-    @SuppressWarnings("unused")
     @JsonIgnore
     private String airDry = "?";
     public String getAirDry() {

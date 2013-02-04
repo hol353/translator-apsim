@@ -25,6 +25,12 @@ public class SimulationRun {
     // weather
     private Weather weather;
     public Weather getWeather() { return weather; }
+    public void setWeather(Weather w) { weather = w; }
+    
+    @JsonProperty("wst_id")
+    private String weatherID;
+    public String getWeatherID(){return weatherID;}
+    
     
     // management.
     private Management management;
@@ -33,7 +39,12 @@ public class SimulationRun {
     // soil
     private Soil soil;
     public Soil getSoil() { return soil; }
-
+    public void setSoil(Soil s) { soil =s;}
+    
+    @JsonProperty("soil_id")
+    private String soilID;
+    public String getSoilID(){return soilID;}
+    
     // experimentName
     @JsonProperty("exname")
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)

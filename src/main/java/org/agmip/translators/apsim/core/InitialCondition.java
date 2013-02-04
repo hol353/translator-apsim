@@ -1,6 +1,5 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.ApsimOutput;
 import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;

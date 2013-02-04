@@ -94,6 +94,19 @@ public class Weather {
 
 	
     
+    /* 
+     * I assume that two weathers are the same if they have the same ID.
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object other) {
+        if (other instanceof Weather) {
+        	Weather otherWeather = (Weather) other;
+            return id.equals(otherWeather.id);
+        }
+        return false;
+    }        
+    
 
 	
 }

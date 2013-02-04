@@ -1,6 +1,5 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -37,7 +36,7 @@ public class Soil {
     // id
     @JsonProperty("soil_id")
     private String id = "?";    
-    
+    public String getID() { return id; }
     
     // source
     @JsonProperty("sl_source")
@@ -60,7 +59,7 @@ public class Soil {
     public String getU() { return u; }
     
     // salb
-    @JsonProperty("SALB")
+    @JsonProperty("salb")
     private String salb = "?";
     public String getSalb() { return salb; }
 
