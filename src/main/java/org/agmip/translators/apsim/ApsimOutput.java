@@ -18,8 +18,6 @@ import org.agmip.translators.apsim.util.Converter;
 import org.agmip.util.MapUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ioannis N. Athanasiadis, DUTh
@@ -30,9 +28,9 @@ import org.slf4j.LoggerFactory;
 
 public class ApsimOutput implements TranslatorOutput {
     static final int BUFFER = 2048;
-    private static final Logger LOG = LoggerFactory.getLogger(ApsimOutput.class);
-
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
     public void writeFile(String filePath, Map input) {
         File path = new File(filePath);
         ObjectMapper mapper = new ObjectMapper();
