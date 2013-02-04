@@ -1,5 +1,5 @@
 <folder version="32" name="simulations">
-	<simulation name="AgMIP">
+	<simulation name="${simulation.experimentName}">
 		<memo name="LOG">
 This .apsim file was created by the APSIM AgMIP translator.
 Log messages:
@@ -141,7 +141,7 @@ $simulation.log
 				<PoolName type="text" description="Organic Matter pool name">OrganicMatter</PoolName>
 				<type type="list" listvalues="bambatsi,barley,base_type,broccoli,camaldulensis,canola,centro,chickpea,chikenmanure_base,cm,cmA,cmB,constants,cotton,cowpea,danthonia,fababean,fieldpea,fym,gbean,globulus,goatmanure,grandis,grass,horsegram,inert,lablab,lentil,lucerne,lupin,maize,manB,manure,medic,millet,mucuna,nativepasture,navybean,oats,orobanche,peanut,pigeonpea,potato,rice,sorghum,soybean,stylo,sugar,sunflower,sweetcorn,sweetsorghum,tillage,tithonia,vetch,weed,wheat" description="Organic Matter type">$simulation.initialCondition.getResidueType()</type>
 				<mass type="text" description="Initial surface residue (kg/ha)">$simulation.initialCondition.residueWeight</mass>
-				<cnr type="text" description="C:N ratio of initial residue">?</cnr>
+				<cnr type="text" description="C:N ratio of initial residue">$simulation.initialCondition.cnr</cnr>
 				<standing_fraction type="text" description="Fraction of residue standing">0</standing_fraction>
 			</surfaceom>
 			<fertiliser />
@@ -156,7 +156,11 @@ $simulation.log
 				<default_nh4_conc type="text" description="Ammonium concentration (ppm N)">0.0</default_nh4_conc>
 				<default_cl_conc type="text" description="Chloride concentration (ppm Cl)">0.0</default_cl_conc>
 			</irrigation>
-			<$simulation.management.plantingCropName() />
+			<$simulation.management.plantingCropName()>
+            <ini>
+               <filename />
+            </ini>
+         </$simulation.management.plantingCropName()>
 			<folder name="Manager folder">
 				<operations name="Operations">
 #foreach ($event in $simulation.management.events)        

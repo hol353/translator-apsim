@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -23,8 +22,6 @@ import org.agmip.util.MapUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ioannis N. Athanasiadis, DUTh
@@ -35,8 +32,6 @@ import org.slf4j.LoggerFactory;
 
 public class ApsimOutput implements TranslatorOutput {
 	static final int BUFFER = 2048;
-	private static final Logger LOG = LoggerFactory.getLogger(ApsimOutput.class);
-
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

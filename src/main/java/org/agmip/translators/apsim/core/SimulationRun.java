@@ -51,6 +51,12 @@ public class SimulationRun {
     private String experimentName = "default";
     public String getExperimentName() { return experimentName; }
     
+    // experimentName
+    @JsonProperty("trt_name")
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+    private String treatmentName = "";
+    public String getTreatmentName() { return treatmentName; }
+    
     // latitude
     @JsonProperty("fl_lat")
     private String latitude = "?";

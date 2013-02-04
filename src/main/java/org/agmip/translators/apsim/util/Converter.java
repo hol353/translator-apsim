@@ -7,12 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import org.agmip.translators.apsim.ApsimOutput;
 import org.agmip.translators.apsim.core.SimulationRun;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 /**
  * @author Ioannis N. Athanasiadis, DUTh
@@ -23,8 +21,7 @@ public class Converter {
 
     public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
     public static final SimpleDateFormat apsim = new SimpleDateFormat("dd/MM/yyyy");
-    private static final Logger LOG = LoggerFactory.getLogger(ApsimOutput.class);
-
+    
     public static void generateAPSIMFile(File path, SimulationRun sim)
             throws Exception {
         path.mkdirs();
@@ -40,7 +37,7 @@ public class Converter {
             Velocity.evaluate(context, writer, "Generate APSIM", Converter.class.getClassLoader().getResourceAsStream("template.apsim"));
             writer.close();
         } catch (IOException ex) {
-            LOG.error(ex.getMessage());
+            ex.printStackTrace();
         }
     }
         
