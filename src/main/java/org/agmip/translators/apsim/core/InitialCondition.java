@@ -29,10 +29,7 @@ public class InitialCondition {
     private String residueNConc = "?";
     public String getResidueNConc() { return residueNConc; }
     
-    // residueNConc
-    @JsonProperty("icrn")
-    private String nconc = "?";
-    public String getNConc() { return nconc; }    
+ 
     
     // cropCode
     @JsonProperty("icpcr")
@@ -88,12 +85,12 @@ public class InitialCondition {
         if ("?".equals(residueWeight))
             log += "  * SurfaceOrganicMatter ERROR: Missing residue weight.\r\n";
         else {
-            if ("?".equals(nconc))
+            if ("?".equals(residueNConc))
                 log += "  * SurfaceOrganicMatter ERROR: Missing residue nitrogen concentration. Cannot calculate CNR.\r\n";
             
             else {
                 double carbon = 0.4 * Double.valueOf(residueWeight);
-                double nitrogen = Double.valueOf(nconc) / 100.0 * Double.valueOf(residueWeight);
+                double nitrogen = Double.valueOf(residueNConc) / 100.0 * Double.valueOf(residueWeight);
                 if (nitrogen == 0)
                     log += "  * SurfaceOrganicMatter ERROR: Residue nitrogen concentration = 0.\r\n";
                 else
