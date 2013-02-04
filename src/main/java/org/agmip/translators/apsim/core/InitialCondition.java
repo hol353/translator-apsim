@@ -1,6 +1,5 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.ApsimOutput;
 import org.agmip.translators.apsim.util.Converter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -30,6 +29,11 @@ public class InitialCondition {
     private String residueNConc = "?";
     public String getResidueNConc() { return residueNConc; }
     
+    // residueNConc
+    @JsonProperty("icrn")
+    private String nconc = "?";
+    public String getNConc() { return nconc; }    
+    
     // cropCode
     @JsonProperty("icpcr")
     private String cropCode = "?";
@@ -45,6 +49,10 @@ public class InitialCondition {
     // log
     private String log = "";
     public String getLog() { return log; }
+    
+    // cnr
+    private String cnr = "0";
+    public String getCnr() {return cnr;}
     
     // Needed for Jackson
     public InitialCondition() {}
@@ -79,10 +87,22 @@ public class InitialCondition {
         
         if ("?".equals(residueWeight))
             log += "  * SurfaceOrganicMatter ERROR: Missing residue weight.\r\n";
-        
-        log += "  * SurfaceOrganicMatter ERROR: Missing residue CNR.\r\n";
-        
+        else {
+            if ("?".equals(nconc))
+                log += "  * SurfaceOrganicMatter ERROR: Missing residue nitrogen concentration. Cannot calculate CNR.\r\n";
+            
+            else {
+                double carbon = 0.4 * Double.valueOf(residueWeight);
+                double nitrogen = Double.valueOf(nconc) / 100.0 * Double.valueOf(residueWeight);
+                if (nitrogen == 0)
+                    log += "  * SurfaceOrganicMatter ERROR: Residue nitrogen concentration = 0.\r\n";
+                else
+                    cnr = String.valueOf(carbon / nitrogen);
+                }
+                
+            }
+        }
+                
     }
 
- 
-}
+

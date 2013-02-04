@@ -123,7 +123,9 @@ public class SoilLayer {
         double[] klY = {0.08, 0.08, 0.08, 0.06, 0.06, 0.04, 0.02};
         kl = Converter.linearInterpReal(bottom, klX, klY);
         
-        double fbiomPerLayer = (0.04 - 0.01) / (numLayers-1);
+        double fbiomPerLayer = 0.03;
+        if (numLayers > 1)
+            fbiomPerLayer = (0.04 - 0.01) / (numLayers-1);
         fbiom = 0.04 - ( (layerNumber-1) * fbiomPerLayer);
 
         double[] finertX = {  15,   30,   60,   90};
