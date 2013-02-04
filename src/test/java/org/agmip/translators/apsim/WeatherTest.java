@@ -13,7 +13,7 @@ public class WeatherTest extends TestCase {
 
     public void setUp() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        w = mapper.readValue(new File("src/test/resources/weather.json"), Weather.class);
+        w = mapper.readValue(new File("src/test/resources/json-samples/weather.json"), Weather.class);
     }
 
     @Test

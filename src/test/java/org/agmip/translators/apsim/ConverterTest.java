@@ -32,7 +32,7 @@ public class ConverterTest extends TestCase{
 
     @Test
     public void testReadJSONFile() throws Exception {
-        loadJSONFromResource("/json-translation-samples/mach_fast.json");
+        loadJSONFromResource("/json-samples/mach_fast.json");
 
        
         assertEquals("0.10", sim.getSoil().getSalb());
