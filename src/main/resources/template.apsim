@@ -210,6 +210,80 @@ endif
 					</Plot>
 				</Graph>		
 			</outputfile>
+         <outputfile name="ACMO">
+            <filename output="yes">MACH0001_1__1 ACMO.out</filename>
+            <title>MACH0001_1__1 ACMO</title>
+            <variables name="Variables">
+               <variable name="yield" />
+               <variable name="biomass" />
+               <variable name="AnthesisDate format yyyy-mm-dd" />
+               <variable name="MaturityDate format yyyy-mm-dd" />
+               <variable name="Today as HarvestDate format yyyy-mm-dd" />
+               <variable name="LAIMax" />
+               <variable name="InCropRain" />
+               <variable name="SumEP" />
+               <variable name="SumNO3Uptake" />
+               <variable name="SumLeachNO3" />
+               <constants>
+                  <constant name="format">csv</constant>
+               </constants>
+            </variables>
+            <events name="Reporting Frequency">
+               <event name="harvesting" />
+            </events>
+         </outputfile>
+         <manager2 name="ACMOVariables">
+            <text>
+using System;
+using ModelFramework;
+using CSGeneral;
+
+public class Script 
+{      
+   [Link] Paddock MyPaddock; 
+   [Input] DateTime Today; 
+   [Input] int Flowering_date;    // Day number of flowering
+   [Input] int Maturity_date;     // Day number of maturity
+   [Input] double LAI;
+   [Input] double Rain;
+   [Input] double ep;
+   [Input] double[] no3_uptake;
+   [Input] double[] flow_no3;
+   [Output] DateTime AnthesisDate;
+   [Output] DateTime MaturityDate;
+   [Output] double LAIMax = 0;
+   [Output] double InCropRain = 0;
+   [Output] double SumEP = 0;
+   [Output] double SumNO3Uptake = 0;
+   [Output] double SumLeachNO3 = 0;
+   
+   // The following event handler will be called each time a crop is sown.
+   [EventHandler] public void OnSowing()
+   {
+      LAIMax = 0.0;
+      InCropRain = 0.0;
+      SumEP = 0.0;
+      SumNO3Uptake = 0;
+      SumLeachNO3 = 0;
+   }   
+      
+   // The following event handler will be called each day at the beginning of the day
+   [EventHandler] public void OnPost()
+   {
+      if (Flowering_date &gt; 0 &amp;&amp; AnthesisDate.Ticks == 0)
+         AnthesisDate = Today;
+      if (Maturity_date &gt; 0 &amp;&amp; MaturityDate.Ticks == 0)
+         MaturityDate = Today;
+      LAIMax = Math.Max(LAIMax, LAI);
+      InCropRain = InCropRain + Rain;
+      SumEP = SumEP + ep;
+      SumNO3Uptake = SumNO3Uptake + -MathUtility.Sum(no3_uptake);  //change from negative number to positive
+      SumLeachNO3 = SumLeachNO3 + flow_no3[flow_no3.Length - 1];
+   }
+   
+}
+            </text>
+         </manager2>         
 		</area>
 	</simulation>
    #end
