@@ -7,8 +7,8 @@
 
 latitude = $weather.latitude
 longitude = $weather.longitude
-tav = $weather.tav
-amp = $weather.amp
+tav = $weather.tav ()
+amp = $weather.amp ()
 
 #if($weather.co2)
 co2 = $weather.co2

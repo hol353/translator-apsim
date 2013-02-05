@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -57,6 +57,12 @@ public class SimulationRun {
     private String treatmentName = "";
     public String getTreatmentName() { return treatmentName; }
     
+    public String getUniqueName() {
+        if ("".equals(treatmentName))
+            return experimentName;
+        else
+            return experimentName + "-" + treatmentName;
+    }
     // latitude
     @JsonProperty("fl_lat")
     private String latitude = "?";
@@ -89,9 +95,9 @@ public class SimulationRun {
     public String getEndDate() throws ParseException {
         if ("?".equals(getStartDate())) 
             return "?";
-        Calendar endDate = Converter.toCalendar(getStartDate());
+        Calendar endDate = Util.toCalendar(getStartDate());
         endDate.add(Calendar.YEAR, 1);
-        return Converter.toApsimDateString(endDate);
+        return Util.toApsimDateString(endDate);
     }
 
     // Needed for Jackson

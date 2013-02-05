@@ -1,6 +1,6 @@
 package org.agmip.translators.apsim.events;
 
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -48,7 +48,7 @@ public class Planting extends Event{
     private String population = "?";
 
     // Crop Name
-    public String getCropName() {return Converter.cropCodeToName(cropID);}
+    public String getCropName() {return Util.cropCodeToName(cropID);}
     
     @Override
     public String getApsimAction() {

@@ -25,7 +25,12 @@ public class Weather {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wst_name")
     private String name="?";
-    public String getName() { return name; }
+    public String getName() { 
+        if ("?".equals(name))
+            return id;
+        else
+            return name; 
+    }
         
     // site
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)

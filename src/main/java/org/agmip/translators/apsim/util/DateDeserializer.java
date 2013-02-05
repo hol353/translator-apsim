@@ -20,8 +20,8 @@ public class DateDeserializer extends JsonDeserializer<String> {
             throws IOException, JsonProcessingException {
         try {
             String toParse = jp.getText();
-            Date date = Converter.agmip.parse(toParse);
-            return Converter.apsim.format(date);
+            Date date = Util.agmip.parse(toParse);
+            return Util.apsim.format(date);
         } catch (ParseException e) {
             throw new IOException(e);
         }

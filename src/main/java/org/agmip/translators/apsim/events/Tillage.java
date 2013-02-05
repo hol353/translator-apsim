@@ -1,6 +1,6 @@
 package org.agmip.translators.apsim.events;
 
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -24,7 +24,7 @@ public class Tillage extends Event {
         if ("?".equals(implementCode))
             return "?";
         else
-            return Converter.tillageCodeToName(implementCode); 
+            return Util.tillageCodeToName(implementCode); 
     }
     
     // apsimAction

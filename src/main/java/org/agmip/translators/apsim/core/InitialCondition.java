@@ -1,6 +1,6 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -36,7 +36,7 @@ public class InitialCondition {
     private String cropCode = "?";
 
     // residueType
-    public String getResidueType() { return Converter.cropCodeToName(cropCode); }
+    public String getResidueType() { return Util.cropCodeToName(cropCode); }
     
     // soilLayers
     @JsonProperty("soilLayer")

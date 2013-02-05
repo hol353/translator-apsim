@@ -22,7 +22,7 @@ public class DateSerializer extends JsonSerializer<String>{
 	 
 	        String formattedDate="";
 			try {
-				formattedDate = Converter.agmip.format(Converter.apsim.parse(date));
+				formattedDate = Util.agmip.format(Util.apsim.parse(date));
 			} catch (ParseException e) {
 				throw new IOException(e);
 			}

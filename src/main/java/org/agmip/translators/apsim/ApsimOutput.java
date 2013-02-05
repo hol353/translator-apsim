@@ -1,26 +1,20 @@
 package org.agmip.translators.apsim;
 
-import static org.agmip.util.JSONAdapter.toJSON;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.SimulationCollection;
 import org.agmip.translators.apsim.core.SimulationRun;
-import org.agmip.translators.apsim.core.Soil;
 import org.agmip.translators.apsim.core.Weather;
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
+import static org.agmip.util.JSONAdapter.toJSON;
 import org.agmip.util.MapUtil;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
 
 
 /**
@@ -35,46 +29,27 @@ public class ApsimOutput implements TranslatorOutput {
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
 	public void writeFile(String filePath, Map input) {
 		File path = new File(filePath);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 
 			String temp = toJSON(MapUtil.decompressAll(input));
-			SimulationCollection collection = mapper.readValue(temp,SimulationCollection.class);
 
 			ArrayList<String> files = new ArrayList<String>();
 
-			collection.initialize();
-			
-			
-			for(SimulationRun sim:collection.getSimulationExperiments()){
-				
-				
-				if (sim.getWeather() != null) {
-					
-					// Support if there is no weather data.
-					Converter.generateMetFile(path, sim);
-					String baseName;
-					if (sim.getExperimentName().equals("default")) {
-						baseName = sim.getWeather().getName();
-					} else {
-						baseName = sim.getExperimentName();
-					}
-					files.add(baseName+".met");
-				}
-				if (sim.getLatitude() != null) {
-					// Support for weather file only.
-					Converter.generateAPSIMFile(path, sim);
-					files.add(sim.getExperimentName()+".apsim");
-				}
-			}
-
+			SimulationCollection collection = mapper.readValue(temp,SimulationCollection.class);
+			collection.initialise();
+            
+			generateMetFiles(path, collection, files);
+            generateAPSIMFile(path, collection, files);
+            
 			BufferedInputStream origin = null;
 
 			if (files.size() > 1) {
 
-				File zipfile = new File(path, collection.getSimulationExperiments().firstElement().getExperimentName() + "_apsim.zip");
+				File zipfile = new File(path, collection.getExperiments().firstElement().getExperimentName() + "_apsim.zip");
 
 				if (zipfile.exists())
 					zipfile.delete();
@@ -113,5 +88,41 @@ public class ApsimOutput implements TranslatorOutput {
 			e.printStackTrace();
 		}
 
-	}    
+	}
+
+    public static void generateMetFiles(File path, SimulationCollection collection, ArrayList<String> files) throws Exception {
+        path.mkdirs();
+        for(Weather weather:collection.getWeathers()){
+            String fileName = weather.getName()+".met";
+            File file = new File(path, fileName);
+            files.add(fileName);
+            file.createNewFile();
+            Velocity.init();
+            VelocityContext context = new VelocityContext();
+            context.put("weather", weather);
+            FileWriter writer = new FileWriter(file);
+            Velocity.evaluate(context, writer, "Generate Met", Util.class.getClassLoader().getResourceAsStream("template.met"));
+            writer.close();
+        }
+    }
+    
+    
+    public static void generateAPSIMFile(File path, SimulationCollection collection, ArrayList<String> files)
+            throws Exception {
+        path.mkdirs();
+        File file = new File(path, "AgMip.apsim");
+        files.add("AgMip.apsim");        
+        file.createNewFile();
+        Velocity.init();
+        VelocityContext context = new VelocityContext();
+        FileWriter writer;
+        try {
+            context.put("collection", collection);
+            writer = new FileWriter(file);
+            Velocity.evaluate(context, writer, "Generate APSIM", Util.class.getClassLoader().getResourceAsStream("template.apsim"));
+            writer.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }    
 }

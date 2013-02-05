@@ -1,5 +1,6 @@
 <folder version="32" name="simulations">
-	<simulation name="${simulation.experimentName}">
+   #foreach ($simulation in $collection.experiments)
+	<simulation name="${simulation.getUniqueName()}">
 		<memo name="LOG">
 This .apsim file was created by the APSIM AgMIP translator.
 Log messages:
@@ -10,7 +11,7 @@ $simulation.log
 			<end_date type="date" description="Enter the end date of the simulation">$simulation.endDate</end_date>
 		</clock>
 		<metfile name="met">
-			<filename name="filename" input="yes">${simulation.experimentName}.met</filename>
+			<filename name="filename" input="yes">${simulation.weather.name}.met</filename>
 		</metfile>
 		<summaryfile />
 		<area name="paddock">
@@ -211,4 +212,5 @@ endif
 			</outputfile>
 		</area>
 	</simulation>
+   #end
 </folder>

@@ -15,9 +15,9 @@ public class SimulationCollection {
 
 	@JsonProperty("experiments")
 	Vector<SimulationRun> experiments = new Vector<SimulationRun>();
-	public Vector<SimulationRun> getSimulationExperiments() { return experiments; }
+	public Vector<SimulationRun> getExperiments() { return experiments; }
 
-	public void initialize() throws Exception{
+	public void initialise() throws Exception{
 
 		for(SimulationRun sim:experiments){
 			String mySoil = sim.getSoilID();
