@@ -25,7 +25,12 @@ public class Weather {
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wst_name")
     private String name="?";
-    public String getName() { return name; }
+    public String getName() { 
+        if ("?".equals(name))
+            return id;
+        else
+            return name; 
+    }
         
     // site
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
@@ -93,6 +98,19 @@ public class Weather {
     public Weather() {}
 
 	
+    
+    /* 
+     * I assume that two weathers are the same if they have the same ID.
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object other) {
+        if (other instanceof Weather) {
+        	Weather otherWeather = (Weather) other;
+            return id.equals(otherWeather.id);
+        }
+        return false;
+    }        
     
 
 	

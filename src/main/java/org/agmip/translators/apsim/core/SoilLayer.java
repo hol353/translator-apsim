@@ -1,6 +1,6 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -28,7 +28,6 @@ public class SoilLayer {
     public String getBulkDensity() { return bulkDensity; }
     
     // airDry
-    @SuppressWarnings("unused")
     @JsonIgnore
     private String airDry = "?";
     public String getAirDry() {
@@ -121,14 +120,16 @@ public class SoilLayer {
         
         double[] klX = {  15,   30,   60,   90,  120,  150,  180};
         double[] klY = {0.08, 0.08, 0.08, 0.06, 0.06, 0.04, 0.02};
-        kl = Converter.linearInterpReal(bottom, klX, klY);
+        kl = Util.linearInterpReal(bottom, klX, klY);
         
-        double fbiomPerLayer = (0.04 - 0.01) / (numLayers-1);
+        double fbiomPerLayer = 0.03;
+        if (numLayers > 1)
+            fbiomPerLayer = (0.04 - 0.01) / (numLayers-1);
         fbiom = 0.04 - ( (layerNumber-1) * fbiomPerLayer);
 
         double[] finertX = {  15,   30,   60,   90};
         double[] finertY = { 0.4,  0.5,  0.7, 0.95};
-        finert = Converter.linearInterpReal(bottom, finertX, finertY);
+        finert = Util.linearInterpReal(bottom, finertX, finertY);
         
         return bottom * 10;
     }
@@ -147,7 +148,7 @@ public class SoilLayer {
         double[] percentY = {  80,   50,   25,   15,   10,   10};
         
         if (organicCarbon.equals("?")) {
-            double Percent = Converter.linearInterpReal(Double.valueOf(bottomDepth), 
+            double Percent = Util.linearInterpReal(Double.valueOf(bottomDepth), 
                                                         bottomX, percentY);
             organicCarbon = String.valueOf(TopLayerOC * Percent / 100.0);
         }

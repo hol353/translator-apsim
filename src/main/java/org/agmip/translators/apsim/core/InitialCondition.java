@@ -1,7 +1,6 @@
 package org.agmip.translators.apsim.core;
 
-import org.agmip.translators.apsim.ApsimOutput;
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -30,12 +29,14 @@ public class InitialCondition {
     private String residueNConc = "?";
     public String getResidueNConc() { return residueNConc; }
     
+ 
+    
     // cropCode
     @JsonProperty("icpcr")
     private String cropCode = "?";
 
     // residueType
-    public String getResidueType() { return Converter.cropCodeToName(cropCode); }
+    public String getResidueType() { return Util.cropCodeToName(cropCode); }
     
     // soilLayers
     @JsonProperty("soilLayer")
@@ -45,6 +46,10 @@ public class InitialCondition {
     // log
     private String log = "";
     public String getLog() { return log; }
+    
+    // cnr
+    private String cnr = "0";
+    public String getCnr() {return cnr;}
     
     // Needed for Jackson
     public InitialCondition() {}
@@ -79,10 +84,22 @@ public class InitialCondition {
         
         if ("?".equals(residueWeight))
             log += "  * SurfaceOrganicMatter ERROR: Missing residue weight.\r\n";
-        
-        log += "  * SurfaceOrganicMatter ERROR: Missing residue CNR.\r\n";
-        
+        else {
+            if ("?".equals(residueNConc))
+                log += "  * SurfaceOrganicMatter ERROR: Missing residue nitrogen concentration. Cannot calculate CNR.\r\n";
+            
+            else {
+                double carbon = 0.4 * Double.valueOf(residueWeight);
+                double nitrogen = Double.valueOf(residueNConc) / 100.0 * Double.valueOf(residueWeight);
+                if (nitrogen == 0)
+                    log += "  * SurfaceOrganicMatter ERROR: Residue nitrogen concentration = 0.\r\n";
+                else
+                    cnr = String.valueOf(carbon / nitrogen);
+                }
+                
+            }
+        }
+                
     }
 
- 
-}
+

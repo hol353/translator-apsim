@@ -1,5 +1,6 @@
 <folder version="32" name="simulations">
-	<simulation name="AgMIP">
+   #foreach ($simulation in $collection.experiments)
+	<simulation name="${simulation.getUniqueName()}">
 		<memo name="LOG">
 This .apsim file was created by the APSIM AgMIP translator.
 Log messages:
@@ -10,7 +11,7 @@ $simulation.log
 			<end_date type="date" description="Enter the end date of the simulation">$simulation.endDate</end_date>
 		</clock>
 		<metfile name="met">
-			<filename name="filename" input="yes">${simulation.experimentName}.met</filename>
+			<filename name="filename" input="yes">${simulation.weather.name}.met</filename>
 		</metfile>
 		<summaryfile />
 		<area name="paddock">
@@ -141,7 +142,7 @@ $simulation.log
 				<PoolName type="text" description="Organic Matter pool name">OrganicMatter</PoolName>
 				<type type="list" listvalues="bambatsi,barley,base_type,broccoli,camaldulensis,canola,centro,chickpea,chikenmanure_base,cm,cmA,cmB,constants,cotton,cowpea,danthonia,fababean,fieldpea,fym,gbean,globulus,goatmanure,grandis,grass,horsegram,inert,lablab,lentil,lucerne,lupin,maize,manB,manure,medic,millet,mucuna,nativepasture,navybean,oats,orobanche,peanut,pigeonpea,potato,rice,sorghum,soybean,stylo,sugar,sunflower,sweetcorn,sweetsorghum,tillage,tithonia,vetch,weed,wheat" description="Organic Matter type">$simulation.initialCondition.getResidueType()</type>
 				<mass type="text" description="Initial surface residue (kg/ha)">$simulation.initialCondition.residueWeight</mass>
-				<cnr type="text" description="C:N ratio of initial residue">?</cnr>
+				<cnr type="text" description="C:N ratio of initial residue">$simulation.initialCondition.cnr</cnr>
 				<standing_fraction type="text" description="Fraction of residue standing">0</standing_fraction>
 			</surfaceom>
 			<fertiliser />
@@ -156,7 +157,11 @@ $simulation.log
 				<default_nh4_conc type="text" description="Ammonium concentration (ppm N)">0.0</default_nh4_conc>
 				<default_cl_conc type="text" description="Chloride concentration (ppm Cl)">0.0</default_cl_conc>
 			</irrigation>
-			<$simulation.management.plantingCropName() />
+			<$simulation.management.plantingCropName()>
+            <ini>
+               <filename />
+            </ini>
+         </$simulation.management.plantingCropName()>
 			<folder name="Manager folder">
 				<operations name="Operations">
 #foreach ($event in $simulation.management.events)        
@@ -205,6 +210,81 @@ endif
 					</Plot>
 				</Graph>		
 			</outputfile>
+         <outputfile name="ACMO">
+            <filename output="yes">MACH0001_1__1 ACMO.out</filename>
+            <title>MACH0001_1__1 ACMO</title>
+            <variables name="Variables">
+               <variable name="yield" />
+               <variable name="biomass" />
+               <variable name="AnthesisDate format yyyy-mm-dd" />
+               <variable name="MaturityDate format yyyy-mm-dd" />
+               <variable name="Today as HarvestDate format yyyy-mm-dd" />
+               <variable name="LAIMax" />
+               <variable name="InCropRain" />
+               <variable name="SumEP" />
+               <variable name="SumNO3Uptake" />
+               <variable name="SumLeachNO3" />
+               <constants>
+                  <constant name="format">csv</constant>
+               </constants>
+            </variables>
+            <events name="Reporting Frequency">
+               <event name="harvesting" />
+            </events>
+         </outputfile>
+         <manager2 name="ACMOVariables">
+            <text>
+using System;
+using ModelFramework;
+using CSGeneral;
+
+public class Script 
+{      
+   [Link] Paddock MyPaddock; 
+   [Input] DateTime Today; 
+   [Input] int Flowering_date;    // Day number of flowering
+   [Input] int Maturity_date;     // Day number of maturity
+   [Input] double LAI;
+   [Input] double Rain;
+   [Input] double ep;
+   [Input] double[] no3_uptake;
+   [Input] double[] flow_no3;
+   [Output] DateTime AnthesisDate;
+   [Output] DateTime MaturityDate;
+   [Output] double LAIMax = 0;
+   [Output] double InCropRain = 0;
+   [Output] double SumEP = 0;
+   [Output] double SumNO3Uptake = 0;
+   [Output] double SumLeachNO3 = 0;
+   
+   // The following event handler will be called each time a crop is sown.
+   [EventHandler] public void OnSowing()
+   {
+      LAIMax = 0.0;
+      InCropRain = 0.0;
+      SumEP = 0.0;
+      SumNO3Uptake = 0;
+      SumLeachNO3 = 0;
+   }   
+      
+   // The following event handler will be called each day at the beginning of the day
+   [EventHandler] public void OnPost()
+   {
+      if (Flowering_date &gt; 0 &amp;&amp; AnthesisDate.Ticks == 0)
+         AnthesisDate = Today;
+      if (Maturity_date &gt; 0 &amp;&amp; MaturityDate.Ticks == 0)
+         MaturityDate = Today;
+      LAIMax = Math.Max(LAIMax, LAI);
+      InCropRain = InCropRain + Rain;
+      SumEP = SumEP + ep;
+      SumNO3Uptake = SumNO3Uptake + -MathUtility.Sum(no3_uptake);  //change from negative number to positive
+      SumLeachNO3 = SumLeachNO3 + flow_no3[flow_no3.Length - 1];
+   }
+   
+}
+            </text>
+         </manager2>         
 		</area>
 	</simulation>
+   #end
 </folder>

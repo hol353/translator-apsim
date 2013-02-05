@@ -1,6 +1,6 @@
 package org.agmip.translators.apsim.events;
 
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -16,9 +16,13 @@ public class Planting extends Event{
     private String cropID = "?";
 
     // cultivar
-    @JsonProperty("cul_name")
+    @JsonProperty("apsim_cul_id")
     private String cultivar = "?";
 
+    // cultivar
+    @JsonProperty("cul_id")
+    private String culId = "?";
+    
     // planting depth. units=cm.
     @JsonProperty("pldp")
     private String depth = "?";
@@ -44,7 +48,7 @@ public class Planting extends Event{
     private String population = "?";
 
     // Crop Name
-    public String getCropName() {return Converter.cropCodeToName(cropID);}
+    public String getCropName() {return Util.cropCodeToName(cropID);}
     
     @Override
     public String getApsimAction() {
@@ -65,7 +69,10 @@ public class Planting extends Event{
         }
       
         if ("?".equals(cultivar))
-            log += "  * Operation " + getDate() + " ERROR: Missing planting cultivar.\r\n";
+            if ("?".equals(culId))
+                log += "  * Operation " + getDate() + " ERROR: Missing planting cultivar.\r\n";
+            else
+                cultivar = culId;
         else
             log += "  * Operation " + getDate() + " ERROR: AgMIP planting cultivars don't match the APSIM cultivars. Please check the sowing operation. AgMIP cultivar is: " + cultivar + "\r\n";
 

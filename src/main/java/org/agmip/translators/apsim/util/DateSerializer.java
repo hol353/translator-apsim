@@ -11,7 +11,6 @@ import org.codehaus.jackson.map.SerializerProvider;
  * @author Ioannis N. Athanasiadis, DUTh
  * @author Dean Holzworth, CSIRO
  * @since Jul 13, 2012
- * @see  http://loianegroner.com/2010/09/how-to-serialize-java-util-date-with-jackson-json-processor-spring-3-0/
  */
 
 public class DateSerializer extends JsonSerializer<String>{
@@ -23,7 +22,7 @@ public class DateSerializer extends JsonSerializer<String>{
 	 
 	        String formattedDate="";
 			try {
-				formattedDate = Converter.agmip.format(Converter.apsim.parse(date));
+				formattedDate = Util.agmip.format(Util.apsim.parse(date));
 			} catch (ParseException e) {
 				throw new IOException(e);
 			}

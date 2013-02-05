@@ -2,7 +2,7 @@ package org.agmip.translators.apsim.events;
 
 import java.text.ParseException;
 import java.util.Date;
-import org.agmip.translators.apsim.util.Converter;
+import org.agmip.translators.apsim.util.Util;
 import org.agmip.translators.apsim.util.DateDeserializer;
 import org.agmip.translators.apsim.util.DateSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -44,7 +44,7 @@ public abstract class Event {
             if (date == null)
                 return null;
             else
-                return Converter.apsim.parse(date);
+                return Util.apsim.parse(date);
         } catch (ParseException ex) {
             return null;
         }
