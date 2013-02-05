@@ -35,16 +35,14 @@ public class ApsimOutput implements TranslatorOutput {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 
-			String temp = toJSON(MapUtil.decompressAll(input));
+			String temp = toJSON(input);
 
 			ArrayList<String> files = new ArrayList<String>();
 
 			SimulationCollection collection = mapper.readValue(temp,SimulationCollection.class);
 			collection.initialise();
-            
 			generateMetFiles(path, collection, files);
             generateAPSIMFile(path, collection, files);
-            
 			BufferedInputStream origin = null;
 
 			if (files.size() > 1) {
