@@ -48,7 +48,7 @@ public class ApsimOutput implements TranslatorOutput {
 
 			if (files.size() > 1) {
 
-				File zipfile = new File(path, collection.getExperiments().firstElement().getExperimentName() + "_apsim.zip");
+				File zipfile = new File(path, "AgMIPApsim.zip");
 
 				if (zipfile.exists())
 					zipfile.delete();

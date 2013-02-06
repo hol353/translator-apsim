@@ -19,15 +19,16 @@ public class SimulationCollection {
 
 	public void initialise() throws Exception{
 
-		for(SimulationRun sim:experiments){
-			String mySoil = sim.getSoilID();
-			for(Soil soil:soils){
-				if(mySoil.equals(soil.getID())){
-					sim.setSoil(soil);
-					break;
-				}	
-			}
-
+		if (experiments != null) {
+			for(SimulationRun sim:experiments){
+				String mySoil = sim.getSoilID();
+				for(Soil soil:soils){
+					if(mySoil.equals(soil.getID())){
+						sim.setSoil(soil);
+						break;
+					}	
+				}
+			
 			String myWeather = sim.getWeatherID();
 			for (Weather w : weathers){
 				if(myWeather.equals(w.getId())){
@@ -36,6 +37,7 @@ public class SimulationCollection {
 			}
 
 			sim.initialise();
+			}
 		}
 	}
 }
