@@ -126,17 +126,25 @@ $simulation.log
 					</Layer>
 #end
 				</Analysis>
-				<Sample name="Initial conditions">
+				<Sample name="Initial nitrogen">
 					<Date type="date" description="Sample date:">$simulation.initialCondition.date</Date>
 #foreach ($initialLayer in $simulation.initialCondition.soilLayers)        
 					<Layer>
 						<Thickness units="mm">$initialLayer.thickness</Thickness>
 						<NO3 units="ppm">$initialLayer.no3</NO3>
 						<NH4 units="ppm">$initialLayer.nh4</NH4>
-						<SW units="mm/mm">$initialLayer.soilWater</SW>
 					</Layer>
 #end          
 				</Sample>
+				<Sample name="Initial water">
+					<Date type="date" description="Sample date:">$simulation.initialCondition.date</Date>
+#foreach ($initialLayer in $simulation.initialCondition.soilLayers)        
+					<Layer>
+						<Thickness units="mm">$initialLayer.thickness</Thickness>
+						<SW units="mm/mm">$initialLayer.soilWater</SW>
+					</Layer>
+#end          
+				</Sample>            
 			</soil>
 			<surfaceom name="SurfaceOrganicMatter">
 				<PoolName type="text" description="Organic Matter pool name">OrganicMatter</PoolName>
