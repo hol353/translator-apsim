@@ -28,6 +28,7 @@ public class SimulationCollection {
 						break;
 					}	
 				}
+				
 			
 			String myWeather = sim.getWeatherID();
 			for (Weather w : weathers){
