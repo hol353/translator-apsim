@@ -7,7 +7,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.SimulationCollection;
-import org.agmip.translators.apsim.core.SimulationRun;
 import org.agmip.translators.apsim.core.Weather;
 import org.agmip.translators.apsim.util.Util;
 import static org.agmip.util.JSONAdapter.toJSON;

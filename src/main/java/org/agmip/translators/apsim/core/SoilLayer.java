@@ -109,12 +109,14 @@ public class SoilLayer {
         if ("?".equals(organicCarbon))
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing organ carbon.\r\n";
         
-        if ("?".equals(ph))
+        if ("?".equals(ph)) {
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ASSUMPTION: Missing PH. Assuming a value of 7.0\r\n";
-
-        if ("?".equals(swcon))
+            ph = "7.0";
+        }
+        if ("?".equals(swcon)) {
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ASSUMPTION: Missing SWCON. Assuming a value of 0.3\r\n";
-
+            swcon = "0.3";
+        }
         double bottom = Double.valueOf(bottomDepth);
         thickness = String.valueOf(bottom * 10 - cumThickness);
         
