@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.util.Util;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -17,7 +18,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimulationRun {
     
-    // Initial condition
+  
+
+	// Initial condition
     @JsonProperty("initial_conditions")
     private InitialCondition initialCondition;
     public InitialCondition getInitialCondition() { return initialCondition; }
@@ -74,6 +77,7 @@ public class SimulationRun {
     public String getLongitude() { return longitude; }
 
     // log
+    @JsonIgnore
     private String log;
     public String getLog() { return log; }
     
@@ -150,4 +154,33 @@ public class SimulationRun {
             log += management.getLog();
         }
     }
+    
+    
+    public void setInitialCondition(InitialCondition initialCondition) {
+  		this.initialCondition = initialCondition;
+  	}
+  	public void setWeatherID(String weatherID) {
+  		this.weatherID = weatherID;
+  	}
+  	public void setManagement(Management management) {
+  		this.management = management;
+  	}
+  	public void setSoilID(String soilID) {
+  		this.soilID = soilID;
+  	}
+  	public void setExperimentName(String experimentName) {
+  		this.experimentName = experimentName;
+  	}
+  	public void setTreatmentName(String treatmentName) {
+  		this.treatmentName = treatmentName;
+  	}
+  	public void setLatitude(String latitude) {
+  		this.latitude = latitude;
+  	}
+  	public void setLongitude(String longitude) {
+  		this.longitude = longitude;
+  	}
+  	public void setLog(String log) {
+  		this.log = log;
+  	}
 }

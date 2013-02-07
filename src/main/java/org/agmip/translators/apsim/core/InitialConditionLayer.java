@@ -57,4 +57,63 @@ public class InitialConditionLayer {
         thickness = String.valueOf(bottomDepth * 10 - cumThickness);  // convert from cm to mm
         return bottomDepth * 10;
     }
+
+
+
+
+
+
+
+
+	public void setBottomDepth(double bottomDepth) {
+		this.bottomDepth = bottomDepth;
+	}
+
+
+
+
+
+
+
+
+	public void setSoilWater(String soilWater) {
+		this.soilWater = soilWater;
+	}
+
+
+
+
+
+
+
+
+	public void setNo3(String no3) {
+		this.no3 = no3;
+	}
+
+
+
+
+
+
+
+
+	public void setNh4(String nh4) {
+		this.nh4 = nh4;
+	}
+
+
+
+
+
+
+
+
+	public void setThickness(String thickness) {
+		this.thickness = thickness;
+	}
+    
+    
+    
+    
 }

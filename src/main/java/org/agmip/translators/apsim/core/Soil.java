@@ -83,7 +83,7 @@ public class Soil {
     private SoilLayer[] layers;
     public SoilLayer[] getLayers() { return layers; }
     
-    // log
+    @JsonIgnore
     private String log;
     public String getLog() { return log; }
     
@@ -177,7 +177,93 @@ public class Soil {
         log += "  * Soil ASSUMPTION: RootWt set to a value of 500.0\r\n";
         log += "  * Soil ASSUMPTION: FBiom values decrease from 0.04 at the surface to 0.01 in the bottom layer.\r\n";
         log += "  * Soil ASSUMPTION: FInert values increase from 0.4 at the surface to 0.9 in the bottom layer.\r\n";
-    } 
+    }
+
+
+
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+
+	public void setClassification(String classification) {
+		this.classification = classification;
+	}
+
+
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+
+
+	public void setU(String u) {
+		this.u = u;
+	}
+
+
+
+	public void setSalb(String salb) {
+		this.salb = salb;
+	}
+
+
+
+	public void setCn2bare(String cn2bare) {
+		this.cn2bare = cn2bare;
+	}
+
+
+
+	public void setDiffusConst(String diffusConst) {
+		this.diffusConst = diffusConst;
+	}
+
+
+
+	public void setDiffusSlope(String diffusSlope) {
+		this.diffusSlope = diffusSlope;
+	}
+
+
+
+	public void setLayers(SoilLayer[] layers) {
+		this.layers = layers;
+	}
+
+
+
+	public void setLog(String log) {
+		this.log = log;
+	} 
       
       
 }

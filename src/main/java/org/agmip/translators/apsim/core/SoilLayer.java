@@ -27,9 +27,7 @@ public class SoilLayer {
     private String bulkDensity = "?";
     public String getBulkDensity() { return bulkDensity; }
     
-    // airDry
     @JsonIgnore
-    private String airDry = "?";
     public String getAirDry() {
         double ll = Double.valueOf(lowerLimit);
         return String.valueOf(ll * 0.5);
@@ -65,18 +63,20 @@ public class SoilLayer {
     private String swcon = "?";
     public String getSwcon() { return swcon; }
     
-    // kl
+    @JsonIgnore
     private double kl;
     public double getKl() { return kl; }
     
-    // fbiom
+  
+    @JsonIgnore
     private double fbiom;
     public double getFbiom() { return fbiom; }
     
-    // finert
+    @JsonIgnore
     private double finert;
     public double getFinert() { return finert; }
     
+    @JsonIgnore
     private String log;
     public String getLog() { return log; }    
     
@@ -154,5 +154,72 @@ public class SoilLayer {
         }
         
     }
+
+
+
+	public void setBottomDepth(String bottomDepth) {
+		this.bottomDepth = bottomDepth;
+	}
+
+
+
+	public void setThickness(String thickness) {
+		this.thickness = thickness;
+	}
+
+
+
+	public void setBulkDensity(String bulkDensity) {
+		this.bulkDensity = bulkDensity;
+	}
+
+
+
+
+
+
+
+	public void setLowerLimit(String lowerLimit) {
+		this.lowerLimit = lowerLimit;
+	}
+
+
+
+	public void setDrainedUpperLimit(String drainedUpperLimit) {
+		this.drainedUpperLimit = drainedUpperLimit;
+	}
+
+
+
+	public void setSaturation(String saturation) {
+		this.saturation = saturation;
+	}
+
+
+
+	public void setOrganicCarbon(String organicCarbon) {
+		this.organicCarbon = organicCarbon;
+	}
+
+
+
+	public void setPh(String ph) {
+		this.ph = ph;
+	}
+
+
+
+	public void setSwcon(String swcon) {
+		this.swcon = swcon;
+	}
+
+
+
+
+
+
+	
+    
+    
     
 }

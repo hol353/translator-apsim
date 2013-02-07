@@ -1,6 +1,7 @@
 package org.agmip.translators.apsim.core;
 
 import org.agmip.translators.apsim.util.Util;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -43,7 +44,7 @@ public class InitialCondition {
     private InitialConditionLayer[] soilLayers = new InitialConditionLayer[0];
     public InitialConditionLayer[] getSoilLayers() { return soilLayers; }
 
-    // log
+    @JsonIgnore
     private String log = "";
     public String getLog() { return log; }
     
@@ -99,7 +100,37 @@ public class InitialCondition {
                 
             }
         }
-                
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public void setResidueWeight(String residueWeight) {
+		this.residueWeight = residueWeight;
+	}
+
+	public void setResidueNConc(String residueNConc) {
+		this.residueNConc = residueNConc;
+	}
+
+	public void setCropCode(String cropCode) {
+		this.cropCode = cropCode;
+	}
+
+	public void setSoilLayers(InitialConditionLayer[] soilLayers) {
+		this.soilLayers = soilLayers;
+	}
+
+	public void setLog(String log) {
+		this.log = log;
+	}
+
+	public void setCnr(String cnr) {
+		this.cnr = cnr;
+	}
+         
+    
+    
     }
 
 
