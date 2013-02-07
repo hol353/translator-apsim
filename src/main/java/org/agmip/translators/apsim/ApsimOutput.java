@@ -7,7 +7,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.SimulationCollection;
-import org.agmip.translators.apsim.core.SimulationRun;
 import org.agmip.translators.apsim.core.Weather;
 import org.agmip.translators.apsim.util.Util;
 import static org.agmip.util.JSONAdapter.toJSON;
@@ -49,7 +48,7 @@ public class ApsimOutput implements TranslatorOutput {
 
 			if (files.size() > 1) {
 
-				File zipfile = new File(path, collection.getExperiments().firstElement().getExperimentName() + "_apsim.zip");
+				File zipfile = new File(path, "AgMIPApsim.zip");
 
 				if (zipfile.exists())
 					zipfile.delete();

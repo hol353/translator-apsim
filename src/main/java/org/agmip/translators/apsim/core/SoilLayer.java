@@ -109,12 +109,14 @@ public class SoilLayer {
         if ("?".equals(organicCarbon))
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing organ carbon.\r\n";
         
-        if ("?".equals(ph))
+        if ("?".equals(ph)) {
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ASSUMPTION: Missing PH. Assuming a value of 7.0\r\n";
-
-        if ("?".equals(swcon))
+            ph = "7.0";
+        }
+        if ("?".equals(swcon)) {
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ASSUMPTION: Missing SWCON. Assuming a value of 0.3\r\n";
-
+            swcon = "0.3";
+        }
         double bottom = Double.valueOf(bottomDepth);
         thickness = String.valueOf(bottom * 10 - cumThickness);
         
@@ -156,27 +158,18 @@ public class SoilLayer {
     }
 
 
-
 	public void setBottomDepth(String bottomDepth) {
 		this.bottomDepth = bottomDepth;
 	}
-
 
 
 	public void setThickness(String thickness) {
 		this.thickness = thickness;
 	}
 
-
-
 	public void setBulkDensity(String bulkDensity) {
 		this.bulkDensity = bulkDensity;
 	}
-
-
-
-
-
 
 
 	public void setLowerLimit(String lowerLimit) {
@@ -184,11 +177,9 @@ public class SoilLayer {
 	}
 
 
-
 	public void setDrainedUpperLimit(String drainedUpperLimit) {
 		this.drainedUpperLimit = drainedUpperLimit;
 	}
-
 
 
 	public void setSaturation(String saturation) {
@@ -196,11 +187,9 @@ public class SoilLayer {
 	}
 
 
-
 	public void setOrganicCarbon(String organicCarbon) {
 		this.organicCarbon = organicCarbon;
 	}
-
 
 
 	public void setPh(String ph) {
@@ -208,18 +197,9 @@ public class SoilLayer {
 	}
 
 
-
 	public void setSwcon(String swcon) {
 		this.swcon = swcon;
 	}
-
-
-
-
-
-
-	
-    
-    
+ 
     
 }

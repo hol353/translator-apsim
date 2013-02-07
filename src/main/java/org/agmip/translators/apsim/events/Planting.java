@@ -68,13 +68,14 @@ public class Planting extends Event{
             log += "  * Operation " + getDate() + " ASSUMPTION: Planting depth missing. A depth of 50mm has been assumed.\r\n";
         }
       
-        if ("?".equals(cultivar))
+        if ("?".equals(cultivar)) {
+        	log += "  * Operation " + getDate() + " ERROR: AgMIP planting cultivars don't match the APSIM cultivars. Please check the sowing operation. AgMIP cultivar is: " + cultivar + "\r\n";
             if ("?".equals(culId))
                 log += "  * Operation " + getDate() + " ERROR: Missing planting cultivar.\r\n";
             else
                 cultivar = culId;
-        else
-            log += "  * Operation " + getDate() + " ERROR: AgMIP planting cultivars don't match the APSIM cultivars. Please check the sowing operation. AgMIP cultivar is: " + cultivar + "\r\n";
+        }
+            
 
         if ("?".equals(rowSpacing)) {
             rowSpacing = "500";
