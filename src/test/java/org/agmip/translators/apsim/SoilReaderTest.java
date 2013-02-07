@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.agmip.translators.apsim.core.Soil;
 import org.agmip.translators.apsim.readers.SoilReader;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 
@@ -21,6 +22,15 @@ public class SoilReaderTest {
 		assertEquals(2,soils.size());
 		assertEquals("Yucheng",soils.get(0).getID());
 		assertEquals(20,soils.get(1).getLayers().length);
+	}
+	
+	@Test
+	public void testReaderBig() throws Exception{
+		SoilReader	sr = new SoilReader("src/test/resources/apsim/WheatValidation.apsim");
+		List<Soil> soils = sr.read();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(System.out, soils);
+		
 	}
 
 }

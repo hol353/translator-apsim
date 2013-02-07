@@ -31,6 +31,13 @@ public abstract class VTDReader {
 		return ap;
 	}
 	
+	
+	public  String xPathText(String path) throws XPathParseException{
+		AutoPilot ap = new AutoPilot(vn);
+		ap.selectXPath(prefix+path);
+		return ap.evalXPathToString();
+	}
+	
 	public  String xpath(int count, String path) throws XPathParseException{
 		AutoPilot ap = new AutoPilot(vn);
 		ap.selectXPath(prefix+"["+count+"]"+path);
@@ -44,6 +51,8 @@ public abstract class VTDReader {
 	}
 	
 	abstract public<T> List<T> read() throws Exception;
+	
+	abstract public <T> T read(String path) throws Exception;
 	
 	
 }
