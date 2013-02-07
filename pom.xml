@@ -62,10 +62,13 @@
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
 		</dependency>
+		
 		<dependency>
-			<groupId>net.sourceforge.vtdxml</groupId>
-			<artifactId>vtd-xml</artifactId>
-			<version>2.1.0</version>
+ 			<groupId>net.sf.vxd-xml</groupId>
+ 			<artifactId>vtd-xml</artifactId>
+ 			<version>2.11</version>
+			 <scope>system</scope>
+ 			<systemPath>${project.basedir}/lib/vtd-xml.jar</systemPath>
 		</dependency>
 	</dependencies>
 
