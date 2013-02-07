@@ -35,31 +35,36 @@ public class DailyWeather {
     @JsonSerialize(using=DateSerializer.class,include=JsonSerialize.Inclusion.NON_DEFAULT)
     private String date ="1000/01/01";
     public String getDate() { return date; }
+    public void setDate(String value) {date = value;}
 
     // solarRadiation
     @JsonProperty("srad")
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     private String solarRadiation="?";
     public String getSolarRadiation() { return solarRadiation; }
-
+    public void setSolarRadiation(String value) {solarRadiation = value;}
+    
     // maxTemperature
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("tmax")
     private String maxTemperature="?";
     public String getMaxTemperature() { return maxTemperature; }
+    public void setMaxTemperature(String value) {maxTemperature = value;}
     
     // minTemperature
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("tmin")
     private String minTemperature="?";
     public String getMinTemperature() { return minTemperature; }
+    public void setMinTemperature(String value) {minTemperature = value;}
     
     // rainfall
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("rain")
     private String rainfall="?";
     public String getRainfall() { return rainfall; }
-
+    public void setRainfall(String value) {rainfall = value;}
+    
     // windSpeed
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wind")

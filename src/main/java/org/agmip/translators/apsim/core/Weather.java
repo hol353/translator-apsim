@@ -20,6 +20,7 @@ public class Weather {
     @JsonProperty("wst_id")
     private String id="?";
     public String getId() { return id; }
+    public void setId(String value) {id = value;}
 
     // name
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
@@ -31,7 +32,8 @@ public class Weather {
         else
             return name; 
     }
-        
+    public void setName(String value) {name = value;}
+    
     // site
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wst_site")
@@ -68,18 +70,21 @@ public class Weather {
     @JsonProperty("wst_long") 
     private String longitude = "?";
     public String getLongitude() { return longitude; }
-    
+	public void setLongitude(String value) {longitude = value;}
+		    
     // averageTemperature
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("tav") 
     private String tav = "?";
     public String getTav() { return tav; }
+    public void setTav(String value) {tav = value;}
 
     // AMP
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("tamp") 
     private String amp = "?";
     public String getAmp() { return amp; }
+    public void setAmp(String value) {amp = value;}
     
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
@@ -93,6 +98,7 @@ public class Weather {
     @JsonProperty("dailyWeather") 
     private List<DailyWeather> records = new ArrayList<DailyWeather>();
     public List<DailyWeather> getRecords() { return records; }
+    public void setRecords(List<DailyWeather> value) { records = value; }
 
     // Needed for Jackson
     public Weather() {}
@@ -110,7 +116,8 @@ public class Weather {
             return id.equals(otherWeather.id);
         }
         return false;
-    }        
+    }
+        
     
 
 	
