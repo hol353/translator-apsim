@@ -1,21 +1,22 @@
 package org.agmip.translators.apsim.core;
 
+import java.util.Collection;
 import java.util.Vector;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class SimulationCollection {
 	@JsonProperty("soils")
-	Vector<Soil> soils = new Vector<Soil>();
-	public Vector<Soil> getSoils() { return soils; }	
+	Collection<Soil> soils = new Vector<Soil>();
+	public Collection<Soil> getSoils() { return soils; }	
 
 	@JsonProperty("weathers")
-	Vector<Weather> weathers = new Vector<Weather>();
-	public Vector<Weather> getWeathers() { return weathers; }	
+	Collection<Weather> weathers = new Vector<Weather>();
+	public Collection<Weather> getWeathers() { return weathers; }	
 
 	@JsonProperty("experiments")
-	Vector<SimulationRun> experiments = new Vector<SimulationRun>();
-	public Vector<SimulationRun> getExperiments() { return experiments; }
+	Collection<SimulationRun> experiments = new Vector<SimulationRun>();
+	public Collection<SimulationRun> getExperiments() { return experiments; }
 
 	public void initialise() throws Exception{
 
@@ -40,5 +41,19 @@ public class SimulationCollection {
 			sim.initialise();
 			}
 		}
+	}
+
+
+
+	public void setSoils(Collection<Soil> soils) {
+		this.soils = soils;
+	}
+
+	public void setWeathers(Collection<Weather> weathers) {
+		this.weathers = weathers;
+	}
+
+	public void setExperiments(Collection<SimulationRun> experiments) {
+		this.experiments = experiments;
 	}
 }

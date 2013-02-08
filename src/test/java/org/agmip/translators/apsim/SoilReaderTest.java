@@ -24,13 +24,13 @@ public class SoilReaderTest {
 		assertEquals(10,soils.get(1).getLayers().length);
 	}
 	
-	@Test
-	public void testReaderBig() throws Exception{
-		SoilReader	sr = new SoilReader("src/test/resources/apsim/WheatValidation.apsim");
-		List<Soil> soils = sr.read();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(System.out, soils);
-		
-	}
+//	@Test
+//	public void testReaderBig() throws Exception{
+//		SoilReader	sr = new SoilReader("src/test/resources/apsim/WheatValidation.apsim");
+//		List<Soil> soils = sr.read();
+//		ObjectMapper mapper = new ObjectMapper();
+//		mapper.writeValue(System.out, soils);
+//		
+//	}
 
 }

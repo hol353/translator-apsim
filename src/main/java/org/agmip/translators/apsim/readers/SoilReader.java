@@ -19,6 +19,10 @@ public class SoilReader extends VTDReader{
 	public SoilReader(String file) {
 		super(file,"(//soil[not(@shortcut)])");
 	}
+	
+	public SoilReader(String file, String path){
+		super(file, path);
+	}
 
 
 	public List<Soil> read() throws Exception{
@@ -42,12 +46,11 @@ public class SoilReader extends VTDReader{
 	
 	public Soil read(String path) throws Exception{
 		Soil soil = new Soil();
-		String name = xPathText(path+"/@name");
 	    
 		soil.setCn2bare(xPathText(path+"/SoilWat/Cn2Bare"));
 		soil.setDiffusConst(xPathText(path+"/SoilWat/DiffusConst"));
 		soil.setDiffusSlope(xPathText(path+"/SoilWat/DiffusSlope"));
-		soil.setId(name);
+		soil.setId(xPathText(path+"/@name"));
 		soil.setLatitude(xPathText(path+"/Latitude"));
 		soil.setLongitude(xPathText(path+"/Longitude"));
 		soil.setName(xPathText(path+"/@name"));

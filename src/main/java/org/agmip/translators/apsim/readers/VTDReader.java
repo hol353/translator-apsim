@@ -9,7 +9,8 @@ import com.ximpleware.XPathParseException;
 
 public abstract class VTDReader {
 	protected final VTDNav vn;
-	private String prefix;
+	protected final String file;
+	protected String prefix;
 
 	
 	public VTDReader(String file){
@@ -17,6 +18,7 @@ public abstract class VTDReader {
 		vg.parseFile(file, false);
 		vn = vg.getNav();
 		this.prefix="";
+		this.file = file;
 	}
 	
 	public VTDReader(String file, String prefix){
@@ -35,6 +37,12 @@ public abstract class VTDReader {
 	public  String xPathText(String path) throws XPathParseException{
 		AutoPilot ap = new AutoPilot(vn);
 		ap.selectXPath(prefix+path);
+		return ap.evalXPathToString();
+	}
+	
+	public  String xAbsPathText(String path) throws XPathParseException{
+		AutoPilot ap = new AutoPilot(vn);
+		ap.selectXPath(path);
 		return ap.evalXPathToString();
 	}
 	

@@ -25,7 +25,7 @@ public class SimulationRun {
     private InitialCondition initialCondition;
     public InitialCondition getInitialCondition() { return initialCondition; }
     
-    // weather
+    @JsonIgnore
     private Weather weather;
     public Weather getWeather() { return weather; }
     public void setWeather(Weather w) { weather = w; }
@@ -39,7 +39,7 @@ public class SimulationRun {
     private Management management;
     public Management getManagement() { return management; }
     
-    // soil
+    @JsonIgnore
     private Soil soil;
     public Soil getSoil() { return soil; }
     public void setSoil(Soil s) { soil =s;}

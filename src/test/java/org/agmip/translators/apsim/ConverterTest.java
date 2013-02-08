@@ -34,7 +34,7 @@ public class ConverterTest extends TestCase{
     public void testReadJSONFile() throws Exception {
         loadJSONFromResource("/json-samples/mach_fast.json");
 
-        SimulationRun sim = collection.getExperiments().firstElement();
+        SimulationRun sim = collection.getExperiments().iterator().next();
         assertEquals("0.10", sim.getSoil().getSalb());
         assertEquals("18/03/1981", sim.getManagement().getEvents().get(0).getDate());
         assertEquals("0.12", sim.getSoil().getLayers()[0].getLowerLimit());

@@ -72,7 +72,7 @@ public class WeatherReader {
 						DailyWeather dailyWeather = new DailyWeather();
 						
 						Date date = getDateFromWords(headings, words);
-						dailyWeather.setDate(Util.agmip.format(date));
+						dailyWeather.setDate(Util.apsim.format(date));
 						
 						for (int i=0; i<headings.length; i++) {
 							if (headings[i].equalsIgnoreCase("radn"))
