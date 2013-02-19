@@ -1,16 +1,9 @@
 package org.agmip.translators.apsim.util;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import org.agmip.translators.apsim.core.SimulationCollection;
-import org.agmip.translators.apsim.core.SimulationRun;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 
 
 /**

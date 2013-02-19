@@ -2,6 +2,8 @@ package org.agmip.translators.apsim.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -85,13 +87,25 @@ public class Weather {
     private String amp = "?";
     public String getAmp() { return amp; }
     public void setAmp(String value) {amp = value;}
+
+    // CO2
+    @JsonIgnore
+    public String getCo2() { 
+    	if (ACO2.equals("?"))
+    		return CO2Y;
+    	else
+    		return ACO2; 
+    	}
+     
+    // CO2
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonProperty("ACO2") 
+    private String ACO2 = "?";
     
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-    @JsonProperty("ambient_CO2_conc") 
-    private String co2;
-    public String getCo2() { return co2; }
-    
+    @JsonProperty("CO2Y") 
+    private String CO2Y;
     
     // records
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
