@@ -16,6 +16,9 @@ import org.apache.velocity.app.Velocity;
 import org.codehaus.jackson.map.ObjectMapper;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Ioannis N. Athanasiadis, DUTh
  * @author Dean Holzworth, CSIRO
@@ -25,26 +28,36 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public class ApsimOutput implements TranslatorOutput {
 	static final int BUFFER = 2048;
+	private static final Logger log = LoggerFactory.getLogger(ApsimOutput.class);
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
 	public void writeFile(String filePath, Map input) {
 		File path = new File(filePath);
+
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 
-			String temp = toJSON(MapUtil.decompressAll(input));
-
+			String temp = toJSON(input);
+            input = null;
 			ArrayList<String> files = new ArrayList<String>();
 
 			SimulationCollection collection = mapper.readValue(temp,SimulationCollection.class);
+            temp = null;
 			collection.initialise();
-            
-			generateMetFiles(path, collection, files);
-            generateAPSIMFile(path, collection, files);
-            
+
+            // Check to see which files should be generated.
+            if (! collection.getWeathers().isEmpty()) {
+                generateMetFiles(path, collection, files);
+            }
+            if (collection.getSoils().size() > 0 || collection.getExperiments().size() > 0) {
+                generateAPSIMFile(path, collection, files);
+            }
+
 			BufferedInputStream origin = null;
+
+			log.debug("Files in collection: {}", files.size());
 
 			if (files.size() > 1) {
 
@@ -104,13 +117,13 @@ public class ApsimOutput implements TranslatorOutput {
             writer.close();
         }
     }
-    
-    
+
+
     public static void generateAPSIMFile(File path, SimulationCollection collection, ArrayList<String> files)
             throws Exception {
         path.mkdirs();
         File file = new File(path, "AgMip.apsim");
-        files.add("AgMip.apsim");        
+        files.add("AgMip.apsim");
         file.createNewFile();
         Velocity.init();
         VelocityContext context = new VelocityContext();
@@ -123,5 +136,5 @@ public class ApsimOutput implements TranslatorOutput {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }    
+    }
 }

@@ -15,12 +15,8 @@ public class WeatherReaderTest {
 		assertEquals("36.68", weather.getLatitude());
 		assertEquals("Yucheng",weather.getName());
 		assertEquals(1189, weather.getRecords().size());
-		assertEquals("20021102", weather.getRecords().get(1).getDate());
+		assertEquals("02/11/2002", weather.getRecords().get(1).getDate());
 		assertEquals("14.7", weather.getRecords().get(1).getMinTemperature());
 		assertEquals("23.1", weather.getRecords().get(1).getMaxTemperature());
-		
 	}
-
-	
-	
 }
