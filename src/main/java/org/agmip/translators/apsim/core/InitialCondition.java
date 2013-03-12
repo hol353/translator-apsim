@@ -37,7 +37,7 @@ public class InitialCondition {
     private String cropCode = "?";
 
     // residueType
-    public String getResidueType() { return Util.cropCodeToName(cropCode); }
+    public String getResidueType() { return cropCode; } //Util.cropCodeToName(cropCode); }
     
     // soilLayers
     @JsonProperty("soilLayer")

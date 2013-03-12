@@ -91,21 +91,21 @@ public class Weather {
     // CO2
     @JsonIgnore
     public String getCo2() { 
-    	if (ACO2.equals("?"))
-    		return CO2Y;
+    	if (CO2Y.equals("?"))
+    		return ACO2;
     	else
-    		return ACO2; 
+    		return CO2Y; 
     	}
      
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("ACO2") 
-    private String ACO2 = "?";
+    private String ACO2;
     
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("CO2Y") 
-    private String CO2Y;
+    private String CO2Y = "?";
     
     // records
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
