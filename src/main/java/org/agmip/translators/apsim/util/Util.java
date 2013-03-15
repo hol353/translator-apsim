@@ -201,7 +201,7 @@ public class Util {
             return "wheat";
         if ("WHD".equals(cropCode))
             return "wheat";
-        return "?";
+        return cropCode;
     }    
     
    // static helper function for converting a crop code to a crop name.

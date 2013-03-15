@@ -167,7 +167,7 @@ $simulation.log
 			</irrigation>
 			<$simulation.management.plantingCropName()>
             <ini>
-               <filename />
+               <filename>${simulation.management.plantingCropName()}.xml</filename>
             </ini>
          </$simulation.management.plantingCropName()>
 			<folder name="Manager folder">
