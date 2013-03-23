@@ -30,7 +30,7 @@ public class Planting extends Event{
         if ("?".equals(depth))
             return "?";
         else
-            return String.valueOf(Double.valueOf(depth) * 10.0);
+            return String.valueOf(Double.valueOf(depth));
     }
 
     // row spacing. units=cm
