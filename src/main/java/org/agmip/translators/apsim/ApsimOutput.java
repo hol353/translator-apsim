@@ -55,47 +55,47 @@ public class ApsimOutput implements TranslatorOutput {
                 generateAPSIMFile(path, collection, files);
             }
 
-			BufferedInputStream origin = null;
+			// BufferedInputStream origin = null;
 
-			log.debug("Files in collection: {}", files.size());
+			// log.debug("Files in collection: {}", files.size());
 
-			if (files.size() > 1) {
+			// if (files.size()s > 1) {
 
-				File zipfile = new File(path, "AgMIPApsim.zip");
+			// 	File zipfile = new File(path, "AgMIPApsim.zip");
 
-				if (zipfile.exists())
-					zipfile.delete();
+			// 	if (zipfile.exists())
+			// 		zipfile.delete();
 
-				FileOutputStream dest = new FileOutputStream(zipfile);
-				ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-						dest));
-				byte data[] = new byte[BUFFER];
-				// get a list of files from current directory
+			// 	FileOutputStream dest = new FileOutputStream(zipfile);
+			// 	ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+			// 			dest));
+			// 	byte data[] = new byte[BUFFER];
+			// 	// get a list of files from current directory
 
-				for (int i = 0; i < files.size(); i++) {
-					// System.out.println("Adding: " + files[i]);
-					File rawFile = new File(path, files.get(i));
-					if( rawFile.exists()) {
-						FileInputStream fi = new FileInputStream(new File(path,
-								files.get(i)));
-						origin = new BufferedInputStream(fi);
-						ZipEntry entry = new ZipEntry(files.get(i));
-						out.putNextEntry(entry);
-						int count;
-						while ((count = origin.read(data, 0, BUFFER)) != -1) {
-							out.write(data, 0, count);
-						}
-						origin.close();
-					}
-				}
-				out.close();
-				dest.close();
+			// 	for (int i = 0; i < files.size(); i++) {
+			// 		// System.out.println("Adding: " + files[i]);
+			// 		File rawFile = new File(path, files.get(i));
+			// 		if( rawFile.exists()) {
+			// 			FileInputStream fi = new FileInputStream(new File(path,
+			// 					files.get(i)));
+			// 			origin = new BufferedInputStream(fi);
+			// 			ZipEntry entry = new ZipEntry(files.get(i));
+			// 			out.putNextEntry(entry);
+			// 			int count;
+			// 			while ((count = origin.read(data, 0, BUFFER)) != -1) {
+			// 				out.write(data, 0, count);
+			// 			}
+			// 			origin.close();
+			// 		}
+			// 	}
+			// 	out.close();
+			// 	dest.close();
 
-				for (int i = 0; i < files.size(); i++) {
-					File f = new File(path, files.get(i));
-					f.delete();
-				}
-			}
+			// 	for (int i = 0; i < files.size(); i++) {
+			// 		File f = new File(path, files.get(i));
+			// 		f.delete();
+			// 	}
+			// }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
