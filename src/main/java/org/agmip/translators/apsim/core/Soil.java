@@ -115,6 +115,13 @@ public class Soil {
 		this.diffusSlope = diffusSlope;
 	}
 
+    // cropName
+    public String cropName = "";
+    public String getCropName() { return cropName; }
+    public void setCropName(String cropName) {
+		this.cropName = cropName;
+	}
+    
     // layers
     @JsonProperty("soilLayer")
     private SoilLayer[] layers;

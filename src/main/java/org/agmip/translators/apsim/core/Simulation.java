@@ -1,9 +1,12 @@
 package org.agmip.translators.apsim.core;
 
+import org.agmip.translators.apsim.util.DateDeserializer;
+import org.agmip.translators.apsim.util.DateSerializer;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
@@ -73,11 +76,15 @@ public class Simulation {
   	}
   	
     // startDate
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
     @JsonProperty("apsim_startDate")
     private String startDate = "?";
     public String getStartDate() { return startDate; }
 
     // endDate
+    @JsonSerialize(using=DateSerializer.class)
+    @JsonDeserialize(using=DateDeserializer.class)
     @JsonProperty("apsim_endDate")
     private String endDate = "?";
     public String getEndDate() { return endDate; }

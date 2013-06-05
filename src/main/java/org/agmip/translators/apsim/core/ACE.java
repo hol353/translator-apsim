@@ -1,6 +1,7 @@
 package org.agmip.translators.apsim.core;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -24,9 +25,9 @@ public class ACE {
 
 	// experiments
 	@JsonProperty("experiments")
-	Collection<Simulation> experiments = new Vector<Simulation>();
-	public Collection<Simulation> getExperiments() { return experiments; }
-	public void setExperiments(Collection<Simulation> experiments) {
+	List<Simulation> experiments = new Vector<Simulation>();
+	public List<Simulation> getExperiments() { return experiments; }
+	public void setExperiments(List<Simulation> experiments) {
 		this.experiments = experiments;
 	}
 
@@ -59,7 +60,11 @@ public class ACE {
 				sim.initialise();
 			}
 		}
+		
+		// For now assume a single soil/crop parameterisation. Will have to change maybe.
+		for(Soil soil:soils)
+			soil.setCropName(experiments.get(0).getManagement().plantingCropName());
 	}
-
+ 
 
 }

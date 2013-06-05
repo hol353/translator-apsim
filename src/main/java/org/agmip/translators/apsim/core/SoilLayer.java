@@ -80,7 +80,7 @@ public class SoilLayer {
 	}
 	
     // swcon
-    @JsonProperty("SLDR")
+    @JsonProperty("sldr")
     private double swcon = Util.missingValue;
     public double getSwcon() { return swcon; }
 	public void setSwcon(double swcon) {
@@ -94,12 +94,12 @@ public class SoilLayer {
     
     // fbiom
     @JsonProperty("apsim_fbiom")
-    private double fbiom;
+    private double fbiom = Util.missingValue;
     public double getFbiom() { return fbiom; }
     
     // finert
     @JsonProperty("apsim_finert")
-    private double finert;
+    private double finert = Util.missingValue;
     public double getFinert() { return finert; }
     
     @JsonIgnore

@@ -52,7 +52,7 @@ public class ApsimWriter implements TranslatorOutput {
                 generateMetFiles(path, ace, files);
            
             if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0)
-                generateAPSIMFile(path, ace, files);
+                generateAPSIMFile("AgMip.apsim", path, ace, files);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,11 +78,11 @@ public class ApsimWriter implements TranslatorOutput {
     }
 
 
-    public static void generateAPSIMFile(File path, ACE ace, ArrayList<String> files)
+    public static void generateAPSIMFile(String fileNameToGenerate, File path, ACE ace, ArrayList<String> files)
             throws Exception {
         path.mkdirs();
-        File file = new File(path, "AgMip.apsim");
-        files.add("AgMip.apsim");
+        File file = new File(path, fileNameToGenerate);
+        files.add(fileNameToGenerate);
         file.createNewFile();
         Velocity.init();
         VelocityContext context = new VelocityContext();

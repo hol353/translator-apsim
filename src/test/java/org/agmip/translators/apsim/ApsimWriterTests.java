@@ -39,18 +39,29 @@ public class ApsimWriterTests extends TestCase{
     }
 
     @Test
-    public void testWriteAPSIMFile() throws Exception {
+    public void testWriteMaizeIncomplete() throws Exception {
     	ACE ace = fileResourceToACE("/json-samples/MaizeIncomplete.json");
 
         ArrayList<String> files = new ArrayList<String>();
-        ApsimWriter.generateAPSIMFile(outputPath, ace, files);
+        ApsimWriter.generateAPSIMFile("MaizeIncomplete.apsim", outputPath, ace, files);
         ApsimWriter.generateMetFiles(outputPath, ace, files);
         
         assertEquals(files.size(), 2);
-        assertEquals(files.get(0), "AgMip.apsim");
+        assertEquals(files.get(0), "MaizeIncomplete.apsim");
         assertEquals(files.get(1), "MK10.met");
     }  
-
  
+    @Test
+    public void testWriteMaizeComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/MaizeComplete.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("MaizeComplete.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0), "MaizeComplete.apsim");
+        assertEquals(files.get(1), "MK10.met");
+    }  
 
 }
