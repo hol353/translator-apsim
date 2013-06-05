@@ -34,16 +34,25 @@ public class Management {
         }
         return null;
     }
-    // Needed for Jackson
+    
+    
+    
+    // default constructor - needed for Jackson
     public Management() {}
+    
+    
+    
+    
     // initialise this instance
     public void initialise() {
-        log = "";
+    	
         // initialise all events.
         for (int i = 0; i < events.size(); i++) {
             events.get(i).initialise();
             log += events.get(i).getLog();
         }
+        
+        
         Comparator<Event> eventComparator = new Comparator<Event>() {
             @Override
             public int compare(Event eventA, Event eventB)  {
@@ -54,6 +63,7 @@ public class Management {
                 return eventA.getEventDate().compareTo(eventB.getEventDate());
             }
         };
+        
         // sort the events into date order.
         Collections.sort(events, eventComparator);
     }

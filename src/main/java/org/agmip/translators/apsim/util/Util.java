@@ -15,7 +15,7 @@ public class Util {
 
     public static final SimpleDateFormat agmip = new SimpleDateFormat("yyyyMMdd");
     public static final SimpleDateFormat apsim = new SimpleDateFormat("dd/MM/yyyy");
-    
+    public static final double missingValue = -99.999;
       
     public static String GetYear(String agmipDate) throws ParseException {
         Date date = apsim.parse(agmipDate);
@@ -300,8 +300,8 @@ public class Util {
         {
             if (dX <= dXCoordinate[iIndex])
             {
-                //Chcek to see if dX is exactly equal to dXCoordinate[iIndex]
-                //If so then don't calcuate dY.  This was added to remove roundoff error.
+                //Check to see if dX is exactly equal to dXCoordinate[iIndex]
+                //If so then don't calculate dY.  This was added to remove roundoff error.
                 if (dX == dXCoordinate[iIndex])
                     return dYCoordinate[iIndex];
                 //Found position

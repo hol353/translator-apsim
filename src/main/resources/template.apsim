@@ -1,4 +1,121 @@
 <folder version="32" name="simulations">
+    <folder name="Soils">
+#foreach ($soil in $collection.soils)
+        <soil name="$soil.id">
+            <Comment type="multiedit" description="Comments">ICASA Classification: $soil.classification</Comment>
+            <ASC_Order description="Australian Soil Classification Order" />
+            <ASC_Sub-order description="Australian Soil Classification Sub-Order" />
+            <SoilType description="Soil description"/>
+            <LocalName/>
+            <Site>$soil.site</Site>
+            <NearestTown description="Nearest town"/>
+            <Region/>
+            <State />
+            <Country />
+            <NaturalVegetation description="Natural vegetation"/>
+            <ApsoilNumber description="Apsoil number" />
+            <Latitude description="Latitude (WGS84)">$soil.latitude</Latitude>
+            <Longitude>$soil.longitude</Longitude>
+            <LocationAccuracy description="Location accuracy" />
+            <DataSource type="multiedit" description="Data source">$soil.source</DataSource>
+            <Comments />
+            <Water>
+#foreach ($layer in $soil.layers)
+                <Layer>
+                    <Thickness units="mm">$layer.thickness</Thickness>
+                    <KS units="mm/day" />
+                    <BD units="g/cc">$layer.bulkDensity</BD>
+                    <AirDry units="mm/mm">$layer.airDry</AirDry>
+                    <LL15 units="mm/mm">$layer.lowerLimit</LL15>
+                    <DUL units="mm/mm">$layer.drainedUpperLimit</DUL>
+                    <SAT units="mm/mm">$layer.saturation</SAT>
+                </Layer>
+#end
+                <SoilCrop name="$simulation.management.plantingCropName()">
+#foreach ($layer in $simulation.soil.layers)          
+                    <Layer>
+                        <Thickness units="mm">$layer.thickness</Thickness>
+                        <LL units="mm/mm">$layer.lowerLimit</LL>
+                        <KL units="/day">$layer.kl</KL>
+                        <XF units="0-1">1</XF>
+                    </Layer>
+#end
+                </SoilCrop>
+            </Water>
+            <SoilWat>
+                <SummerCona>3.5</SummerCona>
+                <SummerU>$soil.u</SummerU>
+                <SummerDate>1-Nov</SummerDate>
+                <WinterCona>3.5</WinterCona>
+                <WinterU>$soil.u</WinterU>
+                <WinterDate>1-Apr</WinterDate>
+                <DiffusConst>$soil.getDiffusConst()</DiffusConst>
+                <DiffusSlope>$soil.getDiffusSlope()</DiffusSlope>
+                <Salb>$soil.salb</Salb>
+                <Cn2Bare>$soil.cn2bare</Cn2Bare>
+                <CnRed>20</CnRed>
+                <CnCov>0.8</CnCov>
+                <Slope>
+                </Slope>
+                <DischargeWidth>
+                </DischargeWidth>
+                <CatchmentArea>
+                </CatchmentArea>
+                <MaxPond>
+                </MaxPond>
+#foreach ($layer in $soil.layers)             
+                <Layer>
+                    <Thickness units="mm">$layer.thickness</Thickness>
+                    <SWCON units="0-1">0.3</SWCON>
+                    <MWCON units="0-1" />
+                    <KLAT units="mm/d" />
+                </Layer>
+#end
+            </SoilWat>
+            <SoilOrganicMatter>
+                <RootCn>45</RootCn>  
+                <RootWt>500</RootWt>  
+                <SoilCn>14.5</SoilCn> 
+                <EnrACoeff>7.4</EnrACoeff>
+                <EnrBCoeff>0.2</EnrBCoeff>
+#foreach ($layer in $soil.layers)        
+                <Layer>                                            
+                    <Thickness units="mm">$layer.thickness</Thickness>                                                
+                    <OC units="Total %">#if( $layer.organicCarbon == 0 ) 0.1 #else $layer.organicCarbon #end</OC>
+                    <FBiom units="0-1">$layer.fbiom</FBiom>
+                    <FInert units="0-1">$layer.finert</FInert>
+                </Layer>
+#end
+            </SoilOrganicMatter>
+            <Analysis>
+#foreach ($layer in $soil.layers)        
+                <Layer>
+                    <Thickness units="mm">$layer.thickness</Thickness>
+                    <Rocks units="%" />
+                    <Texture/>
+                    <MunsellColour/>
+                    <EC units="1:5 dS/m"/>
+                    <PH units="1:5 water">$layer.ph</PH>
+                    <CL units="mg/kg" />
+                    <Boron units="Hot water mg/kg" />
+                    <CEC units="cmol+/kg" />
+                    <Ca units="cmol+/kg" />
+                    <Mg units="cmol+/kg" />
+                    <Na units="cmol+/kg" />
+                    <K units="cmol+/kg" />
+                    <ESP units="%" />
+                    <Mn units="mg/kg" />
+                    <Al units="cmol+/kg" />
+                    <ParticleSizeSand units="%" />
+                    <ParticleSizeSilt units="%" />
+                    <ParticleSizeClay units="%" />
+                </Layer>
+#end
+            </Analysis>           
+        </soil>    
+#end
+    </folder>
+
    #foreach ($simulation in $collection.experiments)
 	<simulation name="${simulation.getUniqueName()}">
 		<memo name="LOG">
@@ -15,117 +132,7 @@ $simulation.log
 		</metfile>
 		<summaryfile />
 		<area name="paddock">
-			<soil name="Soil">
-				<Comment type="multiedit" description="Comments">ICASA Classification: $simulation.soil.classification</Comment>
-				<ASC_Order description="Australian Soil Classification Order" />
-				<ASC_Sub-order description="Australian Soil Classification Sub-Order" />
-				<SoilType description="Soil description"/>
-				<LocalName/>
-				<Site>$simulation.soil.site</Site>
-				<NearestTown description="Nearest town"/>
-				<Region/>
-				<State />
-				<Country />
-				<NaturalVegetation description="Natural vegetation"/>
-				<ApsoilNumber description="Apsoil number" />
-				<Latitude description="Latitude (WGS84)">$simulation.soil.latitude</Latitude>
-				<Longitude>$simulation.soil.longitude</Longitude>
-				<LocationAccuracy description="Location accuracy" />
-				<DataSource type="multiedit" description="Data source">$simulation.soil.source</DataSource>
-				<Comments />
-				<Water>
-#foreach ($layer in $simulation.soil.layers)
-					<Layer>
-						<Thickness units="mm">$layer.thickness</Thickness>
-						<KS units="mm/day" />
-						<BD units="g/cc">$layer.bulkDensity</BD>
-						<AirDry units="mm/mm">$layer.airDry</AirDry>
-						<LL15 units="mm/mm">$layer.lowerLimit</LL15>
-						<DUL units="mm/mm">$layer.drainedUpperLimit</DUL>
-						<SAT units="mm/mm">$layer.saturation</SAT>
-					</Layer>
-#end
-					<SoilCrop name="$simulation.management.plantingCropName()">
-#foreach ($layer in $simulation.soil.layers)          
-						<Layer>
-							<Thickness units="mm">$layer.thickness</Thickness>
-							<LL units="mm/mm">$layer.lowerLimit</LL>
-							<KL units="/day">$layer.kl</KL>
-							<XF units="0-1">1</XF>
-						</Layer>
-#end
-					</SoilCrop>
-				</Water>
-				<SoilWat>
-					<SummerCona>3.5</SummerCona>
-					<SummerU>$simulation.soil.u</SummerU>
-               <SummerDate>1-Nov</SummerDate>
-					<WinterCona>3.5</WinterCona>
-					<WinterU>$simulation.soil.u</WinterU>
-               <WinterDate>1-Apr</WinterDate>
-					<DiffusConst>$simulation.soil.getDiffusConst()</DiffusConst>
-					<DiffusSlope>$simulation.soil.getDiffusSlope()</DiffusSlope>
-					<Salb>$simulation.soil.salb</Salb>
-					<Cn2Bare>$simulation.soil.cn2bare</Cn2Bare>
-					<CnRed>20</CnRed>
-					<CnCov>0.8</CnCov>
-					<Slope>
-					</Slope>
-					<DischargeWidth>
-					</DischargeWidth>
-					<CatchmentArea>
-					</CatchmentArea>
-					<MaxPond>
-					</MaxPond>
-#foreach ($layer in $simulation.soil.layers)             
-					<Layer>
-						<Thickness units="mm">$layer.thickness</Thickness>
-						<SWCON units="0-1">0.3</SWCON>
-						<MWCON units="0-1" />
-						<KLAT units="mm/d" />
-					</Layer>
-#end
-				</SoilWat>
-				<SoilOrganicMatter>
-					<RootCn>45</RootCn>  
-					<RootWt>500</RootWt>  
-					<SoilCn>14.5</SoilCn> 
-					<EnrACoeff>7.4</EnrACoeff>
-					<EnrBCoeff>0.2</EnrBCoeff>
-#foreach ($layer in $simulation.soil.layers)        
-					<Layer>                                            
-						<Thickness units="mm">$layer.thickness</Thickness>                                                
-						<OC units="Total %">#if( $layer.organicCarbon == 0 ) 0.1 #else $layer.organicCarbon #end</OC>
-						<FBiom units="0-1">$layer.fbiom</FBiom>
-						<FInert units="0-1">$layer.finert</FInert>
-					</Layer>
-#end
-				</SoilOrganicMatter>
-				<Analysis>
-#foreach ($layer in $simulation.soil.layers)        
-					<Layer>
-						<Thickness units="mm">$layer.thickness</Thickness>
-						<Rocks units="%" />
-						<Texture/>
-						<MunsellColour/>
-						<EC units="1:5 dS/m"/>
-						<PH units="1:5 water">$layer.ph</PH>
-						<CL units="mg/kg" />
-						<Boron units="Hot water mg/kg" />
-						<CEC units="cmol+/kg" />
-						<Ca units="cmol+/kg" />
-						<Mg units="cmol+/kg" />
-						<Na units="cmol+/kg" />
-						<K units="cmol+/kg" />
-						<ESP units="%" />
-						<Mn units="mg/kg" />
-						<Al units="cmol+/kg" />
-						<ParticleSizeSand units="%" />
-						<ParticleSizeSilt units="%" />
-						<ParticleSizeClay units="%" />
-					</Layer>
-#end
-				</Analysis>
+			<soil name="Soil" shortcut="/simulations/Soils/$simulation.soil.id">
 				<Sample name="Initial nitrogen">
 					<Date type="date" description="Sample date:">$simulation.initialCondition.date</Date>
 #foreach ($initialLayer in $simulation.initialCondition.soilLayers)        

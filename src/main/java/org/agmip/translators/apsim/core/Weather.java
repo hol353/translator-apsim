@@ -3,6 +3,7 @@ package org.agmip.translators.apsim.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -51,8 +52,8 @@ public class Weather {
     // elevation
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wst_elev")
-    private String elevation="?";
-    public String getElevation() { return elevation; }
+    private double elevation = Util.missingValue;
+    public double getElevation() { return elevation; }
     
     // longName    
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
@@ -63,35 +64,35 @@ public class Weather {
     // latitude
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wst_lat")	
-    private String latitude = "?";
-    public String getLatitude() { return latitude; }
-    public void setLatitude(String value) { latitude = value; }
+    private double latitude = Util.missingValue;
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double value) { latitude = value; }
     
     // longitude
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("wst_long") 
-    private String longitude = "?";
-    public String getLongitude() { return longitude; }
-	public void setLongitude(String value) {longitude = value;}
+    private double longitude = Util.missingValue;
+    public double getLongitude() { return longitude; }
+	public void setLongitude(double value) {longitude = value;}
 		    
     // averageTemperature
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("tav") 
-    private String tav = "?";
-    public String getTav() { return tav; }
-    public void setTav(String value) {tav = value;}
+    private double tav = Util.missingValue;
+    public double getTav() { return tav; }
+    public void setTav(double value) {tav = value;}
 
     // AMP
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("tamp") 
-    private String amp = "?";
-    public String getAmp() { return amp; }
-    public void setAmp(String value) {amp = value;}
+    private double amp = Util.missingValue;
+    public double getAmp() { return amp; }
+    public void setAmp(double value) {amp = value;}
 
     // CO2
-    @JsonIgnore
-    public String getCo2() { 
-    	if (CO2Y.equals("?"))
+    @JsonIgnore 
+    public double getCo2() { 
+    	if (CO2Y == Util.missingValue)
     		return ACO2;
     	else
     		return CO2Y; 
@@ -100,12 +101,12 @@ public class Weather {
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("ACO2") 
-    private String ACO2;
+    private double ACO2 = Util.missingValue;
     
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("CO2Y") 
-    private String CO2Y = "?";
+    private double CO2Y = Util.missingValue;
     
     // records
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
@@ -114,7 +115,9 @@ public class Weather {
     public List<DailyWeather> getRecords() { return records; }
     public void setRecords(List<DailyWeather> value) { records = value; }
 
-    // Needed for Jackson
+    
+    
+    // default constructor - Needed for Jackson
     public Weather() {}
 
 	

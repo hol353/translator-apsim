@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.events;
 
+import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -16,7 +17,7 @@ public class Irrigation extends Event {
     //private String method = "?";
 
     @JsonProperty("irval")
-    private String amount = "?";
+    private double amount = Util.missingValue;
 
     //@JsonProperty("ireff")
     //private String efficiency = "?";
@@ -26,13 +27,16 @@ public class Irrigation extends Event {
         return "irrigation apply amount = " +amount+ " (mm) " ;
     }
 
+    
+    
+    
     @Override
     public void initialise() {
         if ("?".equals(getDate()))
             log += "  * Operation irrigation ERROR: Date missing. '?' has been inserted\r\n";
         
-        if ("?".equals(amount))
-            log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing. A '?' has been inserted.\r\n";
+        if (amount == Util.missingValue)
+            log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing.\r\n";
     }
 
 }
