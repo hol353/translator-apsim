@@ -78,7 +78,7 @@ public class SoilReader extends VTDReader{
 			layer.setOrganicCarbon(xPathDouble(path+"/SoilOrganicMatter/Layer["+l+"]/OC"));
 			layer.setPh(xPathDouble(path+"/Analysis/Layer["+l+"]/PH"));
 			layer.setSaturation(xPathDouble(path+"/Water/Layer["+l+"]/SAT"));
-			layer.setSwcon(xPathDouble(path+"/SoilWat/Layer["+l+"]/SWCON"));
+			soil.setSwcon(xPathDouble(path+"/SoilWat/Layer["+l+"]/SWCON"));
 			layer.setThickness(xPathDouble(path+"/Water/Layer["+l+"]/Thickness"));
 			
 			layers[l-1]=layer;

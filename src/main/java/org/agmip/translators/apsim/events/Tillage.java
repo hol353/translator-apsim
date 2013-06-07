@@ -40,13 +40,13 @@ public class Tillage extends Event {
     @Override
     public void initialise() {
         if ("?".equals(getDate()))
-            log += "  * Operation tillage ERROR: Date missing.r\n";
+            log += "  * Operation tillage ERROR: Date missing (date).r\n";
         
         if (depth == Util.missingValue)
-            log += "  * Operation " + getDate() + " ERROR: Tillage depth missing.\r\n";
+            log += "  * Operation " + getDate() + " ERROR: Tillage depth missing (tidep).\r\n";
         
         if ("?".equals(implementCode))
-            log += "  * Operation " + getDate() + " ERROR: Tillage implement missing.\r\n";
+            log += "  * Operation " + getDate() + " ERROR: Tillage implement missing (tiimp).\r\n";
         else
             log += "  * Operation " + getDate() + " ASSUMPTION: Tillage type: " + getImplementName() + " may not match an APSIM tillage type\r\n";
     }

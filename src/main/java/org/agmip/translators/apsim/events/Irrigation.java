@@ -33,10 +33,10 @@ public class Irrigation extends Event {
     @Override
     public void initialise() {
         if ("?".equals(getDate()))
-            log += "  * Operation irrigation ERROR: Date missing. '?' has been inserted\r\n";
+            log += "  * Operation irrigation ERROR: Date missing (date).\r\n";
         
         if (amount == Util.missingValue)
-            log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing.\r\n";
+            log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing (irval).\r\n";
     }
 
 }

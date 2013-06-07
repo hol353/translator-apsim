@@ -49,7 +49,7 @@ public class InitialCondition {
 
     // residueType
     public String getResidueType() { 
-        return LookupCodes.lookupCode("crid", cropCode, "common");
+        return LookupCodes.lookupCode("crid", cropCode, "apsim");
     }
     
     // soilLayers
@@ -97,13 +97,13 @@ public class InitialCondition {
         
     	
         if ("?".equals(getResidueType()))
-            log += "  * SurfaceOrganicMatter ERROR: Missing residue type.\r\n";
+            log += "  * SurfaceOrganicMatter ERROR: Missing residue type (icpcr).\r\n";
         
         if (residueWeight == Util.missingValue)
-            log += "  * SurfaceOrganicMatter ERROR: Missing residue weight.\r\n";
+            log += "  * SurfaceOrganicMatter ERROR: Missing residue weight (icrag).\r\n";
         else {
             if (residueNConc == Util.missingValue)
-                log += "  * SurfaceOrganicMatter ERROR: Missing residue nitrogen concentration. Cannot calculate CNR.\r\n";
+                log += "  * SurfaceOrganicMatter ERROR: Missing residue nitrogen concentration (icrn). Cannot calculate CNR.\r\n";
             
             else {
                 double carbon = 0.4 * residueWeight;

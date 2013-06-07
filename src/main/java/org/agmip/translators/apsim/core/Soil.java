@@ -76,7 +76,7 @@ public class Soil {
 	}
 
     // u
-    @JsonProperty("SLU1")
+    @JsonProperty("slu1")
     private double u = Util.missingValue;
     public double getU() { return u; }
 	public void setU(double u) {
@@ -92,12 +92,20 @@ public class Soil {
 	}
 
     // cn2bare
-    @JsonProperty("SLRO")
+    @JsonProperty("slro")
     private double cn2bare = Util.missingValue;
     public double getCn2bare() { return cn2bare; }
     public void setCn2bare(double cn2bare) {
 		this.cn2bare = cn2bare;
 	}
+    
+    // swcon - is a whole of profile number in AgMIP - layered in APSIM.
+    @JsonProperty("sldr")
+    private double swcon = Util.missingValue;
+    public double getSwcon() { return swcon; }
+    public void setSwcon(double swcon) {
+		this.swcon = swcon;
+	}    
 
     // diffusConst
     @JsonProperty("apsim_diffusConst")
@@ -161,23 +169,26 @@ public class Soil {
         }
 
         if (id.equals("?"))
-        	log += "  * Soil ERROR: Missing soil ID.\r\n";
+        	log += "  * Soil ERROR: Missing soil ID (soil_id).\r\n";
         
         if (u == Util.missingValue)
-            log += "  * Soil ERROR: Missing U.\r\n";
+            log += "  * Soil ERROR: Missing U (slu1).\r\n";
 
         if (salb == Util.missingValue)
-            log += "  * Soil ERROR: Missing SALB.\r\n";
+            log += "  * Soil ERROR: Missing SALB (salb).\r\n";
 
         if (cn2bare == Util.missingValue)
-            log += "  * Soil ERROR: Missing CN2Bare.\r\n";
+            log += "  * Soil ERROR: Missing CN2Bare (slro).\r\n";
                
         if (diffusConst == Util.missingValue)
-            log += "  * Soil ERROR: Missing diffusConst.\r\n";        
+            log += "  * Soil ERROR: Missing diffusConst (apsim_diffusConst).\r\n";        
 
         if (diffusSlope == Util.missingValue)
-            log += "  * Soil ERROR: Missing diffusSlope.\r\n";        
+            log += "  * Soil ERROR: Missing diffusSlope (apsim_diffusSlope).\r\n";        
 
+        if (swcon == Util.missingValue)
+            log += "  * Soil ERROR: Missing SWCON (sldr).\r\n";
+        
     }
    
       

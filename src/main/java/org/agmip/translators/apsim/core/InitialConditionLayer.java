@@ -68,19 +68,19 @@ public class InitialConditionLayer {
     public double initialise(double cumThickness, int layerNumber) {
     	
     	if (bottomDepth == Util.missingValue)
-    		log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing thickness.\r\n";
+    		log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing thickness (icbl).\r\n";
 
     	else
     		thickness = bottomDepth * 10 - cumThickness;  // convert from cm to mm
         
         if (no3 == Util.missingValue)
-        	log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing NO3.\r\n";
+        	log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing NO3 (icno3).\r\n";
         	
         if (nh4 == Util.missingValue)
-        	log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing NH4.\r\n";
+        	log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing NH4 (icnh4).\r\n";
         
         if (soilWater == Util.missingValue)
-        	log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing SW.\r\n";        
+        	log += "  * Initial conditions layer " + String.valueOf(layerNumber) + " ERROR: Missing SW (ich2o).\r\n";        
                 
         return bottomDepth * 10;
     }

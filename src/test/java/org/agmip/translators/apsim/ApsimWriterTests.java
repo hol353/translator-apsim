@@ -34,8 +34,8 @@ public class ApsimWriterTests extends TestCase{
         assertEquals(0.10, sim.getSoil().getSalb());
         assertEquals("18/03/1981", sim.getManagement().getEvents().get(0).getDate());
         assertEquals(0.12, sim.getSoil().getLayers()[0].getLowerLimit());
-        assertEquals("Maize", sim.getManagement().plantingCropName());
-        assertEquals("Maize", sim.getInitialCondition().getResidueType());
+        assertEquals("maize", sim.getManagement().plantingCropName());
+        assertEquals("maize", sim.getInitialCondition().getResidueType());
     }
 
     @Test
@@ -53,15 +53,40 @@ public class ApsimWriterTests extends TestCase{
  
     @Test
     public void testWriteMaizeComplete() throws Exception {
-    	ACE ace = fileResourceToACE("/json-samples/MaizeComplete.json");
+    	ACE ace = fileResourceToACE("/json-samples/Maize.json");
 
         ArrayList<String> files = new ArrayList<String>();
-        ApsimWriter.generateAPSIMFile("MaizeComplete.apsim", outputPath, ace, files);
+        ApsimWriter.generateAPSIMFile("Maize.apsim", outputPath, ace, files);
         ApsimWriter.generateMetFiles(outputPath, ace, files);
         
         assertEquals(files.size(), 2);
-        assertEquals(files.get(0), "MaizeComplete.apsim");
+        assertEquals(files.get(0), "Maize.apsim");
         assertEquals(files.get(1), "MK10.met");
     }  
 
+    @Test
+    public void testWriteWheatComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/Wheat.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("Wheat.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0), "Wheat.apsim");
+        assertEquals(files.get(1), "MK10.met");
+    }    
+    
+    @Test
+    public void testWriteSorghumComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/Sorghum.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("Sorghum.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 3);
+        assertEquals(files.get(0), "Sorghum.apsim");
+    }     
+    
 }

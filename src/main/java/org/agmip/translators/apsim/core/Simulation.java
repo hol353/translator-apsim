@@ -78,14 +78,14 @@ public class Simulation {
     // startDate
     @JsonSerialize(using=DateSerializer.class)
     @JsonDeserialize(using=DateDeserializer.class)
-    @JsonProperty("apsim_startDate")
+    @JsonProperty("sdat")
     private String startDate = "?";
     public String getStartDate() { return startDate; }
 
     // endDate
     @JsonSerialize(using=DateSerializer.class)
     @JsonDeserialize(using=DateDeserializer.class)
-    @JsonProperty("apsim_endDate")
+    @JsonProperty("endat")
     private String endDate = "?";
     public String getEndDate() { return endDate; }
     
@@ -133,22 +133,22 @@ public class Simulation {
         
         // Check the start and end date.
         if ("?".equals(startDate))
-           log += "  * Clock ERROR: Missing a simulation start date.\r\n";
+           log += "  * Clock ERROR: Missing a simulation start date (sdat).\r\n";
         if ("?".equals(endDate))
-            log += "  * Clock ERROR: Missing a simulation end date.\r\n";
+            log += "  * Clock ERROR: Missing a simulation end date (endat).\r\n";
 
         // Check the weather.
         if (weather == null)
             log += "  * Met ERROR: Missing weather data.\r\n";
         else {
         	if (weather.getLatitude() == Util.missingValue)
-        		log += "  * Met ERROR: No latitude found in weather data.\r\n";
+        		log += "  * Met ERROR: No latitude found in weather data (wst_lat).\r\n";
         	if (weather.getTav() == Util.missingValue)
-        		log += "  * Met ERROR: No TAV found in weather data.\r\n";
+        		log += "  * Met ERROR: No TAV found in weather data (tav).\r\n";
         	if (weather.getAmp() == Util.missingValue)
-        		log += "  * Met ERROR: No AMP found in weather data.\r\n";
+        		log += "  * Met ERROR: No AMP found in weather data (tamp).\r\n";
         	if (weather.getCo2() == Util.missingValue)
-        		log += "  * Met WARNING: No CO2 found in weather data.\r\n";
+        		log += "  * Met WARNING: No CO2 found in weather data (aco2 or co2y).\r\n";
         }
             
         // Check the soil.

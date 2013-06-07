@@ -79,28 +79,31 @@ public class SoilLayer {
 		this.ph = ph;
 	}
 	
-    // swcon
-    @JsonProperty("sldr")
-    private double swcon = Util.missingValue;
-    public double getSwcon() { return swcon; }
-	public void setSwcon(double swcon) {
-		this.swcon = swcon;
-	}
-	
+
     //kl
     @JsonProperty("apsim_kl")
     private double kl = Util.missingValue;
     public double getKl() { return kl; }
     
     // fbiom
-    @JsonProperty("apsim_fbiom")
-    private double fbiom = Util.missingValue;
-    public double getFbiom() { return fbiom; }
+    @JsonProperty("slacc")
+    private double biomC = Util.missingValue;
+    public double getFbiom() {
+    	if (organicCarbon == 0)
+    		return 0;
+    	else
+    		return biomC / organicCarbon; 
+    	}
     
     // finert
-    @JsonProperty("apsim_finert")
-    private double finert = Util.missingValue;
-    public double getFinert() { return finert; }
+    @JsonProperty("slic")
+    private double inertC = Util.missingValue;
+    public double getFinert() { 
+    	if (organicCarbon == 0)
+    		return 0;
+    	else
+    		return inertC / organicCarbon; 
+    	}
     
     @JsonIgnore
     private String log;
@@ -118,40 +121,37 @@ public class SoilLayer {
         log = "";
         
         if (bottomDepth == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing thickness.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing thickness (sllb).\r\n";
 
         if (bulkDensity == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing bulk density.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing bulk density (slbdm).\r\n";
 
         if (airDry == Util.missingValue)
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing airdry.\r\n";
         
         if (lowerLimit == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing lowerLimit.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing lowerLimit (slll).\r\n";
         
         if (drainedUpperLimit == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing drained upper limit.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing drained upper limit (sldul).\r\n";
 
         if (saturation == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing saturation.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing saturation (slsat).\r\n";
 
         if (organicCarbon == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing organ carbon.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing organ carbon (sloc).\r\n";
         
         if (ph == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing PH.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing PH (slphw).\r\n";
         
-        if (swcon == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing SWCON.\r\n";
-
         if (kl == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing KL.\r\n";
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing KL (apsim_kl).\r\n";
         
-        if (fbiom == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing FBIOM.\r\n";
+        if (biomC == Util.missingValue)
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing FBIOM (slacc).\r\n";
         
-        if (finert == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing FINERT.\r\n";
+        if (inertC == Util.missingValue)
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing InertC (slic).\r\n";
         
         thickness = bottomDepth * 10 - cumThickness;
         

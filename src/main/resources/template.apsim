@@ -66,7 +66,7 @@
 #foreach ($layer in $soil.layers)             
                 <Layer>
                     <Thickness units="mm">$layer.thickness</Thickness>
-                    <SWCON units="0-1">0.3</SWCON>
+                    <SWCON units="0-1">$soil.swcon</SWCON>
                     <MWCON units="0-1" />
                     <KLAT units="mm/d" />
                 </Layer>
@@ -192,12 +192,71 @@ $simulation.log
 #end               
 #end        
 				</operations>
-<manager name="Harvesting rule"><ui><category type="category" description="Harvesting criteria" />
-                                    <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop></ui><script><text>if [crop].StageName = 'harvest_ripe'  or [crop].plant_status = 'dead' then
+#if ($simulation.management.plantingCropName() == "sugar")
+                <manager name="SUGAR management">
+                    <ui>
+                        <category description="Ratoon management parameters" type="category" />
+                        <NoRatoons type="text" description="Number of ratoons (max = 5): ">4</NoRatoons>
+                        <ratoonlen type="text" description="Duration of a ratoon crop (days) (30 days/month * 13 months) : ">390</ratoonlen>
+                        <ratoon_stalks type="text" description="Stalk density of ratoon crop (/m2) :">10</ratoon_stalks>
+                    </ui>
+                    <script name="start_of_day">
+                    <text><![CDATA[
+                    ! -----------------------------------------------------------------
+                    ! Book keeping to round days to integer values
+                    plantlen = nearest_int(plantlen)
+                    ratoonlen = nearest_int(ratoonlen)
+
+                    if (sugar.crop_status = 'alive') then
+
+                       ! Set harvest dates for each crop phase
+                       if (sugar.DaysAfterSowing = [plantlen] and ratoon_no = 0) or
+                          (sugar.DaysAfterSowing = [ratoonlen] and ratoon_no > 0) then
+
+                          sugar harvest
+
+                          if (ratoon_no = [NoRatoons] + 1) then
+                             ! plough the crop out
+                             sugar kill_crop
+                             sugar end_crop
+
+                          else
+                             ! Set stalk density
+                             sugar.plants = [ratoon_stalks]
+                          endif
+                       else
+                          ! We have not reached the harvest date for this ratoon.
+                       endif
+
+                    elseif (sugar.crop_status = 'dead') then
+                       sugar harvest
+                       sugar end_crop
+
+                    endif
+                       ]]></text>
+                    <event>start_of_day</event>
+                    </script>
+                    <script name="init">
+                    <text>
+                    plantlen = 0
+                    ratoonlen = 0
+                    </text>
+                    <event>init</event>
+                    </script>
+                </manager>
+#else        
+                <manager name="Harvesting rule">
+                    <ui>
+                        <category type="category" description="Harvesting criteria" />
+                        <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop>
+                    </ui>
+                    <script><text>if [crop].StageName = 'harvest_ripe'  or [crop].plant_status = 'dead' then
    [crop] harvest
    [crop] end_crop
 endif
-</text><event>end_of_day</event></script></manager>
+</text><event>end_of_day</event></script>
+                </manager>
+#end
 			</folder>
 			<outputfile>
 				<filename output="yes">AgMIP.out</filename>
@@ -206,8 +265,6 @@ endif
 					<variable name="dd/mm/yyyy as Date"></variable>
 					<variable name="biomass"></variable>
 					<variable name="yield"></variable>
-					<variable name="grain_protein"></variable>
-					<variable name="grain_size"></variable>
 					<variable name="esw"></variable>
 					<variable name="lai"></variable>		  
 				</variables>
@@ -260,13 +317,11 @@ using CSGeneral;
 public class Script 
 {      
    [Link] Paddock MyPaddock; 
-   [Input] DateTime Today; 
-   [Input] int Flowering_date;    // Day number of flowering
-   [Input] int Maturity_date;     // Day number of maturity
+   [Input] DateTime Today;
+   
    [Input] double LAI;
    [Input] double Rain;
    [Input] double ep;
-   [Input] double[] no3_uptake;
    [Input] double[] flow_no3;
    [Output] DateTime AnthesisDate;
    [Output] DateTime MaturityDate;
@@ -289,14 +344,30 @@ public class Script
    // The following event handler will be called each day at the beginning of the day
    [EventHandler] public void OnPost()
    {
-      if (Flowering_date &gt; 0 &amp;&amp; AnthesisDate.Ticks == 0)
-         AnthesisDate = Today;
-      if (Maturity_date &gt; 0 &amp;&amp; MaturityDate.Ticks == 0)
-         MaturityDate = Today;
+      // Work out flowering and maturity dates.
+      string StageName;
+      MyPaddock.Get("StageName", out StageName);
+      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
+      if (StageName.ToLower() == "maturity") MaturityDate = Today;      
+      
+      // Get no3_uptake for whole profile (as a positive number)
+      double no3_uptake;
+#if ($simulation.management.plantingCropName() == "maize")
+      double[] no3_uptake_array;
+      MyPaddock.Get("no3_uptake", out no3_uptake_array);
+      no3_uptake = -MathUtility.Sum(no3_uptake_array);  //change from negative number to positive
+#elseif ($simulation.management.plantingCropName() == "sorghum")
+      MyPaddock.Get("n_total_uptake", out no3_uptake);
+#else
+      double[] no3_uptake_array;
+      MyPaddock.Get("no3_uptake", out no3_uptake_array);
+      no3_uptake = -MathUtility.Sum(no3_uptake_array);  //change from negative number to positive
+#end
+   
       LAIMax = Math.Max(LAIMax, LAI);
       InCropRain = InCropRain + Rain;
       SumEP = SumEP + ep;
-      SumNO3Uptake = SumNO3Uptake + -MathUtility.Sum(no3_uptake);  //change from negative number to positive
+      SumNO3Uptake = SumNO3Uptake + no3_uptake;
       SumLeachNO3 = SumLeachNO3 + flow_no3[flow_no3.Length - 1];
    }
    

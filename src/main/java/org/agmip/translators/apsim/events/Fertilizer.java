@@ -44,13 +44,13 @@ public class Fertilizer extends Event {
     @Override
     public void initialise() {
         if ("?".equals(getDate()))
-            log += "  * Operation fertiliser ERROR: Date missing. '?' has been inserted\r\n";
+            log += "  * Operation fertiliser ERROR: Date missing (date).\r\n";
         
         if (depth == Util.missingValue)
-        	log += "  * Operation " + getDate() + " ERROR: Fertiliser depth missing.\r\n";
+        	log += "  * Operation " + getDate() + " ERROR: Fertiliser depth missing (fedep).\r\n";
         
         if (nitrogen == Util.missingValue)
-            log += "  * Operation " + getDate() + " ERROR: Fertiliser nitrogen amount missing.\r\n";
+            log += "  * Operation " + getDate() + " ERROR: Fertiliser nitrogen amount missing (feamn).\r\n";
     }
 	
 	

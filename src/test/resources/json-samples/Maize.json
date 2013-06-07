@@ -16,10 +16,8 @@
 			"slic": "0.396",
 			"slll": "0.12",
 			"apsim_airdry": "0.08",
-			"sldr": "0.3",
 			"apsim_kl": "0.08",
-			"apsim_fbiom": "0.04",
-			"apsim_finert": "0.39"
+			"slacc": "0.04"
 		},
 		{
 			"sldul": "0.44",
@@ -37,10 +35,8 @@
 			"slic": "0.000",
 			"slll": "0.31",
 			"apsim_airdry": "0.20",
-			"sldr": "0.3",
 			"apsim_kl": "0.06",
-			"apsim_fbiom": "0.02",
-			"apsim_finert": "0.47"
+			"slacc": "0.02"
 		},
 		{
 			"sldul": "0.45",
@@ -58,10 +54,8 @@
 			"slic": "0.000",
 			"slll": "0.33",
 			"apsim_airdry": "0.21",
-			"sldr": "0.3",
 			"apsim_kl": "0.05",
-			"apsim_fbiom": "0.015",
-			"apsim_finert": "0.52"
+			"slacc": "0.015"
 		},
 		{
 			"sldul": "0.43",
@@ -79,16 +73,14 @@
 			"slic": "0.000",
 			"slll": "0.3",
 			"apsim_airdry": "0.22",
-			"sldr": "0.3",
 			"apsim_kl": "0.04",
-			"apsim_fbiom": "0.01",
-			"apsim_finert": "0.62"
+			"slacc": "0.01"
 		}],
 		"slpf": "0.93",
 		"slro": "60",
 		"salb": "0.10",
-		"SLU1": "6.0",
-		"SLRO": "82.0",
+		"slu1": "6.0",
+		"slro": "82.0",
 		"apsim_diffusConst": "250",
 		"apsim_diffusSlope": "22",
 		"sl_source": "MSUWUR",
@@ -101,8 +93,6 @@
 		"sc_year": "1981",
 		"fek_tot": "119",
 		"exp_dur": "30",
-		"apsim_startDate": "19810318",
-		"apsim_endDate": "19820318",
 		"initial_conditions": {
 			"icpcr": "MAZ",
 			"soilLayer": [{
@@ -142,6 +132,7 @@
 			"bwah": "264"
 		},
 		"sdat": "19810216",
+		"endat": "19820318",
 		"fen_tot": "110",
 		"fep_tot": "39",
 		"field_overlay": "MACHAKOS-1--1--FIELD",
@@ -156,7 +147,7 @@
 				"cul_id": "GH0010",
 				"date": "19810318",
 				"plrs": "75",
-				"pldp": "5",
+				"pldp": "50",
 				"cul_name": "OBATAMPA"
 			},
 			{
