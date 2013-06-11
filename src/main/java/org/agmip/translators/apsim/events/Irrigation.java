@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.events;
 
+import org.agmip.translators.apsim.core.Management;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -19,6 +20,9 @@ public class Irrigation extends Event {
     @JsonProperty("irval")
     private double amount = Util.missingValue;
 
+    @JsonProperty("abund")
+    private double bundHeight = Util.missingValue;
+    
     //@JsonProperty("ireff")
     //private String efficiency = "?";
 
@@ -31,12 +35,15 @@ public class Irrigation extends Event {
     
     
     @Override
-    public void initialise() {
+    public void initialise(Management management) {
         if ("?".equals(getDate()))
             log += "  * Operation irrigation ERROR: Date missing (date).\r\n";
         
         if (amount == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing (irval).\r\n";
+        
+        if (bundHeight != Util.missingValue)
+        	management.setBundHeight(bundHeight);
     }
 
 }

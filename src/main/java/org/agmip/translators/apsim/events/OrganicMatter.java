@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.events;
 
+import org.agmip.translators.apsim.core.Management;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -68,7 +69,7 @@ public class OrganicMatter extends Event {
     }
 
     @Override
-    public void initialise() {
+    public void initialise(Management management) {
         if ("?".equals(getDate()))
             log += "  * Operation fertiliser ERROR: Date missing. '?' has been inserted\r\n";
         

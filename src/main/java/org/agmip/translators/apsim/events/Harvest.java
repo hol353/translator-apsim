@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.events;
 
+import org.agmip.translators.apsim.core.Management;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
@@ -21,7 +22,7 @@ public class Harvest extends Event {
     
     // initialise this instance.
     @Override
-    public void initialise() {
+    public void initialise(Management management) {
     }
 
 

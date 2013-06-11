@@ -184,7 +184,7 @@
 	}],
 	"experiments": [{
 		"fl_lat": "10.8372",
-		"exname": "RICE0002_1",
+		"exname": "RICETransplant",
 		"initial_conditions": {
 			"icpcr": "RIC",
 			"soilLayer": [{
@@ -245,6 +245,519 @@
 				"apsim_cul_id": "IR58",
 				"plpop": "50",
 				"plma": "T",
+				"plph": "3",
+				"pldp": "25",
+				"cul_name": "CORH2"
+			},
+			{
+				"event": "irrigation",
+				"irval": "15",
+				"irop": "IR010",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irval": "100",
+				"irop": "IR009",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irval": "2",
+				"irop": "IR008",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irop": "IR006",
+				"irval": "30",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080818"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080822"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080825"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080829"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080902"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080907"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080912"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080916"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080921"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080926"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080930"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081005"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081009"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081015"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081020"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081025"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081029"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081103"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081107"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081112"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20080816"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20080909"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20080919"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20081019"
+			},
+			{
+				"omc2n": "30",
+				"omamt": "3500",
+				"omcd": "RE005",
+				"ominp": "100",
+				"omdep": "15",
+				"event": "organic_matter",
+				"date": "20080808",
+				"omn%": "1.33"
+			}]
+		},
+		"soil_id": "CMMZ710001"
+	},
+	{
+		"fl_lat": "10.8372",
+		"exname": "RICETransplantWithBundHeight",
+		"initial_conditions": {
+			"icpcr": "RIC",
+			"soilLayer": [{
+				"ich2o": "0.22",
+				"icno3": "0.78",
+				"icbl": "10",
+				"icn_tot": "1.14",
+				"icnh4": "0.09"
+			},
+			{
+				"ich2o": "0.22",
+				"icno3": "0.78",
+				"icbl": "22",
+				"icn_tot": "1.37",
+				"icnh4": "0.09"
+			},
+			{
+				"ich2o": "0.245",
+				"icno3": "0.78",
+				"icbl": "52",
+				"icn_tot": "3.72",
+				"icnh4": "0.09"
+			},
+			{
+				"ich2o": "0.23",
+				"icno3": "0.78",
+				"icbl": "82",
+				"icn_tot": "3.77",
+				"icnh4": "0.09"
+			}],
+			"icrag": "250",
+			"icrn": "0.8",
+			"icdat": "20080805"
+		},
+		"fl_long": "78.9969",
+		"wst_id": "ADTH",
+		"seasonal_strategy": "RICE-1----BASELINE",
+		"endat": "20081213",
+		"observed": {
+			"hwah": "2157",
+			"hdate": "20081123"
+		},
+		"field_dome_applied": "Y",
+		"sdat": "20080805",
+		"om_tot": "3500",
+		"fen_tot": "86",
+		"field_overlay": "RICE-1----all|RICE-1----SOIL1",
+		"dome_applied": "Y",
+		"management": {
+			"events": [{
+				"crid": "RIC",
+				"date": "20080815",
+				"plrs": "20",
+				"plenv": "25",
+				"page": "21",
+				"event": "planting",
+				"dssat_cul_id": "990002",
+				"apsim_cul_id": "IR58",
+				"plpop": "50",
+				"plma": "T",
+				"plph": "3",
+				"pldp": "25",
+				"cul_name": "CORH2"
+			},
+			{
+				"event": "irrigation",
+				"irval": "15",
+				"irop": "IR010",
+				"date": "20080815",
+				"abund": "150"
+			},
+			{
+				"event": "irrigation",
+				"irval": "100",
+				"irop": "IR009",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irval": "2",
+				"irop": "IR008",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irop": "IR006",
+				"irval": "30",
+				"date": "20080815"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080818"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080822"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080825"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080829"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080902"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080907"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080912"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080916"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080921"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080926"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20080930"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081005"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081009"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081015"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081020"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081025"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081029"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081103"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081107"
+			},
+			{
+				"event": "irrigation",
+				"irval": "50",
+				"irop": "IR006",
+				"date": "20081112"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20080816"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20080909"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20080919"
+			},
+			{
+				"event": "fertilizer",
+				"feamn": "22",
+				"fedep": "3",
+				"fecd": "FE005",
+				"feacd": "AP002",
+				"date": "20081019"
+			},
+			{
+				"omc2n": "30",
+				"omamt": "3500",
+				"omcd": "RE005",
+				"ominp": "100",
+				"omdep": "15",
+				"event": "organic_matter",
+				"date": "20080808",
+				"omn%": "1.33"
+			}]
+		},
+		"soil_id": "CMMZ710001"
+	},
+	{
+		"fl_lat": "10.8372",
+		"exname": "RICEDirectSeed",
+		"initial_conditions": {
+			"icpcr": "RIC",
+			"soilLayer": [{
+				"ich2o": "0.22",
+				"icno3": "0.78",
+				"icbl": "10",
+				"icn_tot": "1.14",
+				"icnh4": "0.09"
+			},
+			{
+				"ich2o": "0.22",
+				"icno3": "0.78",
+				"icbl": "22",
+				"icn_tot": "1.37",
+				"icnh4": "0.09"
+			},
+			{
+				"ich2o": "0.245",
+				"icno3": "0.78",
+				"icbl": "52",
+				"icn_tot": "3.72",
+				"icnh4": "0.09"
+			},
+			{
+				"ich2o": "0.23",
+				"icno3": "0.78",
+				"icbl": "82",
+				"icn_tot": "3.77",
+				"icnh4": "0.09"
+			}],
+			"icrag": "250",
+			"icrn": "0.8",
+			"icdat": "20080805"
+		},
+		"fl_long": "78.9969",
+		"wst_id": "ADTH",
+		"seasonal_strategy": "RICE-1----BASELINE",
+		"endat": "20081213",
+		"observed": {
+			"hwah": "2157",
+			"hdate": "20081123"
+		},
+		"field_dome_applied": "Y",
+		"sdat": "20080805",
+		"om_tot": "3500",
+		"fen_tot": "86",
+		"field_overlay": "RICE-1----all|RICE-1----SOIL1",
+		"dome_applied": "Y",
+		"management": {
+			"events": [{
+				"crid": "RIC",
+				"date": "20080815",
+				"plrs": "20",
+				"plenv": "25",
+				"page": "21",
+				"event": "planting",
+				"dssat_cul_id": "990002",
+				"apsim_cul_id": "IR58",
+				"plpop": "50",
+				"plma": "S",
 				"plph": "3",
 				"pldp": "25",
 				"cul_name": "CORH2"
