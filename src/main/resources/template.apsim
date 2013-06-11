@@ -133,8 +133,10 @@ $simulation.log
 		<summaryfile />
 		<area name="paddock">
 			<soil name="Soil" shortcut="/simulations/Soils/$simulation.soil.id">
-                <Water shortcut="/simulations/Soils/$simulation.soil.id/Water" />
-                <SoilWater shortcut="/simulations/Soils/$simulation.soil.id/SoilWater" />
+                <Water shortcut="/simulations/Soils/$simulation.soil.id/Water">
+                    <SoilCrop name="$simulation.management.plantingCropName()" shortcut="/simulations/Soils/$simulation.soil.id/Water/$simulation.management.plantingCropName()" />
+                </Water>
+                <SoilWat shortcut="/simulations/Soils/$simulation.soil.id/SoilWat" />
                 <SoilOrganicMatter shortcut="/simulations/Soils/$simulation.soil.id/SoilOrganicMatter" />
                 <Analysis shortcut="/simulations/Soils/$simulation.soil.id/Analysis" />
 				<Sample name="Initial nitrogen">
@@ -180,7 +182,10 @@ $simulation.log
             <ini>
                <filename>${simulation.management.plantingCropName()}.xml</filename>
             </ini>
-         </$simulation.management.plantingCropName()>
+            </$simulation.management.plantingCropName()>
+#if ($simulation.management.plantingCropName() == "millet")
+            <canopy name="Canopy"><intercrop type="text" description="Enter crop names to intercrop">millet millet1 millet2 millet3 millet4 millet5</intercrop></canopy>
+#end         
 			<folder name="Manager folder">
 				<operations name="Operations">
 #foreach ($event in $simulation.management.events)        
@@ -195,6 +200,8 @@ $simulation.log
 #if ($simulation.management.plantingCropName() == "sugar")
                 <manager name="SUGAR management">
                     <ui>
+                        <category type="category" description="Sugar plant crop management parameters" />
+                        <plantlen type="text" description="Duration of a plant crop (days) (30 days/month * 15 months) : ">450</plantlen>
                         <category description="Ratoon management parameters" type="category" />
                         <NoRatoons type="text" description="Number of ratoons (max = 5): ">4</NoRatoons>
                         <ratoonlen type="text" description="Duration of a ratoon crop (days) (30 days/month * 13 months) : ">390</ratoonlen>
@@ -213,6 +220,7 @@ $simulation.log
                        if (sugar.DaysAfterSowing = [plantlen] and ratoon_no = 0) or
                           (sugar.DaysAfterSowing = [ratoonlen] and ratoon_no > 0) then
 
+                          acmo do_output
                           sugar harvest
 
                           if (ratoon_no = [NoRatoons] + 1) then
@@ -229,6 +237,7 @@ $simulation.log
                        endif
 
                     elseif (sugar.crop_status = 'dead') then
+                       acmo do_output
                        sugar harvest
                        sugar end_crop
 
@@ -244,6 +253,53 @@ $simulation.log
                     <event>init</event>
                     </script>
                 </manager>
+#elseif ($simulation.management.plantingCropName() == "millet")
+                <manager name="Harvesting rule">
+                    <ui>
+                        <category type="category" description="Harvesting criteria" />
+                        <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop>
+                    </ui>
+                    <script><text>if [crop].StageName = 'harvest_ripe'  or [crop].plant_status = 'dead' then
+   acmo do_output
+   [crop] harvest
+   [crop]1 harvest
+   [crop]2 harvest
+   [crop]3 harvest
+   [crop]4 harvest
+   [crop]5 harvest
+   [crop] end_crop
+   [crop]1 end_crop
+   [crop]2 end_crop
+   [crop]3 end_crop
+   [crop]4 end_crop
+   [crop]5 end_crop
+endif
+</text><event>end_of_day</event></script>
+                </manager>
+#elseif ($simulation.management.plantingCropName() == "rice")
+                <manager name="Harvesting rule">
+                    <ui>
+                        <category type="category" description="Harvesting criteria" />
+                        <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop>
+                    </ui>
+                    <script><text>if [crop].plant_status = 'dead' then
+   acmo do_output
+   [crop] end_crop
+endif
+</text><event>end_of_day</event></script>
+                </manager>
+#elseif ($simulation.management.plantingCropName() == "cotton")
+                <manager name="Harvesting rule">
+                    <ui>
+                        <category type="category" description="Harvesting criteria" />
+                        <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop>
+                    </ui>
+                    <script><text>if (ozcot_status > 0) then
+     acmo do_output
+     $simulation.management.plantingCropName() harvest
+   endif
+</text><event>end_of_day</event></script>
+                </manager>
 #else        
                 <manager name="Harvesting rule">
                     <ui>
@@ -251,6 +307,7 @@ $simulation.log
                         <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop>
                     </ui>
                     <script><text>if [crop].StageName = 'harvest_ripe'  or [crop].plant_status = 'dead' then
+   acmo do_output
    [crop] harvest
    [crop] end_crop
 endif
@@ -263,10 +320,22 @@ endif
 				<title>AgMIP</title>
 				<variables name="Variables">
 					<variable name="dd/mm/yyyy as Date"></variable>
+#if ($simulation.management.plantingCropName() == "rice")
+					<variable name="wagt as biomass"></variable>
+					<variable name="wrr as yield"></variable>
+					<variable name="esw"></variable>
+					<variable name="rlai as lai"></variable>
+#elseif ($simulation.management.plantingCropName() == "cotton")
+					<variable name="dm"></variable>
+					<variable name="yield"></variable>
+					<variable name="esw"></variable>
+					<variable name="lai"></variable>
+#else
 					<variable name="biomass"></variable>
 					<variable name="yield"></variable>
 					<variable name="esw"></variable>
-					<variable name="lai"></variable>		  
+					<variable name="lai"></variable>
+#end                    
 				</variables>
 				<events name="Reporting Frequency">
 					<event name="daily"></event>
@@ -290,8 +359,19 @@ endif
             <filename output="yes">MACH0001_1__1 ACMO.out</filename>
             <title>MACH0001_1__1 ACMO</title>
             <variables name="Variables">
+#if ($simulation.management.plantingCropName() == "millet")
+               <variable name="TotalYield as yield" />
+               <variable name="TotalBiomass as biomass" />
+#elseif ($simulation.management.plantingCropName() == "rice")
+               <variable name="wrr as yield" />
+               <variable name="wagt as biomass" />
+#elseif ($simulation.management.plantingCropName() == "cotton")
+               <variable name="yield" />
+               <variable name="dm as biomass" />
+#else               
                <variable name="yield" />
                <variable name="biomass" />
+#end               
                <variable name="AnthesisDate format yyyy-mm-dd" />
                <variable name="MaturityDate format yyyy-mm-dd" />
                <variable name="Today as HarvestDate format yyyy-mm-dd" />
@@ -305,7 +385,6 @@ endif
                </constants>
             </variables>
             <events name="Reporting Frequency">
-               <event name="harvesting" />
             </events>
          </outputfile>
          <manager2 name="ACMOVariables">
@@ -319,16 +398,65 @@ public class Script
    [Link] Paddock MyPaddock; 
    [Input] DateTime Today;
    
+#if ($simulation.management.plantingCropName() == "millet")
+   [Link(NamePath = "millet")] Millet Millet;
+   [Link(NamePath = "millet1")] Millet Millet1;
+   [Link(NamePath = "millet2")] Millet Millet2;
+   [Link(NamePath = "millet3")] Millet Millet3;
+   [Link(NamePath = "millet4")] Millet Millet4;
+   [Link(NamePath = "millet5")] Millet Millet5;
+   [Units("kg/ha")]
+   [Output] double TotalYield 
+   { 
+      get 
+      { 
+         double TotYield = 0;
+         double Yield = 0;
+         if (Millet.Get("yield", out Yield)) TotYield = TotYield + Yield;
+         if (Millet1.Get("yield", out Yield)) TotYield = TotYield + Yield;
+         if (Millet2.Get("yield", out Yield)) TotYield = TotYield + Yield;
+         if (Millet3.Get("yield", out Yield)) TotYield = TotYield + Yield;
+         if (Millet4.Get("yield", out Yield)) TotYield = TotYield + Yield;
+         if (Millet5.Get("yield", out Yield)) TotYield = TotYield + Yield;
+         return TotYield;
+      }
+   }
+   [Units("kg/ha")]
+   [Output] double TotalBiomass 
+   { 
+      get 
+      { 
+         double TotBiomass = 0;
+         double Biomass = 0;
+         if (Millet.Get( "biomass", out Biomass)) TotBiomass = TotBiomass + Biomass;
+         if (Millet1.Get("biomass", out Biomass)) TotBiomass = TotBiomass + Biomass;
+         if (Millet2.Get("biomass", out Biomass)) TotBiomass = TotBiomass + Biomass;
+         if (Millet3.Get("biomass", out Biomass)) TotBiomass = TotBiomass + Biomass;
+         if (Millet4.Get("biomass", out Biomass)) TotBiomass = TotBiomass + Biomass;
+         if (Millet5.Get("biomass", out Biomass)) TotBiomass = TotBiomass + Biomass;
+         return TotBiomass;
+      }
+   }
+#elseif ($simulation.management.plantingCropName() == "rice")
+   [Input] double rlai;
+   [Input] double trw;
+#else   
    [Input] double LAI;
-   [Input] double Rain;
    [Input] double ep;
+#end
+   [Input] double Rain;
    [Input] double[] flow_no3;
    [Output] DateTime AnthesisDate;
    [Output] DateTime MaturityDate;
+   [Units("m2/m2")]
    [Output] double LAIMax = 0;
+   [Units("mm")]
    [Output] double InCropRain = 0;
+   [Units("mm")]
    [Output] double SumEP = 0;
+   [Units("kg/ha")]
    [Output] double SumNO3Uptake = 0;
+   [Units("kg/ha")]
    [Output] double SumLeachNO3 = 0;
    
    // The following event handler will be called each time a crop is sown.
@@ -344,30 +472,86 @@ public class Script
    // The following event handler will be called each day at the beginning of the day
    [EventHandler] public void OnPost()
    {
+#if ($simulation.management.plantingCropName() == "millet")
       // Work out flowering and maturity dates.
+      string StageName;
+      Millet.Get("StageName", out StageName);
+      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
+      if (StageName.ToLower() == "maturity") MaturityDate = Today;      
+      
+      double LAI, LAI1, LAI2, LAI3, LAI4, LAI5;
+      double EP, EP1, EP2, EP3, EP4, EP5;
+      double NO3Uptake, NO3Uptake1, NO3Uptake2, NO3Uptake3, NO3Uptake4, NO3Uptake5;
+      
+      Millet.Get("n_uptake", out NO3Uptake);
+      Millet1.Get("n_uptake", out NO3Uptake1);
+      Millet2.Get("n_uptake", out NO3Uptake2);
+      Millet3.Get("n_uptake", out NO3Uptake3);
+      Millet4.Get("n_uptake", out NO3Uptake4);
+      Millet5.Get("n_uptake", out NO3Uptake5);
+      SumNO3Uptake = NO3Uptake + NO3Uptake1 + NO3Uptake2 + NO3Uptake3 + NO3Uptake4 + NO3Uptake5;
+      SumNO3Uptake = SumNO3Uptake * 10;  // g/m2 to kg/ha
+      
+      Millet.Get("lai", out LAI);
+      Millet1.Get("lai", out LAI1);
+      Millet2.Get("lai", out LAI2);
+      Millet3.Get("lai", out LAI3);
+      Millet4.Get("lai", out LAI4);
+      Millet5.Get("lai", out LAI5);
+      LAIMax = Math.Max(LAIMax, LAI);
+      LAIMax = Math.Max(LAIMax, LAI1);
+      LAIMax = Math.Max(LAIMax, LAI2);
+      LAIMax = Math.Max(LAIMax, LAI3);
+      LAIMax = Math.Max(LAIMax, LAI4);
+      LAIMax = Math.Max(LAIMax, LAI5);
+      
+      Millet.Get("ep", out EP);
+      Millet1.Get("ep", out EP1);
+      Millet2.Get("ep", out EP2);
+      Millet3.Get("ep", out EP3);
+      Millet4.Get("ep", out EP4);
+      Millet5.Get("ep", out EP5);
+      SumEP = SumEP + EP + EP1 + EP2 + EP3 + EP4 + EP5;
+#elseif ($simulation.management.plantingCropName() == "rice")
+      // Work out flowering and maturity dates.
+      string StageName;
+      MyPaddock.Get("plant_status", out StageName);
+      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
+      if (StageName.ToLower() == "maturity") MaturityDate = Today;      
+      
+      MyPaddock.Get("nacr", out SumNO3Uptake);
+      LAIMax = Math.Max(LAIMax, rlai);
+      SumEP = SumEP + trw;
+      
+#else
+      // Work out flowering and maturity dates.
+      #if ($simulation.management.plantingCropName() != "cotton")
       string StageName;
       MyPaddock.Get("StageName", out StageName);
       if (StageName.ToLower() == "flowering") AnthesisDate = Today;
       if (StageName.ToLower() == "maturity") MaturityDate = Today;      
+      #end
       
       // Get no3_uptake for whole profile (as a positive number)
-      double no3_uptake;
-#if ($simulation.management.plantingCropName() == "maize")
+      double no3_uptake = 0;
+      #if ($simulation.management.plantingCropName() == "maize")
       double[] no3_uptake_array;
       MyPaddock.Get("no3_uptake", out no3_uptake_array);
       no3_uptake = -MathUtility.Sum(no3_uptake_array);  //change from negative number to positive
-#elseif ($simulation.management.plantingCropName() == "sorghum")
+      #elseif ($simulation.management.plantingCropName() == "sorghum")
       MyPaddock.Get("n_total_uptake", out no3_uptake);
-#else
+      #elseif ($simulation.management.plantingCropName() == "cotton")
+      MyPaddock.Get("nuptake", out SumNO3Uptake);
+      #else
       double[] no3_uptake_array;
       MyPaddock.Get("no3_uptake", out no3_uptake_array);
       no3_uptake = -MathUtility.Sum(no3_uptake_array);  //change from negative number to positive
-#end
-   
+      #end      
       LAIMax = Math.Max(LAIMax, LAI);
-      InCropRain = InCropRain + Rain;
       SumEP = SumEP + ep;
       SumNO3Uptake = SumNO3Uptake + no3_uptake;
+#end
+      InCropRain = InCropRain + Rain;
       SumLeachNO3 = SumLeachNO3 + flow_no3[flow_no3.Length - 1];
    }
    

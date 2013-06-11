@@ -91,10 +91,14 @@ public class Simulation {
     
     // return a unique simulation name.
     public String getUniqueName() {
+    	String Name;
         if ("".equals(treatmentName))
-            return experimentName;
+            Name = experimentName;
         else
-            return experimentName + "-" + treatmentName;
+            Name = experimentName + "-" + treatmentName;
+        Name = Name.replace("/", "_");
+        Name = Name.replace("\\", "_");
+        return Name;
     }
     
     // latitude

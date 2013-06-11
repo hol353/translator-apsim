@@ -29,6 +29,11 @@ public class Planting extends Event{
     private double depth = Util.missingValue;
     public double depth() { return depth; }
     
+    // plants per hill
+    @JsonProperty("plph")
+    private double plantsPerHill = Util.missingValue;
+    public double plantsPerHill() { return plantsPerHill; }
+    
     // row spacing. units=cm
     @JsonProperty("plrs")
     double rowSpacing;
@@ -55,8 +60,10 @@ public class Planting extends Event{
     	actionLine = actionLine.replace("$population", String.valueOf(population)); 
     	actionLine = actionLine.replace("$depth", String.valueOf(depth));
     	actionLine = actionLine.replace("$cultivar",cultivar);
+    	actionLine = actionLine.replace("$row_spacing_m", String.valueOf(rowSpacingAsMM()/1000.0));
     	actionLine = actionLine.replace("$row_spacing", String.valueOf(rowSpacingAsMM()));
     	actionLine = actionLine.replace("$ftn", String.valueOf(ftn));
+    	actionLine = actionLine.replace("$plantsPerHill", String.valueOf(plantsPerHill));
     	return actionLine;
     }
 
@@ -79,6 +86,11 @@ public class Planting extends Event{
 
         if (getCropName() == "sorghum" && ftn == Util.missingValue)
         	log += "  * Operation " + getDate() + " ERROR: Planting fertile tiller number not specified for sorghum (apsim_ftn): r\n";
+        
+        if (getCropName().equals("rice")) {
+        	if (plantsPerHill == Util.missingValue)
+        		log += "  * Operation " + getDate() + " ERROR: Rice planting variable 'plants per hill (plph) missing: r\n";
+        }
     }
     
     // Return a specific crop sow line.    
@@ -89,6 +101,12 @@ public class Planting extends Event{
     		return "$cropName sow plants = $population, sowing_depth = $depth (mm), cultivar = $cultivar, row_spacing = $row_spacing (mm), skip = solid, tiller_no_fertile = $ftn";
     	else if (cropName.equals("sugar"))
     		return "$cropName sow plants = $population, cultivar = $cultivar, sowing_depth = $depth";
+    	else if (cropName.equals("millet"))
+    		return "$cropName sow plants = $population, sowing_depth = $depth (mm), cultivar = $cultivar, row_spacing = $row_spacing_m (m)";
+    	else if (cropName.equals("rice"))
+    		return "$cropName sow nplh  = $plantsPerHill, cultivar = $cultivar, establishment = transplant, sbdur = 22, nplh = 4 , nh = 28, nplsb = 112";
+    	else if (cropName.equals("cotton"))
+    		return "$cropName sow plants_pm = $population, cultivar = $cultivar, sowing_depth = $depth (mm), row_spacing = $row_spacing (mm), skiprow = 1";
     	else
     		// Plant based crops
     		return "$cropName sow plants = $population, sowing_depth = $depth (mm), cultivar = $cultivar, row_spacing = $row_spacing (mm), crop_class = plant";

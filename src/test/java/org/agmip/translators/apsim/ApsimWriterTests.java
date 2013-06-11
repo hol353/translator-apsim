@@ -87,6 +87,54 @@ public class ApsimWriterTests extends TestCase{
         
         assertEquals(files.size(), 3);
         assertEquals(files.get(0), "Sorghum.apsim");
+    }    
+    
+    @Test
+    public void testWriteSugarComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/Sugar.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("Sugar.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0), "Sugar.apsim");
+    }    
+    
+    @Test
+    public void testWriteMilletComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/Millet.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("Millet.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0), "Millet.apsim");
+    }    
+    
+    @Test
+    public void testWriteRiceComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/RicePaddySample.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("RicePaddySample.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0), "RicePaddySample.apsim");
+    }      
+    
+    @Test
+    public void testWriteCottonComplete() throws Exception {
+    	ACE ace = fileResourceToACE("/json-samples/Cotton.json");
+
+        ArrayList<String> files = new ArrayList<String>();
+        ApsimWriter.generateAPSIMFile("Cotton.apsim", outputPath, ace, files);
+        ApsimWriter.generateMetFiles(outputPath, ace, files);
+        
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0), "Cotton.apsim");
     }     
     
 }
