@@ -1,5 +1,8 @@
 package org.agmip.translators.apsim.events;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.agmip.ace.LookupCodes;
 import org.agmip.translators.apsim.core.Management;
 import org.agmip.translators.apsim.util.Util;
@@ -22,7 +25,7 @@ public class Planting extends Event{
     private String cultivar = "?";
 
     // cultivar
-    @JsonProperty("apsim_ftn")
+    @JsonProperty("plftn")
     private double ftn = Util.missingValue;
     
     // planting depth. units=mm
@@ -37,8 +40,8 @@ public class Planting extends Event{
 
     // plants per hill
     @JsonProperty("page")
-    private double ageOfTransplant = Util.missingValue;
-    public double ageOfTransplant() { return ageOfTransplant; }
+    private int ageOfTransplant = Integer.MAX_VALUE;
+    public int ageOfTransplant() { return ageOfTransplant; }
     
     // row spacing. units=cm
     @JsonProperty("plrs")
@@ -117,14 +120,22 @@ public class Planting extends Event{
         if (rowSpacing == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Planting row spacing missing (plrs).\r\n";
 
-        if (getCropName() == "sorghum" && ftn == Util.missingValue)
-        	log += "  * Operation " + getDate() + " ERROR: Planting fertile tiller number not specified for sorghum (apsim_ftn). r\n";
+        if (getCropName().equals("sorghum") && ftn == Util.missingValue)
+        	log += "  * Operation " + getDate() + " ERROR: Planting fertile tiller number not specified for sorghum (plftn). \r\n";
         
         if (getCropName().equals("rice") && plantMaterial.equals("T")) {
         	if (plantsPerHill == Util.missingValue)
-        		log += "  * Operation " + getDate() + " ERROR: Rice planting variable 'plants per hill (plph) missing. r\n";
-        	if (ageOfTransplant == Util.missingValue)
-        		log += "  * Operation " + getDate() + " ERROR: Rice planting variable 'age of transplant (page) missing. r\n";
+        		log += "  * Operation " + getDate() + " ERROR: Rice planting variable 'plants per hill (plph) missing. \r\n";
+        	if (ageOfTransplant == Integer.MAX_VALUE)
+        		log += "  * Operation " + getDate() + " ERROR: Rice planting variable 'age of transplant (page) missing. \r\n";
+        	else {
+        		Calendar c = Calendar.getInstance(); 
+        		c.setTime(getEventDate()); 
+        		c.add(Calendar.DATE, -ageOfTransplant);
+        		setDate(Util.apsim.format(c.getTime()));
+        		
+        	}
+        		
         }
     }
     
