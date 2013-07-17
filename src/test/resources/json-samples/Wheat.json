@@ -81,8 +81,8 @@
 		"salb": "0.10",
 		"slu1": "6.0",
 		"slro": "82.0",
-		"apsim_diffusConst": "250",
-		"apsim_diffusSlope": "22",
+		"diffusconst": "250",
+		"diffusslope": "22",
 		"sl_source": "MSUWUR",
 		"soil_id": "TOA0235063"
 	}],

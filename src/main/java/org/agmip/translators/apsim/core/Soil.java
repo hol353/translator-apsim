@@ -108,7 +108,7 @@ public class Soil {
 	}    
 
     // diffusConst
-    @JsonProperty("apsim_diffusConst")
+    @JsonProperty("diffusconst")
     public double diffusConst = Util.missingValue;
     public double getDiffusConst() { return diffusConst; }
     public void setDiffusConst(double diffusConst) {
@@ -116,7 +116,7 @@ public class Soil {
 	}
 
     // diffusSlope
-    @JsonProperty("apsim_diffusSlope")
+    @JsonProperty("diffusslope")
     public double diffusSlope = Util.missingValue;
     public double getDiffusSlope() { return diffusSlope; }
     public void setDiffusSlope(double diffusSlope) {
@@ -181,10 +181,10 @@ public class Soil {
             log += "  * Soil ERROR: Missing CN2Bare (slro).\r\n";
                
         if (diffusConst == Util.missingValue)
-            log += "  * Soil ERROR: Missing diffusConst (apsim_diffusConst).\r\n";        
+            log += "  * Soil ERROR: Missing diffusConst (diffusConst).\r\n";        
 
         if (diffusSlope == Util.missingValue)
-            log += "  * Soil ERROR: Missing diffusSlope (apsim_diffusSlope).\r\n";        
+            log += "  * Soil ERROR: Missing diffusSlope (diffusSlope).\r\n";        
 
         if (swcon == Util.missingValue)
             log += "  * Soil ERROR: Missing SWCON (sldr).\r\n";

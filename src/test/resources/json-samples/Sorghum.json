@@ -79,8 +79,8 @@
 		"slro": "81",
 		"salb": "0.13",
 		"slu1": "6.0",
-		"apsim_diffusConst": "250",
-		"apsim_diffusSlope": "22",
+		"diffusconst": "250",
+		"diffusslope": "22",
 		"sl_source": "TZCROP",
 		"soil_id": "WML1201301"
 	},
@@ -145,8 +145,8 @@
 		"slro": "81",
 		"salb": "0.13",
 		"slu1": "6.0",
-		"apsim_diffusConst": "250",
-		"apsim_diffusSlope": "22",
+		"diffusconst": "250",
+		"diffusslope": "22",
 		"sl_source": "TZCROP",
 		"soil_id": "WML1201302"
 	}],

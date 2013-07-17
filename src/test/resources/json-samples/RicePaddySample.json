@@ -78,8 +78,8 @@
 		"slro": "76",
 		"salb": "0.14",
 		"slu1": "6.0",
-		"apsim_diffusConst": "250",
-		"apsim_diffusSlope": "22",
+		"diffusconst": "250",
+		"diffusslope": "22",
 		"sl_source": "TNAU",
 		"soil_id": "CMMZ710001"
 	},

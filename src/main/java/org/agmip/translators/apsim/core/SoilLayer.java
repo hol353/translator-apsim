@@ -36,7 +36,7 @@ public class SoilLayer {
 		this.bulkDensity = bulkDensity;
 	}
 	
-    @JsonProperty("apsim_airdry")
+    @JsonProperty("sladr")
     private double airDry = Util.missingValue;
     public double getAirDry() { return airDry; }
     

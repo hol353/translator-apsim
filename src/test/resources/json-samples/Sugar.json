@@ -79,8 +79,8 @@
 		"sl_loc_3": "EREC",
 		"soil_long": "80.600",
 		"soil_lat": "26.600",
-		"apsim_diffusConst": "250",
-		"apsim_diffusSlope": "22",
+		"diffusconst": "250",
+		"diffusslope": "22",
 		"soil_id": "UFBG760001"
 	}],
 	"experiments": [{
