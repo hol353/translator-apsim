@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.ACE;
+import org.agmip.translators.apsim.core.Simulation;
 import org.agmip.translators.apsim.core.Weather;
 import org.agmip.translators.apsim.util.Util;
 import org.apache.velocity.VelocityContext;
@@ -36,29 +38,41 @@ public class ApsimWriter implements TranslatorOutput {
         ace.initialise();
         return ace;
     }	
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-    @Override
-	public void writeFile(String filePath, Map input) {
 
-		try {
-			ACE ace = jsonToACE(toJSON(input));
-			File path = new File(filePath);
+    @SuppressWarnings({"rawtypes"})
+    @Override
+    public void writeFile(String filePath, Map input) {
+
+        try {
+            ACE ace = jsonToACE(toJSON(input));
+            File path = new File(filePath);
 
             // Check to see which files should be generated.
-			ArrayList<String> files = new ArrayList<String>();
-            if (! ace.getWeathers().isEmpty())
+            ArrayList<String> files = new ArrayList<String>();
+            if (!ace.getWeathers().isEmpty()) {
                 generateMetFiles(path, ace, files);
-           
-            if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0)
-                generateAPSIMFile("AgMip.apsim", path, ace, files);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            }
 
-	}
+            if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
+                int maxRun = 1500;
+                if (ace.getExperiments().size() <= maxRun) {
+                    generateAPSIMFile("AgMip.apsim", path, ace, files);
+                } else {
+                    List<Simulation> exps = new ArrayList<Simulation>();
+                    exps.addAll(ace.getExperiments());
+                    
+                    for (int i = 0; i * maxRun < exps.size(); i++) {
+                        ace.setExperiments(exps.subList(i * maxRun, Math.min((i + 1) * maxRun, exps.size())));
+                        generateAPSIMFile(String.format("AgMip%02d.apsim", i + 1), path, ace, files);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static void generateMetFiles(File path, ACE ace, ArrayList<String> files) throws Exception {
         path.mkdirs();
