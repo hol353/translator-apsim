@@ -17,7 +17,8 @@
 			"slll": "0.12",
 			"apsim_airdry": "0.08",
 			"apsim_kl": "0.08",
-			"slacc": "0.04"
+			"slacc": "0.04",
+			"sksat": "0.001"
 		},
 		{
 			"sldul": "0.44",
@@ -36,7 +37,8 @@
 			"slll": "0.31",
 			"apsim_airdry": "0.20",
 			"apsim_kl": "0.06",
-			"slacc": "0.02"
+			"slacc": "0.02",
+			"sksat": "0.002"
 		},
 		{
 			"sldul": "0.45",
@@ -55,7 +57,8 @@
 			"slll": "0.33",
 			"apsim_airdry": "0.21",
 			"apsim_kl": "0.05",
-			"slacc": "0.015"
+			"slacc": "0.015",
+			"sksat": "0.003"
 		},
 		{
 			"sldul": "0.43",
@@ -74,7 +77,8 @@
 			"slll": "0.3",
 			"apsim_airdry": "0.22",
 			"apsim_kl": "0.04",
-			"slacc": "0.01"
+			"slacc": "0.01",
+			"sksat": "0.004"
 		}],
 		"slpf": "0.93",
 		"slro": "60",

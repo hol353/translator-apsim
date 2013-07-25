@@ -23,7 +23,9 @@
 #foreach ($layer in $soil.layers)
                 <Layer>
                     <Thickness units="mm">$layer.thickness</Thickness>
-                    <KS units="mm/day" />
+#if ($layer.ksat != -99.999)
+                    <KS units="mm/day">$layer.ksat</KS>
+#end
                     <BD units="g/cc">$layer.bulkDensity</BD>
                     <AirDry units="mm/mm">$layer.airDry</AirDry>
                     <LL15 units="mm/mm">$layer.lowerLimit</LL15>

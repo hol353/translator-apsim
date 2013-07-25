@@ -104,6 +104,16 @@ public class SoilLayer {
     	else
     		return inertC / organicCarbon; 
     	}
+
+    // ks
+    @JsonProperty("sksat")
+    private double ksat = Util.missingValue;
+    public double getKsat() { 
+    	if (ksat == Util.missingValue)
+    		return Util.missingValue;
+    	else
+    		return ksat * 10.0 * 24.0;   // Convert from cm/h to mm/day 
+    	}
     
     @JsonIgnore
     private String log;
