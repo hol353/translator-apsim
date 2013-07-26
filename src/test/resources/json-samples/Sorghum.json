@@ -17,7 +17,7 @@
 			"slic": "0.477",
 			"slll": "0.1376",
 			"slacc": "0.04",
-			"apsim_airdry": "0.08",
+			"sladr": "0.08",
 			"apsim_kl": "0.08"
 		},
 		{
@@ -35,7 +35,7 @@
 			"sloc": "0.3",
 			"slcly": "23.2",
 			"slacc": "0.03",
-			"apsim_airdry": "0.08",
+			"sladr": "0.08",
 			"apsim_kl": "0.07"
 		},
 		{
@@ -53,7 +53,7 @@
 			"sloc": "0",
 			"slcly": "27.2",
 			"slacc": "0.02",
-			"apsim_airdry": "0.08",
+			"sladr": "0.08",
 			"apsim_kl": "0.05"
 		},
 		{
@@ -72,7 +72,7 @@
 			"slic": "0.000",
 			"slll": "0.1817",
 			"slacc": "0.01",
-			"apsim_airdry": "0.08",
+			"sladr": "0.08",
 			"apsim_kl": "0.03"
 		}],
 		"slpf": "0.4",
@@ -102,7 +102,7 @@
 			"slic": "0.405",
 			"slll": "0.1521",
 			"slacc": "0.04",
-			"apsim_airdry": "0.08"
+			"sladr": "0.08"
 		},
 		{
 			"sldul": "0.3153",
@@ -120,7 +120,7 @@
 			"slic": "0.351",
 			"slll": "0.2193",
 			"slacc": "0.02",
-			"apsim_airdry": "0.06",
+			"sladr": "0.06",
 			"apsim_kl": "0.07"
 		},
 		{
@@ -138,7 +138,7 @@
 			"sloc": "0",
 			"slcly": "47.2",
 			"slacc": "0.01",
-			"apsim_airdry": "0.04",
+			"sladr": "0.04",
 			"apsim_kl": "0.05"
 		}],
 		"slpf": "0.4",

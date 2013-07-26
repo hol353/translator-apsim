@@ -15,7 +15,7 @@
 			"slrgf": "0.500",
 			"slic": "0.396",
 			"slll": "0.12",
-			"apsim_airdry": "0.08",
+			"sladr": "0.08",
 			"apsim_kl": "0.08",
 			"slacc": "0.04"
 		},
@@ -34,7 +34,7 @@
 			"slcec": "18.4",
 			"slic": "0.000",
 			"slll": "0.31",
-			"apsim_airdry": "0.20",
+			"sladr": "0.20",
 			"apsim_kl": "0.06",
 			"slacc": "0.02"
 		},
@@ -53,7 +53,7 @@
 			"slcec": "18",
 			"slic": "0.000",
 			"slll": "0.33",
-			"apsim_airdry": "0.21",
+			"sladr": "0.21",
 			"apsim_kl": "0.05",
 			"slacc": "0.015"
 		},
@@ -72,7 +72,7 @@
 			"slcec": "20.8",
 			"slic": "0.000",
 			"slll": "0.3",
-			"apsim_airdry": "0.22",
+			"sladr": "0.22",
 			"apsim_kl": "0.04",
 			"slacc": "0.01"
 		}],

@@ -25,7 +25,7 @@
 			"slpx": "96.0",
 			"slll": "0.200",
 			"slal": "2.30",
-            "apsim_airdry": "0.1",
+            "sladr": "0.1",
             "apsim_kl": "0.06",
             "slacc": "0.04",
             "slic": "0.396"
@@ -54,7 +54,7 @@
 			"slpx": "56.0",
 			"slll": "0.026",
 			"slal": "2.00",
-            "apsim_airdry": "0.01",
+            "sladr": "0.01",
             "apsim_kl": "0.06",
             "slacc": "0.0000",
             "slic": "0.0000"
