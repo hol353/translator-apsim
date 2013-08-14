@@ -83,6 +83,48 @@ public class Soil {
 		this.u = u;
 	}
 
+    // SummerU
+    @JsonProperty("summeru")
+    private double sumU = Util.missingValue;
+    public double getSumU() {
+        if (u == Util.missingValue) {
+            return sumU;
+        } else {
+            return u;
+        }
+    }
+    public void setSumU(double u) {
+            this.sumU = u;
+    }
+
+    // WinterU
+    @JsonProperty("winteru")
+    private double winU = Util.missingValue;
+    public double getWinU() {
+        if (u == Util.missingValue) {
+            return winU;
+        } else {
+            return u;
+        }
+    }
+    public void setWinU(double u) {
+            this.winU = u;
+    }
+
+    // CONA
+    @JsonProperty("cona")
+    private double cona = Util.missingValue;
+    public double getCona() {
+        if (cona == Util.missingValue) {
+            return 3.5;
+        } else {
+            return cona;
+        }
+    }
+    public void setCona(double cona) {
+            this.cona = cona;
+    }
+
     // salb
     @JsonProperty("salb")
     private double salb = Util.missingValue;
@@ -173,7 +215,7 @@ public class Soil {
         
         if (u == Util.missingValue)
             log += "  * Soil ERROR: Missing U (slu1).\r\n";
-
+        
         if (salb == Util.missingValue)
             log += "  * Soil ERROR: Missing SALB (salb).\r\n";
 
