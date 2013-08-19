@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.agmip.core.types.TranslatorOutput;
@@ -17,6 +19,7 @@ import org.agmip.translators.apsim.core.Weather;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.util.Util;
+import org.agmip.util.MapUtil;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,13 +33,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public class ApsimWriter implements TranslatorOutput {
 	static final int BUFFER = 2048;
-//        static final HashMap<String, String> modSpecVars = defMpdSpecVars();
-//        private static HashMap defMpdSpecVars() {
-//            HashMap ret = new HashMap();
+        static final HashMap<String, String> modSpecVars = defMpdSpecVars();
+        private static HashMap defMpdSpecVars() {
+            HashMap ret = new HashMap();
+            ret.put("fl_lat", "soil");
 //            ret.put("apsim_summerdate", "soil");
 //            ret.put("apsim_winterdate", "soil");
-//            return ret;
-//        }
+            return ret;
+        }
 
 	// Convert a JSON string into a collection of simulations
     public static ACE jsonToACE(String json) throws Exception{       
@@ -52,7 +56,7 @@ public class ApsimWriter implements TranslatorOutput {
 	public void writeFile(String filePath, Map input) {
 
 		try {
-//                        fixModuleSpecificData(input);
+                        adjustSpecVarLoc(input);
 			ACE ace = jsonToACE(toJSON(input));
 			File path = new File(filePath);
 
@@ -176,39 +180,39 @@ public class ApsimWriter implements TranslatorOutput {
         }
     }
     
-//    private void fixModuleSpecificData(Map input) {
-//        ArrayList<HashMap> exps = MapUtil.getObjectOr(input, "experiments", new ArrayList<HashMap>());
-//        ArrayList<HashMap> soils = MapUtil.getObjectOr(input, "soils", new ArrayList<HashMap>());
-//        ArrayList<HashMap> wths = MapUtil.getObjectOr(input, "weathers", new ArrayList<HashMap>());
-//        HashSet<String> register = new HashSet();
-//        for (HashMap exp : exps) {
-//            for (String var : modSpecVars.keySet()) {
-//                String path = modSpecVars.get(var);
-//                String val = MapUtil.getValueOr(exp, var, "");
-//                if (!val.equals("")) {
-//                    ArrayList<HashMap> arr;
-//                    String idName;
-//                    String idVal;
-//                    if (path.startsWith("soil")) {
-//                        idName = "soil_id";
-//                        idVal = MapUtil.getValueOr(exp, "soil_id", "");
-//                        arr = soils;
-//                    } else {
-//                        idName = "weather";
-//                        idVal = MapUtil.getValueOr(exp, "wst_id", "");
-//                        arr = wths;
-//                    }
-//                    if (!register.contains(var + "_" + idVal)) {
-//                        for (HashMap data : arr) {
-//                            if (MapUtil.getValueOr(data, idName, "").equals(idVal)) {
-//                                data.put(var, val);
-//                                register.add(var + "_" + idVal);
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private void adjustSpecVarLoc(Map input) {
+        ArrayList<HashMap> exps = MapUtil.getObjectOr(input, "experiments", new ArrayList<HashMap>());
+        ArrayList<HashMap> soils = MapUtil.getObjectOr(input, "soils", new ArrayList<HashMap>());
+        ArrayList<HashMap> wths = MapUtil.getObjectOr(input, "weathers", new ArrayList<HashMap>());
+        HashSet<String> register = new HashSet();
+        for (HashMap exp : exps) {
+            for (String var : modSpecVars.keySet()) {
+                String path = modSpecVars.get(var);
+                String val = MapUtil.getValueOr(exp, var, "");
+                if (!val.equals("")) {
+                    ArrayList<HashMap> arr;
+                    String idName;
+                    String idVal;
+                    if (path.startsWith("soil")) {
+                        idName = "soil_id";
+                        idVal = MapUtil.getValueOr(exp, "soil_id", "");
+                        arr = soils;
+                    } else {
+                        idName = "weather";
+                        idVal = MapUtil.getValueOr(exp, "wst_id", "");
+                        arr = wths;
+                    }
+                    if (!register.contains(var + "_" + idVal)) {
+                        for (HashMap data : arr) {
+                            if (MapUtil.getValueOr(data, idName, "").equals(idVal)) {
+                                data.put(var, val);
+                                register.add(var + "_" + idVal);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

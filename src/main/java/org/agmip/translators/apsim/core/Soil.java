@@ -66,6 +66,14 @@ public class Soil {
     public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
+	
+    // latitude from field
+    @JsonProperty("fl_lat")
+    private double flLat = Util.missingValue;
+//    public double getLatitude() { return flLat; }
+    public void setFlLat(double latitude) {
+        this.flLat = latitude;
+    }
 
     // longitude
     @JsonProperty("soil_long")
@@ -109,6 +117,42 @@ public class Soil {
     }
     public void setWinU(double u) {
             this.winU = u;
+    }
+
+    // SummerDate
+    @JsonProperty("apsim_summerdate")
+    private String sumDate = "";
+    public String getSumDate() {
+        if (sumDate.equals("")) {
+            if (flLat >= 0) {
+                return "21-Mar";
+            } else {
+                return "21-Sep"; // If latitude is invailable, then considered as southern hemisphere.
+            }
+        } else {
+            return sumDate;
+        }
+    }
+    public void setSumDate(String sumDate) {
+            this.sumDate = sumDate;
+    }
+
+    // WinterDate
+    @JsonProperty("apsim_winterdate")
+    private String winDate = "";
+    public String getWinDate() {
+        if (winDate.equals("")) {
+            if (flLat >= 0) {
+                return "21-Sep";
+            } else {
+                return "21-Mar"; // If latitude is invailable, then considered as southern hemisphere.
+            }
+        } else {
+            return winDate;
+        }
+    }
+    public void setWinDate(String winDate) {
+            this.winDate = winDate;
     }
 
     // CONA

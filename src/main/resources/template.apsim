@@ -45,10 +45,10 @@
             <SoilWat>
                 <SummerCona>$soil.cona</SummerCona>
                 <SummerU>$soil.sumU</SummerU>
-                <SummerDate>1-Nov</SummerDate>
+                <SummerDate>$soil.sumDate</SummerDate>
                 <WinterCona>$soil.cona</WinterCona>
                 <WinterU>$soil.winU</WinterU>
-                <WinterDate>1-Apr</WinterDate>
+                <WinterDate>$soil.winDate</WinterDate>
                 <DiffusConst>$soil.getDiffusConst()</DiffusConst>
                 <DiffusSlope>$soil.getDiffusSlope()</DiffusSlope>
                 <Salb>$soil.salb</Salb>
