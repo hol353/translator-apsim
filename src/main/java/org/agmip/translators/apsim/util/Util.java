@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -320,6 +321,12 @@ public class Util {
                 return dYCoordinate[iIndex];
         }// END OF FOR LOOP
         return 0.0;
+    }
+    
+    public static String toApsimCalDate(String agmipCalDateStr) throws ParseException {
+        SimpleDateFormat agmipCal = new SimpleDateFormat("MMdd");
+        SimpleDateFormat apsimCal = new SimpleDateFormat("ddd-MM", Locale.US);
+        return apsimCal.format(agmipCal.parse(agmipCalDateStr));
     }
     
 }

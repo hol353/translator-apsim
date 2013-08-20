@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.core;
 
+import java.text.ParseException;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -134,7 +135,11 @@ public class Soil {
         }
     }
     public void setSumDate(String sumDate) {
-            this.sumDate = sumDate;
+        try {
+            this.sumDate = Util.toApsimCalDate(sumDate);
+        } catch (ParseException ex) {
+            this.sumDate = "";
+        }
     }
 
     // WinterDate
@@ -152,7 +157,11 @@ public class Soil {
         }
     }
     public void setWinDate(String winDate) {
-            this.winDate = winDate;
+        try {
+            this.winDate = Util.toApsimCalDate(winDate);
+        } catch (ParseException ex) {
+            this.winDate = "";
+        }
     }
 
     // CONA
