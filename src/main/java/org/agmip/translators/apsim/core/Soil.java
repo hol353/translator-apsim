@@ -121,7 +121,7 @@ public class Soil {
     }
 
     // SummerDate
-    @JsonProperty("apsim_summerdate")
+    @JsonProperty("summerdate__soil")
     private String sumDate = "";
     public String getSumDate() {
         if (sumDate.equals("")) {
@@ -143,7 +143,7 @@ public class Soil {
     }
 
     // WinterDate
-    @JsonProperty("apsim_winterdate")
+    @JsonProperty("winterdate__soil")
     private String winDate = "";
     public String getWinDate() {
         if (winDate.equals("")) {
@@ -266,8 +266,8 @@ public class Soil {
         if (id.equals("?"))
         	log += "  * Soil ERROR: Missing soil ID (soil_id).\r\n";
         
-        if (u == Util.missingValue)
-            log += "  * Soil ERROR: Missing U (slu1).\r\n";
+        if (u == Util.missingValue && (sumU == Util.missingValue || winU == Util.missingValue))
+            log += "  * Soil ERROR: Missing U (slu1 or SummerU or WinterU)).\r\n";
         
         if (salb == Util.missingValue)
             log += "  * Soil ERROR: Missing SALB (salb).\r\n";

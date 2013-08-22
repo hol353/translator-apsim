@@ -100,12 +100,12 @@ public class Weather {
      
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-    @JsonProperty("ACO2") 
+    @JsonProperty("aco2") 
     private double ACO2 = Util.missingValue;
     
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
-    @JsonProperty("CO2Y") 
+    @JsonProperty("co2y") 
     private double CO2Y = Util.missingValue;
     
     // records
