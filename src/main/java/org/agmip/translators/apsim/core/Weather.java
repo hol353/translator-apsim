@@ -92,21 +92,25 @@ public class Weather {
     // CO2
     @JsonIgnore 
     public double getCo2() { 
-    	if (CO2Y == Util.missingValue)
-    		return ACO2;
-    	else
-    		return CO2Y; 
-    	}
+        try {
+            if (CO2Y.equals(""))
+                    return Double.parseDouble(ACO2);
+            else
+                    return Double.parseDouble(CO2Y); 
+    	} catch (Exception e) {
+            return Util.missingValue;
+        }
+    }
      
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("aco2") 
-    private double ACO2 = Util.missingValue;
+    private String ACO2 = "";
     
     // CO2
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
     @JsonProperty("co2y") 
-    private double CO2Y = Util.missingValue;
+    private String CO2Y = "";
     
     // records
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
