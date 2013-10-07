@@ -324,8 +324,8 @@ public class Util {
     }
     
     public static String toApsimCalDate(String agmipCalDateStr) throws ParseException {
-        SimpleDateFormat agmipCal = new SimpleDateFormat("MMdd");
-        SimpleDateFormat apsimCal = new SimpleDateFormat("ddd-MM", Locale.US);
+        SimpleDateFormat agmipCal = new SimpleDateFormat("MM-dd");
+        SimpleDateFormat apsimCal = new SimpleDateFormat("d-MMM", Locale.US);
         return apsimCal.format(agmipCal.parse(agmipCalDateStr));
     }
     
