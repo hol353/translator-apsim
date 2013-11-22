@@ -23,6 +23,8 @@ public class Planting extends Event{
     // cultivar
     @JsonProperty("apsim_cul_id")
     private String cultivar = "?";
+    @JsonProperty("cul_id")
+    private String cultivarDef = "?";
 
     // cultivar
     @JsonProperty("plftn")
@@ -86,7 +88,12 @@ public class Planting extends Event{
     	actionLine = actionLine.replace("$cropName", getCropName());
  		actionLine = actionLine.replace("$population", String.valueOf(population));
     	actionLine = actionLine.replace("$depth", String.valueOf(depth));
-    	actionLine = actionLine.replace("$cultivar",cultivar);
+        if ("?".equals(cultivar)) {
+            actionLine = actionLine.replace("$cultivar",cultivarDef);
+        } else {
+            actionLine = actionLine.replace("$cultivar",cultivar);
+        }
+    	
     	actionLine = actionLine.replace("$row_spacing_m", String.valueOf(rowSpacingAsMM()/1000.0));
     	actionLine = actionLine.replace("$row_spacing", String.valueOf(rowSpacingAsMM()));
     	actionLine = actionLine.replace("$ftn", String.valueOf(ftn));
@@ -114,8 +121,8 @@ public class Planting extends Event{
         if (depth == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Planting depth missing (pldp).\r\n";
       
-        if ("?".equals(cultivar))
-        	log += "  * Operation " + getDate() + " ERROR: Missing planting cultivar (apsim_cul_id).\r\n";
+        if ("?".equals(cultivar) && "?".equals(cultivarDef))
+        	log += "  * Operation " + getDate() + " ERROR: Missing planting cultivar (apsim_cul_id and cul_id).\r\n";
 
         if (rowSpacing == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Planting row spacing missing (plrs).\r\n";
