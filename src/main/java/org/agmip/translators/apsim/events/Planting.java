@@ -63,6 +63,12 @@ public class Planting extends Event{
     @JsonProperty("plpoe")
     private double population2 = Util.missingValue;
 
+    // Number of plants in seedbed. units=number
+    @JsonProperty("nplsb")
+    private double numPlantsInSeedbed = Util.missingValue;
+    public double numPlantsInSeedbed() { return numPlantsInSeedbed; }
+    
+    
     // Plant material 
     // 	  S=Dry seed,
     //    T=Transplant,
@@ -100,6 +106,7 @@ public class Planting extends Event{
     	actionLine = actionLine.replace("$plantsPerHill", String.valueOf(plantsPerHill));
     	actionLine = actionLine.replace("$ageOfTransplant", String.valueOf(ageOfTransplant));
     	actionLine = actionLine.replace("$numberOfHills", String.valueOf(numberOfHills()));
+    	actionLine = actionLine.replace("$numPlantsInSeedbed", String.valueOf(numPlantsInSeedbed()));
     	return actionLine;
     }
 
@@ -127,6 +134,9 @@ public class Planting extends Event{
         if (rowSpacing == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Planting row spacing missing (plrs).\r\n";
 
+        if (numPlantsInSeedbed == Util.missingValue)
+            log += "  * Operation " + getDate() + " ERROR: Number of plants in seedbed missing (nplsb).\r\n";
+        
         if (getCropName().equals("sorghum") && ftn == Util.missingValue)
         	log += "  * Operation " + getDate() + " ERROR: Planting fertile tiller number not specified for sorghum (plftn). \r\n";
         
@@ -160,7 +170,7 @@ public class Planting extends Event{
     		if (plantMaterial.equals("S"))
     			return "$cropName sow cultivar = $cultivar, establishment = direct-seed, nplds = $population";
     		else
-    			return "$cropName sow cultivar = $cultivar, establishment = transplant, nplsb = $population, nplh  = $plantsPerHill, sbdur = $ageOfTransplant, nh = $numberOfHills";
+    			return "$cropName sow cultivar = $cultivar, establishment = transplant, nplsb = $numPlantsInSeedbed, nplh  = $plantsPerHill, sbdur = $ageOfTransplant, nh = $numberOfHills";
     	}
     	else if (cropName.equals("cotton"))
     		return "$cropName sow plants_pm = $population, cultivar = $cultivar, sowing_depth = $depth (mm), row_spacing = $row_spacing (mm), skiprow = 1";
