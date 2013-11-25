@@ -134,7 +134,7 @@ public class Planting extends Event{
         if (rowSpacing == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Planting row spacing missing (plrs).\r\n";
 
-        if (numPlantsInSeedbed == Util.missingValue)
+        if (numPlantsInSeedbed == Util.missingValue && getCropName().equals("rice") && !plantMaterial.equals("S"))
             log += "  * Operation " + getDate() + " ERROR: Number of plants in seedbed missing (nplsb).\r\n";
         
         if (getCropName().equals("sorghum") && ftn == Util.missingValue)
