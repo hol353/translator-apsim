@@ -276,18 +276,6 @@ $simulation.log
 endif
 </text><event>end_of_day</event></script>
                 </manager>
-#elseif ($simulation.management.plantingCropName() == "rice")
-                <manager name="Harvesting rule">
-                    <ui>
-                        <category type="category" description="Harvesting criteria" />
-                        <crop type="crop" description="Enter name of crop to harvest when ripe : ">$simulation.management.plantingCropName()</crop>
-                    </ui>
-                    <script><text>if [crop].plant_status = 'dead' then
-   acmo do_output
-   [crop] end_crop
-endif
-</text><event>end_of_day</event></script>
-                </manager>
 #elseif ($simulation.management.plantingCropName() == "cotton")
                 <manager name="Harvesting rule">
                     <ui>
@@ -300,7 +288,7 @@ endif
    endif
 </text><event>end_of_day</event></script>
                 </manager>
-#else        
+#elseif ($simulation.management.plantingCropName() != "rice")        
                 <manager name="Harvesting rule">
                     <ui>
                         <category type="category" description="Harvesting criteria" />
@@ -388,7 +376,7 @@ endif
             </events>
          </outputfile>
          <manager2 name="ACMOVariables">
-            <text>
+            <text><![CDATA[
 using System;
 using ModelFramework;
 using CSGeneral;
@@ -446,6 +434,7 @@ public class Script
 #end
    [Input] double Rain;
    [Input] double[] flow_no3;
+   [Input] DateTime Simulation_end_date;
    [Output] DateTime AnthesisDate;
    [Output] DateTime MaturityDate;
    [Units("m2/m2")]
@@ -459,6 +448,8 @@ public class Script
    [Units("kg/ha")]
    [Output] double SumLeachNO3 = 0;
    
+   private bool ACMOHasWritten = false;
+   
    // The following event handler will be called each time a crop is sown.
    [EventHandler] public void OnSowing()
    {
@@ -467,6 +458,7 @@ public class Script
       SumEP = 0.0;
       SumNO3Uptake = 0;
       SumLeachNO3 = 0;
+      ACMOHasWritten = false;
    }   
       
    // The following event handler will be called each day at the beginning of the day
@@ -514,10 +506,10 @@ public class Script
       SumEP = SumEP + EP + EP1 + EP2 + EP3 + EP4 + EP5;
 #elseif ($simulation.management.plantingCropName() == "rice")
       // Work out flowering and maturity dates.
-      string StageName;
-      MyPaddock.Get("plant_status", out StageName);
-      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
-      if (StageName.ToLower() == "maturity") MaturityDate = Today;      
+      double dvs;
+      MyPaddock.Get("dvs", out dvs);
+      if (dvs >= 1 && AnthesisDate.Ticks == 0) AnthesisDate = Today;
+      if (dvs >= 2) MaturityDate = Today;      
       
       MyPaddock.Get("nacr", out SumNO3Uptake);
       LAIMax = Math.Max(LAIMax, rlai);
@@ -553,10 +545,33 @@ public class Script
 #end
       InCropRain = InCropRain + Rain;
       SumLeachNO3 = SumLeachNO3 + flow_no3[flow_no3.Length - 1];
+      
+#if ($simulation.management.plantingCropName() == "rice")
+      string plant_status;
+      MyPaddock.Get("plant_status", out plant_status);
+      if (dvs >= 2 || plant_status == "dead")
+      {
+         Component ACMO = MyPaddock.LinkByName("ACMO") as Component;
+         ACMO.Publish("do_output");
+         Component rice = MyPaddock.LinkByName("rice") as Component;
+         rice.Publish("end_crop");
+         ACMOHasWritten = true;
+      }
+      
+      // When a crop has not reached maturity and is still growing, ACMO
+      // will be empty at the end of the simulation. The next few lines
+      // ensures that something is always written to ACMO file.
+      if (Today == Simulation_end_date && !ACMOHasWritten)
+      {
+      	 Component ACMO = MyPaddock.LinkByName("ACMO") as Component;
+         ACMO.Publish("do_output");
+      }
+#end
+      
    }
    
 }
-            </text>
+            ]]></text>
          </manager2>         
 		</area>
 	</simulation>
