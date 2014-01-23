@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import org.agmip.common.Functions;
 
 import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.ACE;
@@ -23,6 +24,8 @@ import org.agmip.util.MapUtil;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ioannis N. Athanasiadis, DUTh
@@ -32,6 +35,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 
 public class ApsimWriter implements TranslatorOutput {
+        private static Logger LOG = LoggerFactory.getLogger(ApsimWriter.class);
 	static final int BUFFER = 2048;
         static final HashMap<String, String> modSpecVars = defMpdSpecVars();
         private static HashMap defMpdSpecVars() {
@@ -72,7 +76,8 @@ public class ApsimWriter implements TranslatorOutput {
                 
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+                        LOG.error(Functions.getStackTrace(e));
 		}
 
 	}
@@ -111,7 +116,8 @@ public class ApsimWriter implements TranslatorOutput {
             Velocity.evaluate(context, writer, "Generate APSIM", R);
             writer.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
+            LOG.error(Functions.getStackTrace(ex));
         }
     }
 
@@ -175,7 +181,8 @@ public class ApsimWriter implements TranslatorOutput {
                 Velocity.evaluate(context, writer, "Generate RunBatch", R);
                 writer.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+//                ex.printStackTrace();
+                LOG.error(Functions.getStackTrace(ex));
             }
         }
     }

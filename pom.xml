@@ -49,6 +49,10 @@
             <artifactId>ace-lookup</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.agmip</groupId>
+            <artifactId>agmip-common-functions</artifactId>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
