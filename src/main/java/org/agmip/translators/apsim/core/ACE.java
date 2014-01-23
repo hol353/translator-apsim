@@ -44,6 +44,7 @@ public class ACE {
 				String mySoil = sim.getSoilID();
 				for(Soil soil:soils){
 					if(mySoil.equals(soil.getId())){
+						soil.setCropName(sim.getManagement().plantingCropName());
 						sim.setSoil(soil);
 						break;
 					}
@@ -62,8 +63,9 @@ public class ACE {
 		}
 		
 		// For now assume a single soil/crop parameterisation. Will have to change maybe.
-		for(Soil soil:soils)
-			soil.setCropName(experiments.get(0).getManagement().plantingCropName());
+                // Commented at 01/23/2014, in order to avoid the exception there is no experiment in the data set
+//		for(Soil soil:soils)
+//			soil.setCropName(experiments.get(0).getManagement().plantingCropName());
 	}
  
 
