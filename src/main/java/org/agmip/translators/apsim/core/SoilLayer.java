@@ -88,22 +88,33 @@ public class SoilLayer {
     // fbiom
     @JsonProperty("slacc")
     private double biomC = Util.missingValue;
+    @JsonProperty("slfac")
+    private double biomCFraction = Util.missingValue;
     public double getFbiom() {
-    	if (organicCarbon == 0)
-    		return 0;
-    	else
-    		return biomC / organicCarbon; 
-    	}
+        if (biomCFraction != Util.missingValue) {
+            return biomCFraction;
+        } else if (organicCarbon == 0) {
+            return 0;
+        }
+    	else {
+            return biomC / organicCarbon;
+        } 
+     }
     
     // finert
     @JsonProperty("slic")
     private double inertC = Util.missingValue;
-    public double getFinert() { 
-    	if (organicCarbon == 0)
-    		return 0;
-    	else
-    		return inertC / organicCarbon; 
+    @JsonProperty("slfic")
+    private double inertCFraction = Util.missingValue;
+    public double getFinert() {
+        if (inertCFraction != Util.missingValue) {
+            return inertCFraction;
+        } else if (organicCarbon == 0) {
+            return 0;
+        } else {
+            return inertC / organicCarbon; 
     	}
+    }
 
     // ks
     @JsonProperty("sksat")
