@@ -95,8 +95,7 @@ public class SoilLayer {
             return biomCFraction;
         } else if (organicCarbon == 0) {
             return 0;
-        }
-    	else {
+        } else {
             return biomC / organicCarbon;
         } 
      }
@@ -168,11 +167,11 @@ public class SoilLayer {
         if (kl == Util.missingValue)
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing KL (apsim_kl).\r\n";
         
-        if (biomC == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing FBIOM (slacc).\r\n";
+        if (biomC == Util.missingValue && biomCFraction == Util.missingValue)
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing FBIOM (both slacc and slfac).\r\n";
         
-        if (inertC == Util.missingValue)
-            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing InertC (slic).\r\n";
+        if (inertC == Util.missingValue && inertCFraction == Util.missingValue)
+            log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing InertC (both slic and slfic).\r\n";
         
         thickness = bottomDepth * 10 - cumThickness;
         
