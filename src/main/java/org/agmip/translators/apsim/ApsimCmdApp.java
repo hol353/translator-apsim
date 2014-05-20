@@ -69,12 +69,7 @@ public class ApsimCmdApp {
                 inputPath = args[i];
                 LOG.info("Read from {}", inputPath);
             } else {
-                outputPath = args[i];
-                if (outputPath != null && !"".equals(outputPath)) {
-                    outputPath = new File(outputPath).getPath() + File.separator + "APSIM";
-                } else {
-                    outputPath = "APSIM";
-                }
+                outputPath = getOutputPath(args[i]);
                 LOG.info("Output to {}", outputPath);
             }
         }
@@ -126,5 +121,23 @@ public class ApsimCmdApp {
 
         out.close();
         LOG.info("End zipping");
+    }
+
+    private static String getOutputPath(String arg) {
+        
+        String path;
+        if (arg != null && !"".equals(arg)) {
+            path = new File(arg).getPath() + File.separator + "APSIM";
+        } else {
+            path = "APSIM";
+        }
+        
+        File dir = new File(path);
+        int cnt = 1;
+        while (dir.exists() && dir.list().length > 0) {
+            dir = new File(path + "-" + cnt);
+            cnt++;
+        }
+        return dir.getPath();
     }
 }
