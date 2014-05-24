@@ -1,12 +1,5 @@
 <configuration>
   <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>logFile-${bySecond}.log</file>
-
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} %-5level %logger{35} - %msg%n</pattern>
-    </encoder>
-  </appender>
   <appender name="CLI" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%d{HH:mm:ss.SSS} %-5level %logger{35} - %msg%n</pattern>
