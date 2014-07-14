@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.agmip.common.Functions;
+import org.agmip.functions.DataCombinationHelper;
 import org.agmip.util.JSONAdapter;
 import org.agmip.util.MapUtil;
 import org.slf4j.Logger;
@@ -84,11 +85,8 @@ public class ApsimCmdApp {
     }
 
     private static Map readJson() throws IOException {
-        Map data = new HashMap();
-        for (String in : inputPaths) {
-            data.putAll(JSONAdapter.fromJSONFile(in));
-        }
-        fixData(data);
+        Map data = DataCombinationHelper.combine(inputPaths);
+        DataCombinationHelper.fixData(data);
         return data;
     }
     
@@ -152,75 +150,5 @@ public class ApsimCmdApp {
             cnt++;
         }
         return dir.getPath();
-    }
-    
-    private static void fixData(Map data) {
-        ArrayList<HashMap> exps = MapUtil.getObjectOr(data, "experiments", new ArrayList());
-        HashSet soilIds = getIds(MapUtil.getObjectOr(data, "soils", new ArrayList()), "soil_id");
-        HashSet wstIds = getIds(MapUtil.getObjectOr(data, "weathers", new ArrayList()), "wst_id");
-        for (HashMap exp : exps) {
-            fixDataLink(exp, soilIds, "soil_id", 10);
-            fixDataLink(exp, wstIds, "wst_id", 4);
-            fixEventDate(exp);
-        }
-    }
-    
-    private static HashSet<String> getIds(ArrayList<HashMap> arr, String idName) {
-        HashSet ids = new HashSet();
-        for (HashMap data : arr) {
-            String id = (String) data.get(idName);
-            if (id != null) {
-                ids.add(id);
-            }
-        }
-        return ids;
-    }
-    
-    private static void fixDataLink(HashMap expData, HashSet ids, String idName, int adjustLength) {
-        
-        String id = (String) expData.get(idName);
-        boolean isIdFixed = false;
-        if (id != null && !ids.isEmpty()) {
-            while (!ids.contains(id)) {
-                if (id.length() > adjustLength) {
-                    id = id.substring(0, adjustLength);
-                    isIdFixed = true;
-                } else {
-                    isIdFixed = false;
-                    break;
-                }
-            }
-        }
-        if (isIdFixed) {
-            LOG.info("Fix {} to {} for experiment {}", idName, id, MapUtil.getValueOr(expData, "exname", "N/A"));
-            expData.put(idName, id);
-        }
-    }
-    
-    private static void fixEventDate(HashMap expData) {
-        ArrayList<HashMap<String, String>> events = MapUtil.getBucket(expData, "management").getDataList();
-        String pdate = getPdate(events);
-        if (pdate == null) {
-            LOG.warn("Planting date is missing, will quit fixing event date");
-            return;
-        }
-        String exname = MapUtil.getValueOr(expData, "exname", "N/A");
-        for (HashMap<String, String> event : events) {
-            String date = event.get("date");
-            if (date != null && date.length() != 8) {
-                String newDate = Functions.dateOffset(pdate, date);
-                event.put("date", newDate);
-                LOG.info("Fix {} date to {} for experiment {}", event.get("event"), newDate, exname);
-            }
-        }
-    }
-    
-    private static String getPdate(ArrayList<HashMap<String, String>> events) {
-        for (HashMap<String, String> event : events) {
-            if ("planting".equals(event.get("event"))) {
-                return event.get("date");
-            }
-        }
-        return null;
     }
 }
