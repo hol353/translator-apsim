@@ -14,11 +14,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Irrigation extends Event {
 	
-    //@JsonProperty("irop")
-    //private String method = "?";
+    @JsonProperty("irop")
+    private String method = "?";
+    public String getMethod() { return method; }
 
     @JsonProperty("irval")
     private double amount = Util.missingValue;
+    public double getAmount() { return amount; }
 
     @JsonProperty("abund")
     private double bundHeight = Util.missingValue;

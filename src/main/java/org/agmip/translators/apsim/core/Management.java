@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.agmip.translators.apsim.events.Event;
+import org.agmip.translators.apsim.events.Irrigation;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.events.SetVariableEvent;
 import org.agmip.translators.apsim.util.Util;
@@ -27,7 +28,7 @@ public class Management {
     // events
     private List<Event> events;
     public List<Event> getEvents() { return events; }
-
+        
     // return the crop being planted
     public String plantingCropName() {
         for (int i = 0; i < events.size(); i++) {
@@ -67,6 +68,36 @@ public class Management {
     // initialise this instance
     public void initialise() {
     	
+        // Special handling for irrigation with operation code of IR008, IR009 and IR010
+        int size = events.size();
+        for (int i = 0; i < size; i++) {
+            if (events.get(i) instanceof Irrigation) {
+                Irrigation ir = (Irrigation) events.get(i);
+                if (("IR008").equals(ir.getMethod())) {
+                    // Might add another SetVariableEvent for percolation rate (KS)
+                } else if (("IR009").equals(ir.getMethod())) {
+                    events.add(new SetVariableEvent(ir.getDate(),
+                            "Soil Water",
+                            "max_pond",
+                            String.valueOf(ir.getAmount())));
+                } else if (("IR010").equals(ir.getMethod())) {
+                    // Might add another SetVariableEvent for plow-pan depth
+                }
+            }
+        }
+
+        // skip meaningless events
+        for (int i = events.size() - 1; i > -1; i--) {
+            if (events.get(i) instanceof Irrigation) {
+                Irrigation ir = (Irrigation) events.get(i);
+                if (("IR008").equals(ir.getMethod())
+                        || ("IR009").equals(ir.getMethod())
+                        || ("IR010").equals(ir.getMethod())) {
+                    events.remove(i);
+                }
+            }
+        }
+
         // initialise all events.
         for (int i = 0; i < events.size(); i++) {
             events.get(i).initialise(this);
