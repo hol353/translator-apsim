@@ -128,7 +128,7 @@ $simulation.log
 			<end_date type="date" description="Enter the end date of the simulation">$simulation.endDate</end_date>
 		</clock>
 		<metfile name="met">
-			<filename name="filename" input="yes">${simulation.weather.name}.met</filename>
+			<filename name="filename" input="yes">${simulation.weatherID}.met</filename>
 		</metfile>
 		<summaryfile />
 		<area name="paddock">

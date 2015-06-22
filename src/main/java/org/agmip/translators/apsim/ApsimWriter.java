@@ -1,5 +1,7 @@
 package org.agmip.translators.apsim;
 
+import adjustments.WeatherAdjustAdaptor;
+import adjustments.WeatherAdjustAdaptor.WeatherAdjustment;
 import static org.agmip.util.JSONAdapter.toJSON;
 
 import java.io.File;
@@ -8,9 +10,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 import org.agmip.common.Functions;
 
 import org.agmip.core.types.TranslatorOutput;
@@ -65,9 +70,39 @@ public class ApsimWriter implements TranslatorOutput {
 			File path = new File(filePath);
 
             // Check to see which files should be generated.
-			ArrayList<String> files = new ArrayList<String>();
-            if (! ace.getWeathers().isEmpty())
-                generateMetFiles(path, ace, files);
+            ArrayList<String> files = new ArrayList<String>();
+            WeatherAdjustAdaptor wthAdjAdp = new WeatherAdjustAdaptor(input);
+            if (wthAdjAdp.hasAdjustments()) {
+                Collection<Weather> weathers = ace.getWeathers();
+                for (Weather weather : weathers) {
+                    String wstId = weather.getId();
+                    Collection<Weather> tmp = new Vector<Weather>();
+                    Iterator<WeatherAdjustment> it = wthAdjAdp.getIterator(wstId);
+                    if (it.hasNext()) {
+                        while(it.hasNext()) {
+                            WeatherAdjustment wthAdj = it.next();
+                            ObjectMapper mapper = new ObjectMapper();
+                            Weather w = mapper.readValue(wthAdj.getAdjustedWthJson(), Weather.class);
+                            tmp.add(w);
+                        }
+                    } else {
+                        tmp.add(weather);
+                    }
+                    generateMetFiles(path, tmp, files);
+                }
+                
+                Collection<Simulation> exps = ace.getExperiments();
+                for (Simulation exp : exps) {
+                    String newWstId = wthAdjAdp.getAdjustedWstId(exp.getExperimentName());
+                    if (newWstId != null && !"".equals(newWstId)) {
+                        exp.setWeatherID(newWstId);
+                    }
+                }
+            } else {
+                if (! ace.getWeathers().isEmpty())
+                    generateMetFiles(path, ace, files);
+            }
+            
            
             if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
                 generateAPSIMFile("AgMip.apsim", path, ace, files);
@@ -82,9 +117,13 @@ public class ApsimWriter implements TranslatorOutput {
 
 	}
 
-    public static void generateMetFiles(File path, ACE ace, ArrayList<String> files) throws Exception {
+        public static void generateMetFiles(File path, ACE ace, ArrayList<String> files) throws Exception {
+            generateMetFiles(path, ace.getWeathers(), files);
+        }
+
+    public static void generateMetFiles(File path, Collection<Weather> weathers, ArrayList<String> files) throws Exception {
         path.mkdirs();
-        for(Weather weather:ace.getWeathers()){
+        for(Weather weather:weathers){
             String fileName = weather.getName()+".met";
             File file = new File(path, fileName);
             files.add(fileName);
