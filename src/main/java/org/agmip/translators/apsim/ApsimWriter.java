@@ -106,7 +106,7 @@ public class ApsimWriter implements TranslatorOutput {
            
             if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
                 generateAPSIMFile("AgMip.apsim", path, ace, files);
-                generateBatchFile(new String[]{"74", "75"}, path, ace, files);
+                generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
             }
                 
 			
@@ -198,6 +198,10 @@ public class ApsimWriter implements TranslatorOutput {
             } else if (apsimVersions[i].equals("75")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim75-r3008\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim75-r3008\\Model\\";
+                apsimExe = "Apsim";
+            } else if (apsimVersions[i].equals("77")) {
+                apsimDir[0] = "C:\\Program Files (x86)\\Apsim77-r3615\\Model\\";
+                apsimDir[1] = "C:\\Program Files\\Apsim77-r3615\\Model\\";
                 apsimExe = "Apsim";
             } else {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim" + apsimVersions[i] + "\\Model\\";
