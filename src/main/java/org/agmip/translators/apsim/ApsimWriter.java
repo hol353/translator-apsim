@@ -124,7 +124,7 @@ public class ApsimWriter implements TranslatorOutput {
     public static void generateMetFiles(File path, Collection<Weather> weathers, ArrayList<String> files) throws Exception {
         path.mkdirs();
         for(Weather weather:weathers){
-            String fileName = weather.getName()+".met";
+            String fileName = weather.getId()+".met";
             File file = new File(path, fileName);
             files.add(fileName);
             file.createNewFile();
