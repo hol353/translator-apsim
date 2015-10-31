@@ -183,9 +183,10 @@ public class SoilLayer {
         if (kl == Util.missingValue)
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing KL (apsim_kl).\r\n";
         
-        if (xf == Util.missingValue)
+        if (xf == Util.missingValue) {
             log += "  * Soil layer " + String.valueOf(layerNumber) + " WARN: Missing XF (slxf), use 1 as default.\r\n";
             xf = 1;
+        }
 
         if (biomC == Util.missingValue && biomCFraction == Util.missingValue)
             log += "  * Soil layer " + String.valueOf(layerNumber) + " ERROR: Missing FBIOM (both slacc and slfac).\r\n";
