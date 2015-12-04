@@ -459,6 +459,7 @@ public class Script
       SumNO3Uptake = 0;
       SumLeachNO3 = 0;
       ACMOHasWritten = false;
+      AnthesisDate = new DateTime();
    }   
       
    // The following event handler will be called each day at the beginning of the day
@@ -468,7 +469,7 @@ public class Script
       // Work out flowering and maturity dates.
       string StageName;
       Millet.Get("StageName", out StageName);
-      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
+      if (StageName.ToLower() == "flowering" && AnthesisDate.Ticks == 0) AnthesisDate = Today;
       if (StageName.ToLower() == "maturity") MaturityDate = Today;      
       
       double LAI, LAI1, LAI2, LAI3, LAI4, LAI5;
@@ -520,7 +521,7 @@ public class Script
       #if ($simulation.management.plantingCropName() != "cotton")
       string StageName;
       MyPaddock.Get("StageName", out StageName);
-      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
+      if (StageName.ToLower() == "flowering" && AnthesisDate.Ticks == 0) AnthesisDate = Today;
       if (StageName.ToLower() == "maturity") MaturityDate = Today;      
       #end
       
