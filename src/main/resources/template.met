@@ -1,0 +1,21 @@
+!name      : $weather.name
+!id        : $weather.id
+!source    : $weather.source
+!site      : $weather.site
+!dist      : $weather.dist
+!climate   : $weather.climateId
+!elevation : $weather.elevation
+
+latitude = $weather.latitude
+longitude = $weather.longitude
+tav = $weather.tav (oC)
+amp = $weather.amp (oC)
+
+#if($weather.co2 != -99.999)
+co2 = $weather.co2
+#end
+year  day    radn maxt  mint  rain 
+()    ()  (MJ/m2) (oC)  (oC)  (mm) 
+#foreach($daily in $weather.records)
+$daily.date $daily.solarRadiation $daily.maxTemperature $daily.minTemperature $daily.rainfall
+#end
