@@ -197,6 +197,37 @@ $simulation.log
 #end               
 #end        
 				</operations>
+#if ($simulation.management.isPaddyApplied())
+        <manager name="Irrigation manager">
+          <script>
+            <text>
+            </text>
+            <event>init</event>
+          </script>
+          <script>
+            <text>
+
+            if rice.plant_status = 'alive' and cropsta &gt; 3 then
+                'Soil Water' set max_pond = $simulation.management.bundHeight       ! setting bund height
+            endif                                                                          
+                                 
+            if rice.plant_status = 'alive' and pond &lt; $simulation.management.minFlood and cropsta &gt; 3 then          ! Top up pond 
+                irrig_amount = $simulation.management.maxFlood - pond                                                    ! irrigation amount calculation
+                irrigation apply amount = irrig_amount 
+                tot_irrig = tot_irrig + irrig_amount
+                count = count + 1
+            endif
+      
+            </text>
+            <event>start_of_day</event>
+          </script>
+          <script>
+            <text>
+            </text>
+            <event>end_of_day</event>
+          </script>
+        </manager>
+#end
 #if ($simulation.management.plantingCropName() == "sugar")
                 <manager name="SUGAR management">
                     <ui>
@@ -315,7 +346,7 @@ endif
 					<variable name="rlai as lai"></variable>
 #elseif ($simulation.management.plantingCropName() == "cotton")
 					<variable name="dm"></variable>
-					<variable name="yield"></variable>
+					<variable name="openwt"></variable>
 					<variable name="esw"></variable>
 					<variable name="lai"></variable>
 #else
@@ -354,7 +385,7 @@ endif
                <variable name="wrr as yield" />
                <variable name="wagt as biomass" />
 #elseif ($simulation.management.plantingCropName() == "cotton")
-               <variable name="yield" />
+               <variable name="openwt" />
                <variable name="dm as biomass" />
 #else               
                <variable name="yield" />
