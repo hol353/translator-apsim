@@ -106,7 +106,12 @@ public class ApsimWriter implements TranslatorOutput {
            
             if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
                 generateAPSIMFile("AgMip.apsim", path, ace, files);
-                generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
+                if (isPaddyApplied(ace)) {
+                    generateBatchFile(new String[]{"77"}, path, ace, files);
+                } else {
+                    generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
+                }
+                
             }
                 
 			
@@ -264,5 +269,16 @@ public class ApsimWriter implements TranslatorOutput {
                 }
             }
         }
+    }
+    
+    private boolean isPaddyApplied(ACE ace) {
+        boolean ret = false;
+        for (Simulation exp : ace.getExperiments()) {
+            if (exp.getManagement().isPaddyApplied()) {
+                ret = true;
+                break;
+            }
+        }
+        return ret;
     }
 }
