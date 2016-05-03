@@ -5,9 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.agmip.translators.apsim.events.Event;
-import org.agmip.translators.apsim.events.Irrigation;
 import org.agmip.translators.apsim.events.Planting;
-import org.agmip.translators.apsim.events.SetVariableEvent;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -45,9 +43,22 @@ public class Management {
     @JsonIgnore
     private double bundHeight = Util.missingValue;
     public double getBundHeight() { return bundHeight;}
-    public void setBundHeight(double height) { bundHeight = height; }
+    public void setBundHeight(double height) { bundHeight = height; setPaddyApplied(true); }
+
+    @JsonIgnore
+    private double minFlood = Util.missingValue;
+    public double getMinFlood() { return minFlood;}
+    public void setMinFlood(double height) { minFlood = height; setPaddyApplied(true); }
+
+    @JsonIgnore
+    private double maxFlood = Util.missingValue;
+    public double getMaxFlood() { return maxFlood;}
+    public void setMaxFlood(double height) { maxFlood = height; setPaddyApplied(true); }
     
-    
+    @JsonIgnore
+    private boolean isPaddyApplied = false;
+    public boolean isPaddyApplied() { return isPaddyApplied;}
+    public void setPaddyApplied(boolean isPaddyApplied) { this.isPaddyApplied = isPaddyApplied; }
     
     
     // default constructor - needed for Jackson
@@ -69,34 +80,34 @@ public class Management {
     public void initialise() {
     	
         // Special handling for irrigation with operation code of IR008, IR009 and IR010
-        int size = events.size();
-        for (int i = 0; i < size; i++) {
-            if (events.get(i) instanceof Irrigation) {
-                Irrigation ir = (Irrigation) events.get(i);
-                if (("IR008").equals(ir.getMethod())) {
-                    // Might add another SetVariableEvent for percolation rate (KS)
-                } else if (("IR009").equals(ir.getMethod())) {
-                    events.add(new SetVariableEvent(ir.getDate(),
-                            "Soil Water",
-                            "max_pond",
-                            String.valueOf(ir.getAmount())));
-                } else if (("IR010").equals(ir.getMethod())) {
-                    // Might add another SetVariableEvent for plow-pan depth
-                }
-            }
-        }
+//        int size = events.size();
+//        for (int i = 0; i < size; i++) {
+//            if (events.get(i) instanceof Irrigation) {
+//                Irrigation ir = (Irrigation) events.get(i);
+//                if (("IR008").equals(ir.getMethod())) {
+//                    // Might add another SetVariableEvent for percolation rate (KS)
+//                } else if (("IR009").equals(ir.getMethod())) {
+//                    events.add(new SetVariableEvent(ir.getDate(),
+//                            "Soil Water",
+//                            "max_pond",
+//                            String.valueOf(ir.getAmount())));
+//                } else if (("IR010").equals(ir.getMethod())) {
+//                    // Might add another SetVariableEvent for plow-pan depth
+//                }
+//            }
+//        }
 
         // skip meaningless events
-        for (int i = events.size() - 1; i > -1; i--) {
-            if (events.get(i) instanceof Irrigation) {
-                Irrigation ir = (Irrigation) events.get(i);
-                if (("IR008").equals(ir.getMethod())
-                        || ("IR009").equals(ir.getMethod())
-                        || ("IR010").equals(ir.getMethod())) {
-                    events.remove(i);
-                }
-            }
-        }
+//        for (int i = events.size() - 1; i > -1; i--) {
+//            if (events.get(i) instanceof Irrigation) {
+//                Irrigation ir = (Irrigation) events.get(i);
+//                if (("IR008").equals(ir.getMethod())
+//                        || ("IR009").equals(ir.getMethod())
+//                        || ("IR010").equals(ir.getMethod())) {
+//                    events.remove(i);
+//                }
+//            }
+//        }
 
         // initialise all events.
         for (int i = 0; i < events.size(); i++) {
@@ -105,13 +116,13 @@ public class Management {
         }
         
         // Look for bund height. If found then add it as an event.
-        if (events.size() >= 1 && bundHeight != Util.missingValue) {
-        	Collections.sort(events, eventComparator);
-        	events.add(new SetVariableEvent(events.get(0).getDate(), 
-        			                        "Soil Water",
-        			                        "max_pond",
-        			                        String.valueOf(bundHeight)));
-        }
+//        if (events.size() >= 1 && bundHeight != Util.missingValue) {
+//        	Collections.sort(events, eventComparator);
+//        	events.add(new SetVariableEvent(events.get(0).getDate(), 
+//        			                        "Soil Water",
+//        			                        "max_pond",
+//        			                        String.valueOf(bundHeight)));
+//        }
         
         
 

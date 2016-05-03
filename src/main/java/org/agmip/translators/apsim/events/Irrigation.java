@@ -30,7 +30,14 @@ public class Irrigation extends Event {
 
     @Override
     public String getApsimAction() {
-        return "irrigation apply amount = " +amount+ " (mm) " ;
+        if (("IR008").equals(method) 
+                || ("IR009").equals(method)
+                || ("IR010").equals(method)
+                || ("IR011").equals(method)) {
+            return null;
+        } else {
+            return "irrigation apply amount = " +amount+ " (mm) " ;
+        }
     }
 
     
@@ -44,8 +51,26 @@ public class Irrigation extends Event {
         if (amount == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing (irval).\r\n";
         
-        if (bundHeight != Util.missingValue)
+        if (("IR008").equals(method)) {
+            // KS
+        } else if (("IR010").equals(method)) {
+            // puddling, plowpan depth
+            bundHeight = amount;
+            if (bundHeight != Util.missingValue)
         	management.setBundHeight(bundHeight);
+        } else if (("IR009").equals(method)) {
+            // Max flood height
+            if (management.getMaxFlood() == Util.missingValue) {
+                management.setMaxFlood(amount);
+            }
+        } else if (("IR011").equals(method)) {
+            // Min flood height
+            if (management.getMinFlood() == Util.missingValue) {
+                management.setMinFlood(amount);
+            }
+        }
+        
+        
     }
 
 }
