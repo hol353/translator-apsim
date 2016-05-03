@@ -7,7 +7,9 @@ if exist "$apsimDir" (
     echo done!
   ) else (
     echo Copy model file into working directory...
-    if exist "${apsimDir}${model}.xml" (
+    if exist ${model}.xml (
+      copy ${model}.xml ${crop}.xml
+    ) else if exist "${apsimDir}${model}.xml" (
       copy "${apsimDir}${model}.xml" ${crop}.xml
       echo done!
       echo Run APSIM...
