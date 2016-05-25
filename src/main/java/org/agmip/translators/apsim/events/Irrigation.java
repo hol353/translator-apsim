@@ -3,6 +3,7 @@ package org.agmip.translators.apsim.events;
 import org.agmip.translators.apsim.core.Management;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -13,7 +14,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Irrigation extends Event {
-	
+
     @JsonProperty("irop")
     private String method = "?";
     public String getMethod() { return method; }
@@ -24,40 +25,39 @@ public class Irrigation extends Event {
 
     @JsonProperty("abund")
     private double bundHeight = Util.missingValue;
-    
-    //@JsonProperty("ireff")
-    //private String efficiency = "?";
+
+    @JsonIgnore
+    private boolean usePaddy = false;
+    public boolean isPaddy() { return usePaddy; }
 
     @Override
     public String getApsimAction() {
-        if (("IR008").equals(method) 
-                || ("IR009").equals(method)
-                || ("IR010").equals(method)
-                || ("IR011").equals(method)) {
+        if (("IR008").equals(method)
+            || ("IR009").equals(method)
+            || ("IR010").equals(method)
+            || ("IR011").equals(method)) {
+            usePaddy = true;
             return null;
         } else {
             return "irrigation apply amount = " +amount+ " (mm) " ;
         }
     }
 
-    
-    
-    
     @Override
     public void initialise(Management management) {
         if ("?".equals(getDate()))
             log += "  * Operation irrigation ERROR: Date missing (date).\r\n";
-        
+
         if (amount == Util.missingValue)
             log += "  * Operation " + getDate() + " ERROR: Irrigation amount missing (irval).\r\n";
-        
+
         if (("IR008").equals(method)) {
             // KS
         } else if (("IR010").equals(method)) {
             // puddling, plowpan depth
             bundHeight = amount;
             if (bundHeight != Util.missingValue)
-        	management.setBundHeight(bundHeight);
+                management.setBundHeight(bundHeight);
         } else if (("IR009").equals(method)) {
             // Max flood height
             if (management.getMaxFlood() == Util.missingValue) {
@@ -69,8 +69,8 @@ public class Irrigation extends Event {
                 management.setMinFlood(amount);
             }
         }
-        
-        
+
+
     }
 
 }
