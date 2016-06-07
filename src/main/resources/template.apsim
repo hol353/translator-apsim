@@ -203,6 +203,11 @@ $simulation.log
         <manager name="Irrigation manager">
           <script>
             <text>
+            !set local variables and counters
+            count = 0
+            datp = 0
+            irrig_amount = 0
+            tot_irrig = 0
             </text>
             <event>init</event>
           </script>
@@ -212,7 +217,7 @@ $simulation.log
                 datp = datp + 1
 #foreach( $bundEntry in $bundEntries )
 #if ($foreach.count == $numBundEntries)
-                if datp >= $bundEntry.getDap() then
+                if datp >= $bundEntry.getDap() and dvs < 1.85 then
 #else
                 if datp >= $bundEntry.getDap() and datp < $bundEntries.get($foreach.count).getDap() then
 #end
