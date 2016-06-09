@@ -28,15 +28,13 @@ public class Irrigation extends Event {
 
     @JsonIgnore
     private boolean usePaddy = false;
+    private boolean isPaddyEntry = false;
     public boolean isPaddy() { return usePaddy; }
+    public boolean isPaddyEntry() { return isPaddyEntry; }
 
     @Override
     public String getApsimAction() {
-        if (("IR008").equals(method)
-            || ("IR009").equals(method)
-            || ("IR010").equals(method)
-            || ("IR011").equals(method)) {
-            usePaddy = true;
+        if (isPaddy()) {
             return null;
         } else {
             return "irrigation apply amount = " +amount+ " (mm) " ;
@@ -53,18 +51,24 @@ public class Irrigation extends Event {
 
         if (("IR008").equals(method)) {
             // KS
+            usePaddy = true;
         } else if (("IR010").equals(method)) {
             // puddling, plowpan depth
+            usePaddy = true;
             bundHeight = amount;
             if (bundHeight != Util.missingValue)
                 management.setBundHeight(bundHeight);
         } else if (("IR009").equals(method)) {
             // Max flood height
+            usePaddy = true;
+            isPaddyEntry = true;
             if (management.getMaxFlood() == Util.missingValue) {
                 management.setMaxFlood(amount);
             }
         } else if (("IR011").equals(method)) {
             // Min flood height
+            usePaddy = true;
+            isPaddyEntry = true;
             if (management.getMinFlood() == Util.missingValue) {
                 management.setMinFlood(amount);
             }

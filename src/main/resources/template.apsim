@@ -199,7 +199,7 @@ $simulation.log
         </operations>
 #if ($simulation.management.isPaddyApplied())
 #set($bundEntries = $simulation.management.getBundEntries())
-#set($numBundEntries = $bundEntries.count())
+#set($numBundEntries = $bundEntries.size())
         <manager name="Irrigation manager">
           <script>
             <text>
@@ -212,17 +212,22 @@ $simulation.log
                 datp = datp + 1
 #foreach( $bundEntry in $bundEntries )
 #if ($foreach.count == $numBundEntries)
-                if datp >= $bundEntry.getDap() then
+#if ($numBundEntries == 1)
+                if datp &gt;= $bundEntry.getDap() then
 #else
-                if datp >= $bundEntry.getDap() and datp < $bundEntries.get($foreach.count).getDap() then
+                elseif datp &gt;= $bundEntry.getDap() then
+#end
+#elseif ($foreach.count == 1)
+                if datp &gt;= $bundEntry.getDap() and datp &lt; $bundEntries.get($foreach.count).getDap() then
+#else
+                elseif datp &gt;= $bundEntry.getDap() and datp &lt; $bundEntries.get($foreach.count).getDap() then
 #end
                   'Soil Water' set max_pond = $bundEntry.getBundHeight()
-                  if pond <= $bundEntry.getMinFlood() then
+                  if pond &lt;= $bundEntry.getMinFlood() then
                     irrig_amount = $bundEntry.getBundHeight() - pond
                   endif
 #end
-                endif
-#end              
+                endif      
               irrigation apply amount = irrig_amount
               tot_irrig = tot_irrig + irrig_amount
               count = count + 1

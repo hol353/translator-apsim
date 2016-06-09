@@ -103,33 +103,34 @@ public class Management {
         // initialize the wonderful bund stuff
         DateTime idate = null;
         BundEntry be = null;
-        boolean runWithBund = true;
-        for(int i=0; i < events.size(); i++) {
-            if (events.get(i).getClass().getName().endsWith(".Irrigation")) {
-                if (runWithBund) {
-                    Irrigation irr = (Irrigation) events.get(i);
-                    if (! irr.isPaddy()) {
-                        runWithBund = false;
-                        break;
-                    }
+        boolean runWithBund = false;
+        for (Event event : events) {
+            if (event instanceof Irrigation) {
+//                if (runWithBund) {
+                    Irrigation irr = (Irrigation) event;
+                if (irr.isPaddyEntry()) {
+                    runWithBund = true;
+                    
                     DateTime currDate = new DateTime(irr.getEventDate());
                     int dap = Days.daysBetween(pdate, currDate).getDays();
                     if (idate == null) {
                         idate = currDate;
-                        be = new BundEntry(dap).merge(irr);
-                    } else if (idate != currDate) {
+                        be = new BundEntry(dap, irr);
                         bundEntries.add(be);
+                    } else if (!idate.equals(currDate)) {
                         idate = currDate;
-                        be = new BundEntry(dap).merge(irr);
+                        be = new BundEntry(dap, irr);
+                        bundEntries.add(be);
                     } else {
-                        be.merge(irr);
+                        if (be != null) be.merge(irr);
                     }
                 }
+//                }
             }
         }
-        if (runWithBund) {
-            bundEntries.add(be);
-        }
+//        if (runWithBund) {
+//            bundEntries.add(be);
+//        }
         this.isPaddyApplied = runWithBund;
     }
 
@@ -137,28 +138,29 @@ public class Management {
         private final int dap;
         private double bundHeight;
         private double minFlood;
-        private double maxFlood;
+//        private double maxFlood;
 
-        public BundEntry(int dap) {
+        public BundEntry(int dap, Irrigation irr) {
             this.dap = dap;
+            merge(irr);
         }
 
-        public BundEntry merge(Irrigation irr) {
-            if("IR009" == irr.getMethod()) {
-                this.maxFlood = irr.getAmount();
-            }
+        public final void merge(Irrigation irr) {
+//            if("IR009".equals(irr.getMethod())) {
+//                this.maxFlood = irr.getAmount();
+//            }
 
-            if("IR010" == irr.getMethod()) {
+            if("IR009".equals(irr.getMethod())) {
                 this.bundHeight = irr.getAmount();
             }
-            if("IR011" == irr.getMethod()) {
+            if("IR011".equals(irr.getMethod())) {
                 this.minFlood = irr.getAmount();
             }
-            return this;
+//            return this;
         }
         public int getDap() { return dap; }
         public double getBundHeight() { return bundHeight; }
         public double getMinFlood() { return minFlood; }
-        public double getMaxFlood() { return maxFlood; }
+        public double getMaxFlood() { return bundHeight; }
     }
 }
