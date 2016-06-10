@@ -45,7 +45,7 @@ public class TranslationTest
             JSONAdapter j = new JSONAdapter();
             LinkedHashMap<String, Object> result;
 
-            String filePath = "src\\test\\resources\\UFGA8201_mzx.json";
+            File filePath = new File( "src/test/resources/UFGA8201_mzx.json");
             FileInputStream in = new FileInputStream(filePath);
             InputStreamReader inreader = new InputStreamReader(in);
             BufferedReader reader = new BufferedReader(inreader);
