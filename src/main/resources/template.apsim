@@ -203,6 +203,11 @@ $simulation.log
         <manager name="Irrigation manager">
           <script>
             <text>
+            !set local variables and counters
+            count = 0
+            datp = 0
+            irrig_amount = 0
+            tot_irrig = 0
             </text>
             <event>init</event>
           </script>
