@@ -40,16 +40,19 @@ import org.slf4j.LoggerFactory;
  */
 
 public class ApsimWriter implements TranslatorOutput {
-        private static Logger LOG = LoggerFactory.getLogger(ApsimWriter.class);
-	static final int BUFFER = 2048;
-        static final HashMap<String, String> modSpecVars = defMpdSpecVars();
-        private static HashMap defMpdSpecVars() {
-            HashMap ret = new HashMap();
-            ret.put("fl_lat", "soil");
+    private static Logger LOG = LoggerFactory.getLogger(ApsimWriter.class);
+    static final int BUFFER = 2048;
+    static final HashMap<String, String> modSpecVars = defMpdSpecVars();
+    private String apsimFileName = "AgMip.apsim";
+    private final ArrayList<String> files = new ArrayList();
+
+    private static HashMap defMpdSpecVars() {
+        HashMap ret = new HashMap();
+        ret.put("fl_lat", "soil");
 //            ret.put("apsim_summerdate", "soil");
 //            ret.put("apsim_winterdate", "soil");
-            return ret;
-        }
+        return ret;
+    }
 
 	// Convert a JSON string into a collection of simulations
     public static ACE jsonToACE(String json) throws Exception{       
@@ -60,77 +63,85 @@ public class ApsimWriter implements TranslatorOutput {
     }	
 	
 	
-	@SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({ "rawtypes" })
     @Override
-	public void writeFile(String filePath, Map input) {
+    public void writeFile(String filePath, Map input) {
 
-		try {
-                        adjustSpecVarLoc(input);
-			ACE ace = jsonToACE(toJSON(input));
-			File path = new File(filePath);
+        try {
+            adjustSpecVarLoc(input);
+            ACE ace = jsonToACE(toJSON(input));
+            File path = new File(filePath);
 
             // Check to see which files should be generated.
-            ArrayList<String> files = new ArrayList<String>();
-            WeatherAdjustAdaptor wthAdjAdp = new WeatherAdjustAdaptor(input);
-            if (wthAdjAdp.hasAdjustments()) {
-                Collection<Weather> weathers = ace.getWeathers();
-                for (Weather weather : weathers) {
-                    String wstId = weather.getId();
-                    Collection<Weather> tmp = new Vector<Weather>();
-                    Iterator<WeatherAdjustment> it = wthAdjAdp.getIterator(wstId);
-                    if (it.hasNext()) {
-                        while(it.hasNext()) {
-                            WeatherAdjustment wthAdj = it.next();
-                            ObjectMapper mapper = new ObjectMapper();
-                            Weather w = mapper.readValue(wthAdj.getAdjustedWthJson(), Weather.class);
-                            tmp.add(w);
-                        }
-                    } else {
-                        tmp.add(weather);
-                    }
-                    generateMetFiles(path, tmp, files);
-                }
-                
-                Collection<Simulation> exps = ace.getExperiments();
-                for (Simulation exp : exps) {
-                    String newWstId = wthAdjAdp.getAdjustedWstId(exp.getExperimentName());
-                    if (newWstId != null && !"".equals(newWstId)) {
-                        exp.setWeatherID(newWstId);
-                    }
-                }
-            } else {
-                if (! ace.getWeathers().isEmpty())
-                    generateMetFiles(path, ace, files);
-            }
-            
-           
+//            ArrayList<String> files = new ArrayList<String>();
+
+            // Generate weather files
+            generateMetFiles(path, input, ace, files);
+
+            // Generate apsim file
             if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
-                generateAPSIMFile("AgMip.apsim", path, ace, files);
+                generateAPSIMFile(apsimFileName, path, ace, files);
                 if (isPaddyApplied(ace)) {
                     generateBatchFile(new String[]{"77"}, path, ace, files);
                 } else {
                     generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
                 }
-                
             }
-                
-			
-		} catch (Exception e) {
+
+        } catch (Exception e) {
 //			e.printStackTrace();
-                        LOG.error(Functions.getStackTrace(e));
-		}
-
-	}
-
-        public static void generateMetFiles(File path, ACE ace, ArrayList<String> files) throws Exception {
-            generateMetFiles(path, ace.getWeathers(), files);
+            LOG.error(Functions.getStackTrace(e));
         }
+
+    }
+
+    public static void generateMetFiles(File path, Map input, ACE ace, ArrayList<String> files) throws Exception {
+
+        WeatherAdjustAdaptor wthAdjAdp = new WeatherAdjustAdaptor(input);
+        if (wthAdjAdp.hasAdjustments()) {
+            Collection<Weather> weathers = ace.getWeathers();
+            for (Weather weather : weathers) {
+                String wstId = weather.getId();
+                Collection<Weather> tmp = new Vector<Weather>();
+                Iterator<WeatherAdjustment> it = wthAdjAdp.getIterator(wstId);
+                if (it.hasNext()) {
+                    while (it.hasNext()) {
+                        WeatherAdjustment wthAdj = it.next();
+                        ObjectMapper mapper = new ObjectMapper();
+                        Weather w = mapper.readValue(wthAdj.getAdjustedWthJson(), Weather.class);
+                        tmp.add(w);
+                        generateMetFiles(path, tmp, files);
+                        tmp.clear();
+                    }
+                } else {
+                    tmp.add(weather);
+                    generateMetFiles(path, tmp, files);
+                    tmp.clear();
+                }
+            }
+
+            Collection<Simulation> exps = ace.getExperiments();
+            for (Simulation exp : exps) {
+                String newWstId = wthAdjAdp.getAdjustedWstId(exp.getExperimentName());
+                if (newWstId != null && !"".equals(newWstId)) {
+                    exp.setWeatherID(newWstId);
+                }
+            }
+        } else {
+            if (!ace.getWeathers().isEmpty()) {
+                generateMetFiles(path, ace.getWeathers(), files);
+            }
+        }
+    }
 
     public static void generateMetFiles(File path, Collection<Weather> weathers, ArrayList<String> files) throws Exception {
         path.mkdirs();
         for(Weather weather:weathers){
             String fileName = weather.getId()+".met";
             File file = new File(path, fileName);
+            if (files.contains(fileName)) {
+                continue;
+            }
             files.add(fileName);
             file.createNewFile();
             Velocity.init();
@@ -148,6 +159,9 @@ public class ApsimWriter implements TranslatorOutput {
             throws Exception {
         path.mkdirs();
         File file = new File(path, fileNameToGenerate);
+        if (files.contains(fileNameToGenerate)) {
+            return;
+        }
         files.add(fileNameToGenerate);
         file.createNewFile();
         Velocity.init();
@@ -214,6 +228,9 @@ public class ApsimWriter implements TranslatorOutput {
                 apsimExe = "Apsim";
             }
             File file = new File(path, "runApsim" + apsimVersions[i] + ".bat");
+            if (files.contains("runApsim" + apsimVersions[i] + ".bat")) {
+                return;
+            }
             files.add("runApsim" + apsimVersions[i] + ".bat");
             file.createNewFile();
             Velocity.init();
@@ -235,7 +252,7 @@ public class ApsimWriter implements TranslatorOutput {
         }
     }
     
-    private void adjustSpecVarLoc(Map input) {
+    protected static void adjustSpecVarLoc(Map input) {
         ArrayList<HashMap> exps = MapUtil.getObjectOr(input, "experiments", new ArrayList<HashMap>());
         ArrayList<HashMap> soils = MapUtil.getObjectOr(input, "soils", new ArrayList<HashMap>());
         ArrayList<HashMap> wths = MapUtil.getObjectOr(input, "weathers", new ArrayList<HashMap>());
@@ -271,7 +288,7 @@ public class ApsimWriter implements TranslatorOutput {
         }
     }
     
-    private boolean isPaddyApplied(ACE ace) {
+    protected static boolean isPaddyApplied(ACE ace) {
         boolean ret = false;
         for (Simulation exp : ace.getExperiments()) {
             if (exp.getManagement().isPaddyApplied()) {
@@ -280,5 +297,12 @@ public class ApsimWriter implements TranslatorOutput {
             }
         }
         return ret;
+    }
+    
+    protected void setApsimFileName(String apsimfileName) {
+        if (!apsimfileName.toLowerCase().endsWith(".apsim")) {
+            apsimfileName += ".apsim";
+        }
+        this.apsimFileName = apsimfileName;
     }
 }

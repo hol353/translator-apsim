@@ -16,6 +16,7 @@ public class SoilLayer {
     // bottomDepth
     @JsonProperty("sllb")
     private double bottomDepth = Util.missingValue;
+    public double getBottomDepth() { return bottomDepth; }
 	public void setBottomDepth(double bottomDepth) {
 		this.bottomDepth = bottomDepth;
 	}

@@ -28,9 +28,9 @@ public class Irrigation extends Event {
 
     @JsonIgnore
     private boolean usePaddy = false;
-    private boolean isPaddyEntry = false;
+    private boolean isAutoFlood = false;
     public boolean isPaddy() { return usePaddy; }
-    public boolean isPaddyEntry() { return isPaddyEntry; }
+    public boolean isAutoFlood() { return isAutoFlood; }
 
     @Override
     public String getApsimAction() {
@@ -52,26 +52,32 @@ public class Irrigation extends Event {
         if (("IR008").equals(method)) {
             // KS
             usePaddy = true;
+            if (management.getPercolationRate()== Util.missingValue) {
+                management.setPercolationRate(amount);
+                management.setPaddyInitDate(getDate());
+            }
         } else if (("IR010").equals(method)) {
             // puddling, plowpan depth
             usePaddy = true;
             bundHeight = amount;
-            if (bundHeight != Util.missingValue)
-                management.setBundHeight(bundHeight);
+            if (bundHeight != Util.missingValue) {
+                management.setPlowpanDepth(bundHeight);
+                management.setPaddyInitDate(getDate());
+            }
         } else if (("IR009").equals(method)) {
             // Max flood height
             usePaddy = true;
-            isPaddyEntry = true;
-            if (management.getMaxFlood() == Util.missingValue) {
-                management.setMaxFlood(amount);
-            }
+//            isPaddyEntry = true;
+//            if (management.getMaxFlood() == Util.missingValue) {
+//                management.setMaxFlood(amount);
+//            }
         } else if (("IR011").equals(method)) {
             // Min flood height
             usePaddy = true;
-            isPaddyEntry = true;
-            if (management.getMinFlood() == Util.missingValue) {
-                management.setMinFlood(amount);
-            }
+            isAutoFlood = true;
+//            if (management.getMinFlood() == Util.missingValue) {
+//                management.setMinFlood(amount);
+//            }
         }
 
 

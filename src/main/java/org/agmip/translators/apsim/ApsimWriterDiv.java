@@ -1,8 +1,5 @@
 package org.agmip.translators.apsim;
 
-import adjustments.WeatherAdjustAdaptor;
-import adjustments.WeatherAdjustAdaptor.WeatherAdjustment;
-import static org.agmip.util.JSONAdapter.toJSON;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,164 +7,236 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 import org.agmip.common.Functions;
+import org.agmip.data.cropmodel.partition.PartitionBuilder;
+import static org.agmip.translators.apsim.ApsimWriter.jsonToACE;
 
-import org.agmip.core.types.TranslatorOutput;
 import org.agmip.translators.apsim.core.ACE;
 import org.agmip.translators.apsim.core.Simulation;
-import org.agmip.translators.apsim.core.Weather;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.util.Util;
+import org.agmip.util.JSONAdapter;
+import static org.agmip.util.JSONAdapter.toJSON;
 import org.agmip.util.MapUtil;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Ioannis N. Athanasiadis, DUTh
- * @author Dean Holzworth, CSIRO
- * @author Chris Villalobos, AgMIP IT
- * @since Jul 13, 2012
+ * @author Meng Zhang, AgMIP IT
+ * @since Jun 14, 2016
  */
+public class ApsimWriterDiv extends ApsimWriter {
 
-public class ApsimWriter implements TranslatorOutput {
-        private static Logger LOG = LoggerFactory.getLogger(ApsimWriter.class);
-	static final int BUFFER = 2048;
-        static final HashMap<String, String> modSpecVars = defMpdSpecVars();
-        private static HashMap defMpdSpecVars() {
-            HashMap ret = new HashMap();
-            ret.put("fl_lat", "soil");
-//            ret.put("apsim_summerdate", "soil");
-//            ret.put("apsim_winterdate", "soil");
-            return ret;
+    private static final Logger LOG = LoggerFactory.getLogger(ApsimWriterDiv.class);
+
+    @SuppressWarnings({"rawtypes"})
+    @Override
+    public void writeFile(String filePath, Map input) {
+
+        try {
+//            ArrayList<Map> dataArr = divideData(input);
+            ArrayList<String> files = new ArrayList();
+//            PartitionBuilder pb = new PartitionBuilder(toJSON(input).getBytes());
+//            Iterator<byte[]> it = pb.iterator();
+            MapPartitionBuilder pb = new MapPartitionBuilder(input);
+            Iterator<Map> it = pb.iterator();
+            while (it.hasNext()) {
+//            for (Map data : dataArr) {
+//                String json = new String(it.next());
+//                HashMap data = JSONAdapter.fromJSON(json);
+                Map data = it.next();
+                String fileName = getFirstExname(data);
+                files.add(fileName);
+                super.setApsimFileName(fileName);
+                super.writeFile(filePath, data);
+            }
+            ACE ace = jsonToACE(toJSON(input));
+            File path = new File(filePath);
+            if (isPaddyApplied(ace)) {
+                generateBatchFile(new String[]{"77"}, path, ace, files);
+            } else {
+                generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
+            }
+        } catch (Exception e) {
+            LOG.error(Functions.getStackTrace(e));
         }
 
-	// Convert a JSON string into a collection of simulations
-    public static ACE jsonToACE(String json) throws Exception{       
-		ObjectMapper mapper = new ObjectMapper();
-        ACE ace = mapper.readValue(json, ACE.class);
-        ace.initialise();
-        return ace;
-    }	
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-    @Override
-	public void writeFile(String filePath, Map input) {
+    }
+    
+    // TODO
+//    protected static ArrayList<Map> divideData(Map data) {
+//        ArrayList<Map> ret = new ArrayList();
+//        ArrayList<Map> exps = MapUtil.getObjectOr(data, "experiments", new ArrayList());
+//        ArrayList<Map> wths = MapUtil.getObjectOr(data, "weathers", new ArrayList());
+//        ArrayList<Map> soils = MapUtil.getObjectOr(data, "soils", new ArrayList());
+//        HashMap<String, Integer> expLookup = new HashMap();
+//        HashMap<String, Integer> wthLookup = new HashMap();
+//        HashMap<String, Integer> soilLookup = new HashMap();
+//        
+//        // Scan weather
+//        for (int i = 0; i < wths.size(); i++) {
+//            String wstId = MapUtil.getValueOr(wths.get(i), "wst_id", "");
+//            String climId = MapUtil.getValueOr(wths.get(i), "clim_id", "");
+//            wthLookup.put(wstId, i);
+//            wthLookup.put(wstId+climId, i);
+//        }
+//        
+//        // Scan soil
+//        for (int i = 0; i < soils.size(); i++) {
+//            String siolId = MapUtil.getValueOr(soils.get(i), "soil_id", "");
+//            soilLookup.put(siolId, i);
+//        }
+//        
+//        // Scan experiment
+//        for (int i = 0; i < exps.size(); i++) {
+//            Map exp = exps.get(i);
+//            String exname = getFirstExname(exp);
+//            String wstId = MapUtil.getValueOr(exp, "wst_id", "");
+//            String climId = MapUtil.getValueOr(exp, "clim_id", "");
+//            String soilId = MapUtil.getValueOr(exp, "soil_id", "");
+//            if (wstId.endsWith(climId)) {
+//                climId = "";
+//            }
+//            
+//            Map m;
+//            if (expLookup.containsKey(exname)) {
+//                m = ret.get(expLookup.get(exname));
+//            } else {
+//                m = new HashMap();
+//                m.put("experiments", new ArrayList());
+//                m.put("soils", new HashSet());
+//                m.put("weathers", new HashSet());
+//                ret.add(m);
+//                expLookup.put(exname, ret.size() - 1);
+//            }
+//            
+//            MapUtil.getObjectOr(m, "experiments", new ArrayList()).add(exp);
+//            if (wthLookup.containsKey(wstId + climId)) {
+//                MapUtil.getObjectOr(m, "weathers", new HashSet()).add(wths.get(wthLookup.get(wstId + climId)));
+//            }
+//            if (soilLookup.containsKey(soilId)) {
+//                MapUtil.getObjectOr(m, "soils", new HashSet()).add(soils.get(soilLookup.get(soilId)));
+//            }
+//        }
+//        
+//        // reorganize weather and soil data structure
+//        for (Map m : ret) {
+//            m.put("weathers", new ArrayList(MapUtil.getObjectOr(m, "weathers", new HashSet())));
+//            m.put("soils", new ArrayList(MapUtil.getObjectOr(m, "soils", new HashSet())));
+//        }
+//        return ret;
+//    }
+    
+    private class MapPartitionBuilder implements Iterable<Map> {
+        
+        private final ArrayList<Map> exps;
+        private final ArrayList<Map> wths;
+        private final ArrayList<Map> soils;
+        private final HashMap<String, Integer> wthLookup = new HashMap();
+        private final HashMap<String, Integer> soilLookup = new HashMap();
+        
+        public MapPartitionBuilder(Map data) {
+            exps = MapUtil.getObjectOr(data, "experiments", new ArrayList());
+            wths = MapUtil.getObjectOr(data, "weathers", new ArrayList());
+            soils = MapUtil.getObjectOr(data, "soils", new ArrayList());
+            
+            // Scan weather
+            for (int i = 0; i < wths.size(); i++) {
+                String wstId = MapUtil.getValueOr(wths.get(i), "wst_id", "");
+                String climId = MapUtil.getValueOr(wths.get(i), "clim_id", "");
+                wthLookup.put(wstId, i);
+                wthLookup.put(wstId+climId, i);
+            }
 
-		try {
-                        adjustSpecVarLoc(input);
-			ACE ace = jsonToACE(toJSON(input));
-			File path = new File(filePath);
+            // Scan soil
+            for (int i = 0; i < soils.size(); i++) {
+                String siolId = MapUtil.getValueOr(soils.get(i), "soil_id", "");
+                soilLookup.put(siolId, i);
+            }
+        }
 
-            // Check to see which files should be generated.
-            ArrayList<String> files = new ArrayList<String>();
-            WeatherAdjustAdaptor wthAdjAdp = new WeatherAdjustAdaptor(input);
-            if (wthAdjAdp.hasAdjustments()) {
-                Collection<Weather> weathers = ace.getWeathers();
-                for (Weather weather : weathers) {
-                    String wstId = weather.getId();
-                    Collection<Weather> tmp = new Vector<Weather>();
-                    Iterator<WeatherAdjustment> it = wthAdjAdp.getIterator(wstId);
-                    if (it.hasNext()) {
-                        while(it.hasNext()) {
-                            WeatherAdjustment wthAdj = it.next();
-                            ObjectMapper mapper = new ObjectMapper();
-                            Weather w = mapper.readValue(wthAdj.getAdjustedWthJson(), Weather.class);
-                            tmp.add(w);
-                        }
-                    } else {
-                        tmp.add(weather);
-                    }
-                    generateMetFiles(path, tmp, files);
+        @Override
+        public Iterator<Map> iterator() {
+            return new MapPartitionIterator();
+        }
+        
+        private class MapPartitionIterator implements Iterator<Map> {
+            
+            private int idx = 0;
+
+            @Override
+            public boolean hasNext() {
+                return idx < exps.size();
+            }
+
+            @Override
+            public Map next() {
+                Map exp = exps.get(idx);
+                idx++;
+                String wstId = MapUtil.getValueOr(exp, "wst_id", "");
+                String climId = MapUtil.getValueOr(exp, "clim_id", "");
+                String soilId = MapUtil.getValueOr(exp, "soil_id", "");
+                if (wstId.endsWith(climId)) {
+                    climId = "";
+                }
+
+                Map m = new HashMap();
+                m.put("experiments", new ArrayList());
+                m.put("soils", new HashSet());
+                m.put("weathers", new HashSet());
+
+                MapUtil.getObjectOr(m, "experiments", new ArrayList()).add(exp);
+                if (wthLookup.containsKey(wstId + climId)) {
+                    MapUtil.getObjectOr(m, "weathers", new HashSet()).add(wths.get(wthLookup.get(wstId + climId)));
+                }
+                if (soilLookup.containsKey(soilId)) {
+                    MapUtil.getObjectOr(m, "soils", new HashSet()).add(soils.get(soilLookup.get(soilId)));
                 }
                 
-                Collection<Simulation> exps = ace.getExperiments();
-                for (Simulation exp : exps) {
-                    String newWstId = wthAdjAdp.getAdjustedWstId(exp.getExperimentName());
-                    if (newWstId != null && !"".equals(newWstId)) {
-                        exp.setWeatherID(newWstId);
-                    }
-                }
-            } else {
-                if (! ace.getWeathers().isEmpty())
-                    generateMetFiles(path, ace, files);
+                // reorganize weather and soil data structure
+                m.put("weathers", new ArrayList(MapUtil.getObjectOr(m, "weathers", new HashSet())));
+                m.put("soils", new ArrayList(MapUtil.getObjectOr(m, "soils", new HashSet())));
+                
+                return m;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Not supported yet.");
             }
             
-           
-            if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
-                generateAPSIMFile("AgMip.apsim", path, ace, files);
-                if (isPaddyApplied(ace)) {
-                    generateBatchFile(new String[]{"77"}, path, ace, files);
-                } else {
-                    generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
-                }
-                
-            }
-                
-			
-		} catch (Exception e) {
-//			e.printStackTrace();
-                        LOG.error(Functions.getStackTrace(e));
-		}
-
-	}
-
-        public static void generateMetFiles(File path, ACE ace, ArrayList<String> files) throws Exception {
-            generateMetFiles(path, ace.getWeathers(), files);
-        }
-
-    public static void generateMetFiles(File path, Collection<Weather> weathers, ArrayList<String> files) throws Exception {
-        path.mkdirs();
-        for(Weather weather:weathers){
-            String fileName = weather.getId()+".met";
-            File file = new File(path, fileName);
-            files.add(fileName);
-            file.createNewFile();
-            Velocity.init();
-            VelocityContext context = new VelocityContext();
-            context.put("weather", weather);
-            FileWriter writer = new FileWriter(file);
-            Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("template.met"));
-            Velocity.evaluate(context, writer, "Generate Met", R);
-            writer.close();
         }
     }
-
-
-    public static void generateAPSIMFile(String fileNameToGenerate, File path, ACE ace, ArrayList<String> files)
-            throws Exception {
-        path.mkdirs();
-        File file = new File(path, fileNameToGenerate);
-        files.add(fileNameToGenerate);
-        file.createNewFile();
-        Velocity.init();
-        VelocityContext context = new VelocityContext();
-        FileWriter writer;
-        try {
-            context.put("collection", ace);
-            writer = new FileWriter(file);
-            Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("template.apsim"));
-            Velocity.evaluate(context, writer, "Generate APSIM", R);
-            writer.close();
-        } catch (IOException ex) {
-//            ex.printStackTrace();
-            LOG.error(Functions.getStackTrace(ex));
+    
+    protected static String getFirstExname(Map data) {
+        
+        ArrayList<Map> exps = MapUtil.getObjectOr(data, "experiments", new ArrayList());
+        Map exp;
+        if (exps.isEmpty()) {
+            exp = data;
+        } else {
+            exp = exps.get(0);
         }
+        String exname = MapUtil.getValueOr(exp, "exname", "");
+//        if (exname.matches(".+(_+\\d+)+$")) {
+//            exname = exname.replaceAll("(_+\\d+)+$", "");
+//        }
+        return exname;
     }
-
-
-    public static void generateBatchFile(String[] apsimVersions, File path, ACE ace, ArrayList<String> files)
-            throws Exception {
+    
+    // TODO
+    public static void generateBatchFile(String[] apsimVersions, File path, ACE ace, ArrayList<String> apsimFiles) throws Exception {
+        
+        if (apsimFiles.isEmpty()) {
+            return;
+        }
         path.mkdirs();
         String crop = null; // TODO to support multiple crops included in the ACE data set, here need to be an array
         String model;
@@ -178,7 +247,7 @@ public class ApsimWriter implements TranslatorOutput {
                     break;
                 }
             }
-            if (crop != null || !crop.equals("")) {
+            if (crop != null || !"".equals(crop)) {
                 break;
             }
         }
@@ -195,26 +264,25 @@ public class ApsimWriter implements TranslatorOutput {
         
         String[] apsimDir = new String[2];
         String apsimExe;
-        for (int i = 0; i < apsimVersions.length; i++) {
-            if (apsimVersions[i].equals("74")) {
+        for (String apsimVersion : apsimVersions) {
+            if (apsimVersion.equals("74")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim74-r2286\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim74-r2286\\Model\\";
                 apsimExe = "ApsimRun";
-            } else if (apsimVersions[i].equals("75")) {
+            } else if (apsimVersion.equals("75")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim75-r3008\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim75-r3008\\Model\\";
                 apsimExe = "Apsim";
-            } else if (apsimVersions[i].equals("77")) {
+            } else if (apsimVersion.equals("77")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim77-r3615\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim77-r3615\\Model\\";
                 apsimExe = "Apsim";
             } else {
-                apsimDir[0] = "C:\\Program Files (x86)\\Apsim" + apsimVersions[i] + "\\Model\\";
-                apsimDir[1] = "C:\\Program Files\\Apsim" + apsimVersions[i] + "\\Model\\";
+                apsimDir[0] = "C:\\Program Files (x86)\\Apsim" + apsimVersion + "\\Model\\";
+                apsimDir[1] = "C:\\Program Files\\Apsim" + apsimVersion + "\\Model\\";
                 apsimExe = "Apsim";
             }
-            File file = new File(path, "runApsim" + apsimVersions[i] + ".bat");
-            files.add("runApsim" + apsimVersions[i] + ".bat");
+            File file = new File(path, "runApsim" + apsimVersion + ".bat");
             file.createNewFile();
             Velocity.init();
             VelocityContext context = new VelocityContext();
@@ -224,61 +292,14 @@ public class ApsimWriter implements TranslatorOutput {
                 context.put("model", model);
                 context.put("apsimExe", apsimExe);
                 context.put("apsimDirs", apsimDir);
+                context.put("apsimFiles", apsimFiles);
                 writer = new FileWriter(file);
-                Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("template.batch"));
+                Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("template_div.batch"));
                 Velocity.evaluate(context, writer, "Generate RunBatch", R);
                 writer.close();
             } catch (IOException ex) {
-//                ex.printStackTrace();
                 LOG.error(Functions.getStackTrace(ex));
             }
         }
-    }
-    
-    private void adjustSpecVarLoc(Map input) {
-        ArrayList<HashMap> exps = MapUtil.getObjectOr(input, "experiments", new ArrayList<HashMap>());
-        ArrayList<HashMap> soils = MapUtil.getObjectOr(input, "soils", new ArrayList<HashMap>());
-        ArrayList<HashMap> wths = MapUtil.getObjectOr(input, "weathers", new ArrayList<HashMap>());
-        HashSet<String> register = new HashSet();
-        for (HashMap exp : exps) {
-            for (String var : modSpecVars.keySet()) {
-                String path = modSpecVars.get(var);
-                String val = MapUtil.getValueOr(exp, var, "");
-                if (!val.equals("")) {
-                    ArrayList<HashMap> arr;
-                    String idName;
-                    String idVal;
-                    if (path.startsWith("soil")) {
-                        idName = "soil_id";
-                        idVal = MapUtil.getValueOr(exp, "soil_id", "");
-                        arr = soils;
-                    } else {
-                        idName = "weather";
-                        idVal = MapUtil.getValueOr(exp, "wst_id", "");
-                        arr = wths;
-                    }
-                    if (!register.contains(var + "_" + idVal)) {
-                        for (HashMap data : arr) {
-                            if (MapUtil.getValueOr(data, idName, "").equals(idVal)) {
-                                data.put(var, val);
-                                register.add(var + "_" + idVal);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private boolean isPaddyApplied(ACE ace) {
-        boolean ret = false;
-        for (Simulation exp : ace.getExperiments()) {
-            if (exp.getManagement().isPaddyApplied()) {
-                ret = true;
-                break;
-            }
-        }
-        return ret;
     }
 }

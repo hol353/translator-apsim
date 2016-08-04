@@ -3,14 +3,13 @@ package org.agmip.translators.apsim.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.events.Irrigation;
+import org.agmip.translators.apsim.events.SetVariableEvent;
 import org.agmip.translators.apsim.util.Util;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -48,24 +47,42 @@ public class Management {
     // bund height - I think this property should be in management not in
     // individual irrigation applications. Units: mm
     @JsonIgnore
-    private double bundHeight = Util.missingValue;
-    public double getBundHeight() { return bundHeight;}
-    public void setBundHeight(double height) { bundHeight = height; setPaddyApplied(true); }
-
+    private double plowpanDepth = Util.missingValue;
+    public double getPlowpanDepth() { return plowpanDepth;}
+    public void setPlowpanDepth(double depth) { plowpanDepth = depth; }
+    
     @JsonIgnore
-    private double minFlood = Util.missingValue;
-    public double getMinFlood() { return minFlood;}
-    public void setMinFlood(double height) { minFlood = height; setPaddyApplied(true); }
-
+    private double percolationRate = Util.missingValue;
+    public double getPercolationRate() { return percolationRate;}
+    public void setPercolationRate(double pr) { percolationRate = pr; }
+    
     @JsonIgnore
-    private double maxFlood = Util.missingValue;
-    public double getMaxFlood() { return maxFlood;}
-    public void setMaxFlood(double height) { maxFlood = height; setPaddyApplied(true); }
+    private String paddyInitDate = "?";
+    public String getPaddyInitDate() { return paddyInitDate;}
+    public void setPaddyInitDate(String date) { paddyInitDate = date; }
+
+//    @JsonIgnore
+//    private double minFlood = Util.missingValue;
+//    public double getMinFlood() { return minFlood;}
+//    public void setMinFlood(double height) { minFlood = height; setPaddyApplied(true); }
+//
+//    @JsonIgnore
+//    private double maxFlood = Util.missingValue;
+//    public double getMaxFlood() { return maxFlood;}
+//    public void setMaxFlood(double height) { maxFlood = height; setPaddyApplied(true); }
 
     @JsonIgnore
     private boolean isPaddyApplied = false;
     public boolean isPaddyApplied() { return isPaddyApplied;}
     public void setPaddyApplied(boolean isPaddyApplied) { this.isPaddyApplied = isPaddyApplied; }
+
+    @JsonIgnore
+    private boolean isAutoFloodApplied = false;
+    public boolean isAutoFloodApplied() { return isAutoFloodApplied;}
+    public void setAutoFloodApplied(boolean isAutoFloodApplied) { this.isAutoFloodApplied = isAutoFloodApplied; }
+    
+//    @JsonIgnore
+//    public boolean isBundHeightOnly() { return getMaxFlood() != Util.missingValue && getPlowpanDepth() == Util.missingValue && getMinFlood() == Util.missingValue;}
 
     @JsonIgnore
     private List<BundEntry> bundEntries = new ArrayList<BundEntry>();
@@ -85,7 +102,7 @@ public class Management {
         };
 
     // initialise this instance
-    public void initialise() {
+    public void initialise(Soil soil) {
 
         // initialise all events.
         DateTime pdate = null;
@@ -96,6 +113,29 @@ public class Management {
                 pdate = new DateTime(((Planting) events.get(i)).getEventDate());
             }
         }
+        
+        // Check if need to add variable modify event for KS
+        if (plowpanDepth != Util.missingValue && percolationRate != Util.missingValue) {
+            SoilLayer[] layers = soil.getLayers();
+            String ksString = "";
+            double plowpanDepthCm = plowpanDepth / 10.0;
+            boolean findPlowLayer = false;
+            for (int j = 0; j < layers.length; j++) {
+                if (findPlowLayer || layers[j].getBottomDepth() < plowpanDepthCm) {
+                    ksString += Double.toString(layers[j].getKsat()) + "  ";
+                } else {
+                    ksString += Double.toString(percolationRate) + "  ";
+                    findPlowLayer = true;
+                }
+            }
+            
+            events.add(new SetVariableEvent(paddyInitDate,
+                "Soil Water",
+                "KS",
+                ksString));
+        }
+
+        
 
         // sort the events into date order.
         Collections.sort(events, eventComparator);
@@ -108,8 +148,11 @@ public class Management {
             if (event instanceof Irrigation) {
 //                if (runWithBund) {
                     Irrigation irr = (Irrigation) event;
-                if (irr.isPaddyEntry()) {
+                if (irr.isPaddy()) {
                     runWithBund = true;
+                    if (irr.isAutoFlood()) {
+                        isAutoFloodApplied = true;
+                    }
                     
                     DateTime currDate = new DateTime(irr.getEventDate());
                     int dap = Days.daysBetween(pdate, currDate).getDays();
@@ -136,8 +179,8 @@ public class Management {
 
     public class BundEntry {
         private final int dap;
-        private double bundHeight;
-        private double minFlood;
+        private double bundHeight = Util.missingValue;
+        private double minFlood = Util.missingValue;
 //        private double maxFlood;
 
         public BundEntry(int dap, Irrigation irr) {
@@ -162,5 +205,6 @@ public class Management {
         public double getBundHeight() { return bundHeight; }
         public double getMinFlood() { return minFlood; }
         public double getMaxFlood() { return bundHeight; }
+        public boolean isAutoFlood() { return minFlood != Util.missingValue; }
     }
 }
