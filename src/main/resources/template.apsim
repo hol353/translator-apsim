@@ -422,6 +422,8 @@ endif
                <variable name="LAIMax" />
                <variable name="InCropRain" />
                <variable name="SumEP" />
+               <variable name="SumES" />
+               <variable name="SumET" />
                <variable name="SumNO3Uptake" />
                <variable name="SumLeachNO3" />
                <constants>
@@ -491,6 +493,7 @@ public class Script
    [Input] double Rain;
    [Input] double[] flow_no3;
    [Input] DateTime Simulation_end_date;
+   [Input] double es;
    [Output] DateTime AnthesisDate;
    [Output] DateTime MaturityDate;
    [Units("m2/m2")]
@@ -499,6 +502,10 @@ public class Script
    [Output] double InCropRain = 0;
    [Units("mm")]
    [Output] double SumEP = 0;
+   [Units("mm")]
+   [Output] double SumES = 0;
+   [Units("mm")]
+   [Output] double SumET { get { return SumEP + SumES; } }
    [Units("kg/ha")]
    [Output] double SumNO3Uptake = 0;
    [Units("kg/ha")]
@@ -512,11 +519,13 @@ public class Script
       LAIMax = 0.0;
       InCropRain = 0.0;
       SumEP = 0.0;
+      SumES = 0.0;
       SumNO3Uptake = 0;
       SumLeachNO3 = 0;
       ACMOHasWritten = false;
-   }
-
+      AnthesisDate = new DateTime();
+   }   
+      
    // The following event handler will be called each day at the beginning of the day
    [EventHandler] public void OnPost()
    {
@@ -524,9 +533,9 @@ public class Script
       // Work out flowering and maturity dates.
       string StageName;
       Millet.Get("StageName", out StageName);
-      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
-      if (StageName.ToLower() == "maturity") MaturityDate = Today;
-
+      if (StageName.ToLower() == "flowering" && AnthesisDate.Ticks == 0) AnthesisDate = Today;
+      if (StageName.ToLower() == "maturity") MaturityDate = Today;      
+      
       double LAI, LAI1, LAI2, LAI3, LAI4, LAI5;
       double EP, EP1, EP2, EP3, EP4, EP5;
       double NO3Uptake, NO3Uptake1, NO3Uptake2, NO3Uptake3, NO3Uptake4, NO3Uptake5;
@@ -576,8 +585,8 @@ public class Script
       #if ($simulation.management.plantingCropName() != "cotton")
       string StageName;
       MyPaddock.Get("StageName", out StageName);
-      if (StageName.ToLower() == "flowering") AnthesisDate = Today;
-      if (StageName.ToLower() == "maturity") MaturityDate = Today;
+      if (StageName.ToLower() == "flowering" && AnthesisDate.Ticks == 0) AnthesisDate = Today;
+      if (StageName.ToLower() == "maturity") MaturityDate = Today;      
       #end
 
       // Get no3_uptake for whole profile (as a positive number)
@@ -601,7 +610,8 @@ public class Script
 #end
       InCropRain = InCropRain + Rain;
       SumLeachNO3 = SumLeachNO3 + flow_no3[flow_no3.Length - 1];
-
+      SumES = SumES + es;
+      
 #if ($simulation.management.plantingCropName() == "rice")
       string plant_status;
       MyPaddock.Get("plant_status", out plant_status);
