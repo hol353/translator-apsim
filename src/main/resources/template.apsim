@@ -206,8 +206,10 @@ $simulation.log
             !set local variables and counters
             count = 0
             datp = 0
+#if ($simulation.management.isAutoFloodApplied())
             irrig_amount = 0
             tot_irrig = 0
+#end
             </text>
             <event>init</event>
           </script>
@@ -228,14 +230,18 @@ $simulation.log
                 elseif datp &gt;= $bundEntry.getDap() and datp &lt; $bundEntries.get($foreach.count).getDap() then
 #end
                   'Soil Water' set max_pond = $bundEntry.getBundHeight()
+#if ($bundEntry.isAutoFlood())
                   if pond &lt;= $bundEntry.getMinFlood() then
                     irrig_amount = $bundEntry.getBundHeight() - pond
+                    irrigation apply amount = irrig_amount
+                    tot_irrig = tot_irrig + irrig_amount
+                    count = count + 1
                   endif
+#else
+                  count = count + 1
 #end
-                endif      
-              irrigation apply amount = irrig_amount
-              tot_irrig = tot_irrig + irrig_amount
-              count = count + 1
+#end
+                endif
             endif
             </text>
             <event>start_of_day</event>
