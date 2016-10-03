@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.agmip.common.Functions;
-import org.agmip.data.cropmodel.partition.PartitionBuilder;
+import org.agmip.core.types.DividableOutputTranslator;
 import static org.agmip.translators.apsim.ApsimWriter.jsonToACE;
 
 import org.agmip.translators.apsim.core.ACE;
@@ -20,7 +21,6 @@ import org.agmip.translators.apsim.core.Simulation;
 import org.agmip.translators.apsim.events.Event;
 import org.agmip.translators.apsim.events.Planting;
 import org.agmip.translators.apsim.util.Util;
-import org.agmip.util.JSONAdapter;
 import static org.agmip.util.JSONAdapter.toJSON;
 import org.agmip.util.MapUtil;
 import org.apache.velocity.VelocityContext;
@@ -32,20 +32,25 @@ import org.slf4j.LoggerFactory;
  * @author Meng Zhang, AgMIP IT
  * @since Jun 14, 2016
  */
-public class ApsimWriterDiv extends ApsimWriter {
+public class ApsimWriterDiv extends ApsimWriter implements DividableOutputTranslator {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApsimWriterDiv.class);
 
     @SuppressWarnings({"rawtypes"})
     @Override
     public void writeFile(String filePath, Map input) {
+        writeFile(filePath, input, 1);
+    }
+    
+    @Override
+    public void writeFile(String filePath, Map input, int size) {
 
         try {
 //            ArrayList<Map> dataArr = divideData(input);
             ArrayList<String> files = new ArrayList();
 //            PartitionBuilder pb = new PartitionBuilder(toJSON(input).getBytes());
 //            Iterator<byte[]> it = pb.iterator();
-            MapPartitionBuilder pb = new MapPartitionBuilder(input);
+            MapPartitionBuilder pb = new MapPartitionBuilder(input, size);
             Iterator<Map> it = pb.iterator();
             while (it.hasNext()) {
 //            for (Map data : dataArr) {
@@ -141,8 +146,14 @@ public class ApsimWriterDiv extends ApsimWriter {
         private final ArrayList<Map> soils;
         private final HashMap<String, Integer> wthLookup = new HashMap();
         private final HashMap<String, Integer> soilLookup = new HashMap();
+        private final int size;
         
         public MapPartitionBuilder(Map data) {
+            this(data, 1);
+        }
+        
+        public MapPartitionBuilder(Map data, int size) {
+            this.size = size;
             exps = MapUtil.getObjectOr(data, "experiments", new ArrayList());
             wths = MapUtil.getObjectOr(data, "weathers", new ArrayList());
             soils = MapUtil.getObjectOr(data, "soils", new ArrayList());
@@ -164,12 +175,17 @@ public class ApsimWriterDiv extends ApsimWriter {
 
         @Override
         public Iterator<Map> iterator() {
-            return new MapPartitionIterator();
+            return new MapPartitionIterator(size);
         }
         
         private class MapPartitionIterator implements Iterator<Map> {
             
             private int idx = 0;
+            private int size;
+            
+            public MapPartitionIterator(int size) {
+                this.size = size;
+            }
 
             @Override
             public boolean hasNext() {
@@ -178,33 +194,44 @@ public class ApsimWriterDiv extends ApsimWriter {
 
             @Override
             public Map next() {
-                Map exp = exps.get(idx);
-                idx++;
-                String wstId = MapUtil.getValueOr(exp, "wst_id", "");
-                String climId = MapUtil.getValueOr(exp, "clim_id", "");
-                String soilId = MapUtil.getValueOr(exp, "soil_id", "");
-                if (wstId.endsWith(climId)) {
-                    climId = "";
+                HashMap ret = new HashMap();
+                if (size <= 0) {
+                    return new HashMap();
                 }
-
-                Map m = new HashMap();
-                m.put("experiments", new ArrayList());
-                m.put("soils", new HashSet());
-                m.put("weathers", new HashSet());
-
-                MapUtil.getObjectOr(m, "experiments", new ArrayList()).add(exp);
-                if (wthLookup.containsKey(wstId + climId)) {
-                    MapUtil.getObjectOr(m, "weathers", new HashSet()).add(wths.get(wthLookup.get(wstId + climId)));
+                int last = idx + size;
+                if (last > exps.size()) {
+                    last = exps.size();
                 }
-                if (soilLookup.containsKey(soilId)) {
-                    MapUtil.getObjectOr(m, "soils", new HashSet()).add(soils.get(soilLookup.get(soilId)));
+                List<Map> subExps = new ArrayList(exps.subList(idx, last));
+                idx = last;
+                ret.put("experiments", subExps);
+                
+                HashSet<String> wthNames = new HashSet();
+                HashSet<String> soilNames = new HashSet();
+                for (Map exp : subExps) {
+                    String wstId = MapUtil.getValueOr(exp, "wst_id", "");
+                    String climId = MapUtil.getValueOr(exp, "clim_id", "");
+                    String soilId = MapUtil.getValueOr(exp, "soil_id", "");
+                    if (wstId.endsWith(climId)) {
+                        climId = "";
+                    }
+                    wthNames.add(wstId + climId);
+                    soilNames.add(soilId);
                 }
                 
-                // reorganize weather and soil data structure
-                m.put("weathers", new ArrayList(MapUtil.getObjectOr(m, "weathers", new HashSet())));
-                m.put("soils", new ArrayList(MapUtil.getObjectOr(m, "soils", new HashSet())));
+                List<Map> subWths = new ArrayList();
+                for (String wthName : wthNames) {
+                    subWths.add(wths.get(wthLookup.get(wthName)));
+                }
+                ret.put("weathers", subWths);
                 
-                return m;
+                List<Map> subSoils = new ArrayList();
+                for (String soilName : soilNames) {
+                    subSoils.add(soils.get(soilLookup.get(soilName)));
+                }
+                ret.put("soils", subSoils);
+                    
+                return ret;
             }
 
             @Override
@@ -218,17 +245,39 @@ public class ApsimWriterDiv extends ApsimWriter {
     protected static String getFirstExname(Map data) {
         
         ArrayList<Map> exps = MapUtil.getObjectOr(data, "experiments", new ArrayList());
-        Map exp;
+        String exname;
         if (exps.isEmpty()) {
-            exp = data;
+            exname = "";
+        } else if (exps.size() > 1) {
+            String exnameFirst = MapUtil.getValueOr(exps.get(0), "exname", "").replaceAll("(_+\\d+)+$", "");
+            String exnameLast = MapUtil.getValueOr(exps.get(exps.size() - 1), "exname", "").replaceAll("(_+\\d+)+$", "");
+            if (exnameFirst.equals(exnameLast)) {
+                exname = exnameFirst;
+            } else {
+                exname = exnameFirst + "_" + exnameLast.substring(getCommonPart(exnameFirst, exnameLast).length());
+            }
         } else {
-            exp = exps.get(0);
+            exname = MapUtil.getValueOr(exps.get(0), "exname", "");
         }
-        String exname = MapUtil.getValueOr(exp, "exname", "");
 //        if (exname.matches(".+(_+\\d+)+$")) {
 //            exname = exname.replaceAll("(_+\\d+)+$", "");
 //        }
         return exname;
+    }
+    
+    private static String getCommonPart(String str1, String str2) {
+        int len = Math.min(str1.length(), str2.length());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            char c1 = str1.charAt(i);
+            char c2 = str2.charAt(i);
+            if (c1 != c2 || (c1 >= '0' && c1 <= '9')) {
+                break;
+            } else {
+                sb.append(c1);
+            }
+        }
+        return sb.toString();
     }
     
     // TODO
