@@ -43,11 +43,12 @@
         <dependency>
             <groupId>org.agmip</groupId>
             <artifactId>agmip-core</artifactId>
+            <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.agmip</groupId>
             <artifactId>ace-lookup</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.5</version>
         </dependency>
         <dependency>
             <groupId>org.agmip</groupId>
