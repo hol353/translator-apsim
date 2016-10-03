@@ -404,31 +404,36 @@ endif
             <title>MACH0001_1__1 ACMO</title>
             <variables name="Variables">
 #if ($simulation.management.plantingCropName() == "millet")
-               <variable name="TotalYield as yield" />
-               <variable name="TotalBiomass as biomass" />
+                <variable name="TotalYield as yield" />
+                <variable name="TotalBiomass as biomass" />
 #elseif ($simulation.management.plantingCropName() == "rice")
-               <variable name="wrr as yield" />
-               <variable name="wagt as biomass" />
+                <variable name="wrr as yield" />
+                <variable name="wagt as biomass" />
 #elseif ($simulation.management.plantingCropName() == "cotton")
-               <variable name="openwt" />
-               <variable name="dm as biomass" />
+                <variable name="openwt" />
+                <variable name="dm as biomass" />
 #else
-               <variable name="yield" />
-               <variable name="biomass" />
+                <variable name="yield" />
+                <variable name="biomass" />
 #end
-               <variable name="AnthesisDate format yyyy-mm-dd" />
-               <variable name="MaturityDate format yyyy-mm-dd" />
-               <variable name="Today as HarvestDate format yyyy-mm-dd" />
-               <variable name="LAIMax" />
-               <variable name="InCropRain" />
-               <variable name="SumEP" />
-               <variable name="SumES" />
-               <variable name="SumET" />
-               <variable name="SumNO3Uptake" />
-               <variable name="SumLeachNO3" />
-               <constants>
-                  <constant name="format">csv</constant>
-               </constants>
+                <variable name="AnthesisDate format yyyy-mm-dd" />
+                <variable name="MaturityDate format yyyy-mm-dd" />
+                <variable name="Today as HarvestDate format yyyy-mm-dd" />
+                <variable name="LAIMax" />
+                <variable name="InCropRain" />
+                <variable name="SumEP" />
+                <variable name="SumES" />
+                <variable name="SumET" />
+                <variable name="SumNO3Uptake" />
+                <variable name="SumLeachNO3" />
+                <variable name="AverageRadn" />
+                <variable name="AverageMaxT" />
+                <variable name="AverageMinT" />
+                <variable name="AverageMeanT" />
+                <variable name="AverageCo2" />
+                <constants>
+                    <constant name="format">csv</constant>
+                </constants>
             </variables>
             <events name="Reporting Frequency">
             </events>
@@ -443,6 +448,9 @@ public class Script
 {
    [Link] Paddock MyPaddock;
    [Input] DateTime Today;
+   [Input] double MaxT;
+   [Input] double MinT;
+   [Output] double AverageT { get { return (MaxT + MinT) / 2; } }
 
 #if ($simulation.management.plantingCropName() == "millet")
    [Link(NamePath = "millet")] Millet Millet;
@@ -639,6 +647,29 @@ public class Script
 }
             ]]></text>
          </manager2>
+		   <tracker>
+				<variable name="sum of rain on start_of_day from sowing to now as RainSinceSowing" />
+				<variable name="sum of swdef_photo on end_of_day from sowing to harvesting as W_str" />
+				<variable name="sum of nfact_photo on end_of_day from sowing to harvesting as N_str" />
+				<variable name="sum of dlt_n_min() on end_of_day from sowing to harvesting as Minz_N" />
+				<variable name="value of esw on sowing as esw_sowing" />
+				<variable name="value of no3() on sowing as no3_sowing" />
+				<variable name="value of surfaceom_wt on sowing as resid_sowing" />
+				<variable name="sum of fertiliser on end_of_day from sowing to harvesting as applied_fert" />
+				<variable name="sum of leach_no3 on end_of_day from sowing to harvesting as Sum_Nleach" />
+				<variable name="maximum of lai on end_of_day from sowing to harvesting as MaxLai" />
+				<variable name="value of day on sowing as sow_day" />
+				<variable name="sum of runoff on end_of_day from sowing to now as runof" />
+				<variable name="sum of es on end_of_day from sowing to now as sevap" />
+				<variable name="sum of drain on end_of_day from sowing to now as drainage" />
+				<variable name="sum of ep on end_of_day from sowing to now as transp" />
+				<variable name="sum of dnit() on end_of_day from sowing to now as denit" />
+				<variable name="average of radn on start_of_day from sowing to harvesting as AverageRadn" />
+                <variable name="average of maxt on start_of_day from sowing to harvesting as AverageMaxt" />
+				<variable name="average of mint on start_of_day from sowing to harvesting as AverageMint" />
+				<variable name="average of AverageT on start_of_day from sowing to harvesting as AverageMeanT" />
+                            <variable name="average of co2 on start_of_day from sowing to harvesting as AverageCo2" />
+		   </tracker>               
     </area>
   </simulation>
    #end
