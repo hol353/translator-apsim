@@ -45,6 +45,11 @@ public class ApsimWriter implements TranslatorOutput {
     static final HashMap<String, String> modSpecVars = defMpdSpecVars();
     private String apsimFileName = "AgMip.apsim";
     private final ArrayList<String> files = new ArrayList();
+    protected boolean outputCraftBat = false;
+    
+    public void setOutputCraftBat(boolean flag) {
+        this.outputCraftBat = flag;
+    }
 
     private static HashMap defMpdSpecVars() {
         HashMap ret = new HashMap();
@@ -60,7 +65,7 @@ public class ApsimWriter implements TranslatorOutput {
         ACE ace = mapper.readValue(json, ACE.class);
         ace.initialise();
         return ace;
-    }	
+    }
 	
 	
     @SuppressWarnings({ "rawtypes" })
@@ -82,9 +87,15 @@ public class ApsimWriter implements TranslatorOutput {
             if (ace.getSoils().size() > 0 || ace.getExperiments().size() > 0) {
                 generateAPSIMFile(apsimFileName, path, ace, files);
                 if (isPaddyApplied(ace)) {
-                    generateBatchFile(new String[]{"77"}, path, ace, files);
+                    generateBatchFile(new String[]{"77"}, path, ace, files, "template.batch");
+                    if (this.outputCraftBat) {
+                        generateBatchFile(new String[]{"77"}, path, ace, files, "template_craft.batch");
+                    }
                 } else {
-                    generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
+                    generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files, "template.batch");
+                    if (this.outputCraftBat) {
+                        generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files, "template_craft.batch");
+                    }
                 }
             }
 
@@ -180,7 +191,7 @@ public class ApsimWriter implements TranslatorOutput {
     }
 
 
-    public static void generateBatchFile(String[] apsimVersions, File path, ACE ace, ArrayList<String> files)
+    public static void generateBatchFile(String[] apsimVersions, File path, ACE ace, ArrayList<String> files, String templateName)
             throws Exception {
         path.mkdirs();
         String crop = null; // TODO to support multiple crops included in the ACE data set, here need to be an array
@@ -209,29 +220,34 @@ public class ApsimWriter implements TranslatorOutput {
         
         String[] apsimDir = new String[2];
         String apsimExe;
-        for (int i = 0; i < apsimVersions.length; i++) {
-            if (apsimVersions[i].equals("74")) {
+        for (String apsimVersion : apsimVersions) {
+            if (apsimVersion.equals("74")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim74-r2286\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim74-r2286\\Model\\";
                 apsimExe = "ApsimRun";
-            } else if (apsimVersions[i].equals("75")) {
+            } else if (apsimVersion.equals("75")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim75-r3008\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim75-r3008\\Model\\";
                 apsimExe = "Apsim";
-            } else if (apsimVersions[i].equals("77")) {
+            } else if (apsimVersion.equals("77")) {
                 apsimDir[0] = "C:\\Program Files (x86)\\Apsim77-r3615\\Model\\";
                 apsimDir[1] = "C:\\Program Files\\Apsim77-r3615\\Model\\";
                 apsimExe = "Apsim";
             } else {
-                apsimDir[0] = "C:\\Program Files (x86)\\Apsim" + apsimVersions[i] + "\\Model\\";
-                apsimDir[1] = "C:\\Program Files\\Apsim" + apsimVersions[i] + "\\Model\\";
+                apsimDir[0] = "C:\\Program Files (x86)\\Apsim" + apsimVersion + "\\Model\\";
+                apsimDir[1] = "C:\\Program Files\\Apsim" + apsimVersion + "\\Model\\";
                 apsimExe = "Apsim";
             }
-            File file = new File(path, "runApsim" + apsimVersions[i] + ".bat");
-            if (files.contains("runApsim" + apsimVersions[i] + ".bat")) {
+            File file;
+            if (templateName.contains("craft")) {
+                file = new File(path, "runApsim" + apsimVersion + "_craft.bat");
+            } else {
+                file = new File(path, "runApsim" + apsimVersion + ".bat");
+            }
+            if (files.contains(file.getName())) {
                 return;
             }
-            files.add("runApsim" + apsimVersions[i] + ".bat");
+            files.add(file.getName());
             file.createNewFile();
             Velocity.init();
             VelocityContext context = new VelocityContext();
@@ -242,7 +258,7 @@ public class ApsimWriter implements TranslatorOutput {
                 context.put("apsimExe", apsimExe);
                 context.put("apsimDirs", apsimDir);
                 writer = new FileWriter(file);
-                Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("template.batch"));
+                Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream(templateName));
                 Velocity.evaluate(context, writer, "Generate RunBatch", R);
                 writer.close();
             } catch (IOException ex) {
