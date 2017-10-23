@@ -1,2 +1,10 @@
 target/*
-*.swp
+*.sw?
+/.settings
+/bin
+/target
+/.classpath
+*.DS_Store
+src/test/resources/UFGA8201MZ.apsim
+src/test/resources/UFGA8201MZ.met
+src/test/resources/default.met
