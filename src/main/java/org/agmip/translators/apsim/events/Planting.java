@@ -1,5 +1,6 @@
 package org.agmip.translators.apsim.events;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -78,6 +79,18 @@ public class Planting extends Event{
     @JsonProperty("plma")
     private String plantMaterial = "S";
     
+    private String pdate;
+    public Date getPDate() {
+        try {
+            if (pdate == null)
+                return null;
+            else
+                return Util.apsim.parse(pdate);
+        } catch (ParseException ex) {
+            return null;
+        }
+    }
+    
     // Crop Name
     public String getCropName() {
         return LookupCodes.lookupCode("crid", cropID, "apsim");
@@ -112,6 +125,8 @@ public class Planting extends Event{
 
     @Override
     public void initialise(Management management) {
+        pdate = getDate();
+        
         if ("?".equals(getDate()))
             log += "  * Operation planting ERROR: Date missing. '?' has been inserted.\r\n";
         
