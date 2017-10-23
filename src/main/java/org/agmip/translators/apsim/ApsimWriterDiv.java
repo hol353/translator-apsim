@@ -65,9 +65,15 @@ public class ApsimWriterDiv extends ApsimWriter implements DividableOutputTransl
             ACE ace = jsonToACE(toJSON(input));
             File path = new File(filePath);
             if (isPaddyApplied(ace)) {
-                generateBatchFile(new String[]{"77"}, path, ace, files);
+                generateBatchFile(new String[]{"77"}, path, ace, files, "template_div.batch");
+                if (super.outputCraftBat) {
+                    generateBatchFile(new String[]{"77"}, path, ace, files, "template_div_craft.batch");
+                }
             } else {
-                generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files);
+                generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files, "template_div.batch");
+                if (super.outputCraftBat) {
+                    generateBatchFile(new String[]{"74", "75", "77"}, path, ace, files, "template_div_craft.batch");
+                }
             }
         } catch (Exception e) {
             LOG.error(Functions.getStackTrace(e));
@@ -221,13 +227,17 @@ public class ApsimWriterDiv extends ApsimWriter implements DividableOutputTransl
                 
                 List<Map> subWths = new ArrayList();
                 for (String wthName : wthNames) {
-                    subWths.add(wths.get(wthLookup.get(wthName)));
+                    if (wthLookup.containsKey(wthName)) {
+                        subWths.add(wths.get(wthLookup.get(wthName)));
+                    }
                 }
                 ret.put("weathers", subWths);
                 
                 List<Map> subSoils = new ArrayList();
                 for (String soilName : soilNames) {
-                    subSoils.add(soils.get(soilLookup.get(soilName)));
+                    if (soilLookup.containsKey(soilName)) {
+                        subSoils.add(soils.get(soilLookup.get(soilName)));
+                    }
                 }
                 ret.put("soils", subSoils);
                     
@@ -281,7 +291,7 @@ public class ApsimWriterDiv extends ApsimWriter implements DividableOutputTransl
     }
     
     // TODO
-    public static void generateBatchFile(String[] apsimVersions, File path, ACE ace, ArrayList<String> apsimFiles) throws Exception {
+    public static void generateBatchFile(String[] apsimVersions, File path, ACE ace, ArrayList<String> apsimFiles, String templateName) throws Exception {
         
         if (apsimFiles.isEmpty()) {
             return;
@@ -331,7 +341,12 @@ public class ApsimWriterDiv extends ApsimWriter implements DividableOutputTransl
                 apsimDir[1] = "C:\\Program Files\\Apsim" + apsimVersion + "\\Model\\";
                 apsimExe = "Apsim";
             }
-            File file = new File(path, "runApsim" + apsimVersion + ".bat");
+            File file;
+            if (templateName.contains("craft")) {
+                file = new File(path, "runApsim" + apsimVersion + "_craft.bat");
+            } else {
+                file = new File(path, "runApsim" + apsimVersion + ".bat");
+            }
             file.createNewFile();
             Velocity.init();
             VelocityContext context = new VelocityContext();
@@ -343,7 +358,7 @@ public class ApsimWriterDiv extends ApsimWriter implements DividableOutputTransl
                 context.put("apsimDirs", apsimDir);
                 context.put("apsimFiles", apsimFiles);
                 writer = new FileWriter(file);
-                Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("template_div.batch"));
+                Reader R = new InputStreamReader(Util.class.getClassLoader().getResourceAsStream(templateName));
                 Velocity.evaluate(context, writer, "Generate RunBatch", R);
                 writer.close();
             } catch (IOException ex) {

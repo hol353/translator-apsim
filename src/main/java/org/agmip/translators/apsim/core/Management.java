@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.agmip.translators.apsim.events.AutoIrrigation;
 
 
 import org.agmip.translators.apsim.events.Event;
@@ -85,6 +86,23 @@ public class Management {
 //    public boolean isBundHeightOnly() { return getMaxFlood() != Util.missingValue && getPlowpanDepth() == Util.missingValue && getMinFlood() == Util.missingValue;}
 
     @JsonIgnore
+    private boolean isAutoIrrigationApplied = false;
+    public boolean isAutoIrrigated() { return isAutoIrrigationApplied;}
+    public void setAutoIrrigated(boolean isAutoIrrigationApplied) { this.isAutoIrrigationApplied = isAutoIrrigationApplied; }
+    
+    public AutoIrrigation getAutoIrrigationEvent() {
+        if (!isAutoIrrigated()) {
+            return null;
+        }
+        for (Event e : events) {
+            if (e instanceof AutoIrrigation) {
+                return (AutoIrrigation) e;
+            }
+        }
+        return null;
+    } 
+
+    @JsonIgnore
     private List<BundEntry> bundEntries = new ArrayList<BundEntry>();
     public List<BundEntry> getBundEntries() { return bundEntries; }
     // default constructor - needed for Jackson
@@ -110,7 +128,7 @@ public class Management {
             events.get(i).initialise(this);
             log += events.get(i).getLog();
             if (events.get(i).getClass().getName().endsWith(".Planting")) {
-                pdate = new DateTime(((Planting) events.get(i)).getEventDate());
+                pdate = new DateTime(((Planting) events.get(i)).getPDate());
             }
         }
         
